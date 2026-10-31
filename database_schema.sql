@@ -113,3 +113,4 @@ VALUES
 ('3216019901010001', 'Tim IT Desa', '081234567894', 'admin@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'admin', 'Administrator Sistem', 'Dusun I Kedung Timur', 'RT 01 / RW 01'),
 ('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Dusun III Kedung Selatan', 'RT 02 / RW 03')
 ON CONFLICT (nik) DO NOTHING;
+
