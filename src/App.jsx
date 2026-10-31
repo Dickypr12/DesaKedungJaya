@@ -13,6 +13,9 @@ import TransparansiPage from './pages/TransparansiPage';
 import UmkmPage from './pages/UmkmPage';
 import KontakPage from './pages/KontakPage';
 
+// Dashboards (6 Role)
+import DashboardLayout from './pages/dashboard/DashboardLayout';
+
 // Floating WhatsApp Button
 import { MessageCircle } from 'lucide-react';
 import { desaInfo } from './data/desaData';
@@ -35,6 +38,11 @@ export default function App() {
           <Route path="/transparansi" element={<TransparansiPage />} />
           <Route path="/umkm" element={<UmkmPage />} />
           <Route path="/kontak" element={<KontakPage />} />
+          
+          {/* Dashboard 6 Role (Stitch Design) */}
+          <Route path="/dashboard" element={<DashboardLayout />} />
+          <Route path="/dashboard/:role" element={<DashboardLayout />} />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

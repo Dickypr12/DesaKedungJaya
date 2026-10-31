@@ -12,8 +12,8 @@ export const desaInfo = {
   alamat: "Jl. Raya Kedung Jaya No. 01, Kec. Kedungwuni, Kab. Bekasi, Jawa Barat 17720",
   jamKerja: "Senin - Jumat: 08.00 - 15.30 WIB",
   kepalaDesa: {
-    nama: "H. Ahmad Fauzi, S.Sos",
-    sambutan: "Puji syukur ke hadirat Tuhan Yang Maha Kuasa atas terwujudnya Website Resmi Pemerintah Desa Kedung Jaya. Website ini merupakan wujud keterbukaan informasi publik dan digitalisasi pelayanan warga. Kami berkomitmen untuk mewujudkan Desa Kedung Jaya yang mandiri, transparan, dan sejahtera dengan mengedepankan pelayanan cepat, tepat, dan tanpa pungli bagi seluruh masyarakat.",
+    nama: "Bpk. H. Suryono, S.Sos.",
+    sambutan: "Puji syukur ke hadirat Tuhan Yang Maha Kuasa atas terwujudnya Website Resmi Pemerintah Desa Kedung Jaya. Website ini merupakan wujud keterbukaan informasi publik dan digitalisasi pelayanan warga terintegrasi TTE BSrE BSSN. Kami berkomitmen mewujudkan Desa Kedung Jaya yang mandiri, transparan, dan sejahtera dengan pelayanan cepat, tepat, dan tanpa pungli.",
     foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
   },
   statistik: {
@@ -43,7 +43,7 @@ export const visiMisi = {
 
 export const perangkatDesa = [
   {
-    nama: "H. Ahmad Fauzi, S.Sos",
+    nama: "Bpk. H. Suryono, S.Sos.",
     jabatan: "Kepala Desa",
     nipd: "19750812 201001 1 001",
     pendidikan: "S1 Ilmu Sosial",
@@ -418,4 +418,116 @@ export const galeriKegiatan = [
     gambar: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=80"
   }
 ];
+
+// Data Pengguna & 6 Role Sistem Desa Kedung Jaya
+export const daftarRole = [
+  {
+    id: 'kades',
+    namaRole: 'Kepala Desa',
+    user: 'Bpk. H. Suryono, S.Sos.',
+    sublabel: 'Sesi Aktif Kades • Token TTE Siap',
+    hakAkses: 'Hak Akses Pejabat Pengesah',
+    koneksi: 'Sistem Terhubung BSrE',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-emerald-700'
+  },
+  {
+    id: 'warga',
+    namaRole: 'Warga',
+    user: 'Hendra Kusuma',
+    sublabel: 'NIK: 3216012804920003 • Dusun II RT 03/02',
+    hakAkses: 'Layanan Mandiri Warga',
+    koneksi: 'Identitas Kependudukan Terverifikasi',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-teal-700'
+  },
+  {
+    id: 'rtrw',
+    namaRole: 'Ketua RT / RW',
+    user: 'Bpk. Mulyono',
+    sublabel: 'Ketua RT 03 / RW 02 • Dusun II Kedung Barat',
+    hakAkses: 'Verifikator Lingkungan Tingkat Rukun Warga',
+    koneksi: 'Database Wilayah Terhubung',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-blue-700'
+  },
+  {
+    id: 'operator',
+    namaRole: 'Operator Pelayanan',
+    user: 'Dewi Lestari, S.Pd',
+    sublabel: 'Loket Pelayanan Umum & Pemeriksa Berkas',
+    hakAkses: 'Operator SIPADES & Pelayanan Surat',
+    koneksi: 'Integrasi Disdukcapil & DTKS Aktif',
+    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-cyan-700'
+  },
+  {
+    id: 'admin',
+    namaRole: 'Admin Desa',
+    user: 'Tim IT Desa Kedung Jaya',
+    sublabel: 'Administrator Sistem, Jaringan & Keamanan',
+    hakAkses: 'Akses Penuh Manajemen Sistem & Audit Log',
+    koneksi: 'Server Lokal & Cloud Sinkron (100% Online)',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-slate-800'
+  },
+  {
+    id: 'bendahara',
+    namaRole: 'Bendahara Desa',
+    user: 'Siti Rahmawati, S.E',
+    sublabel: 'Kaur Keuangan • Penatausahaan Kas APBDes',
+    hakAkses: 'Otoritas Pengeluaran Kas & SPP',
+    koneksi: 'Siskeudes & Rekening Kas Desa Terhubung',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80',
+    warna: 'bg-amber-700'
+  }
+];
+
+// Data Antrean Surat untuk TTE Kades & Pelayanan
+export const mockDrafSuratKades = [
+  {
+    id: 'sku-142',
+    noReg: 'NO REG: 470/142/SKU/X/2025',
+    jenis: 'Surat Keterangan Usaha (SKU)',
+    jenisShort: 'Surat Keterangan Usah...',
+    statusBadge: 'DIPERIKSA',
+    statusBadgeColor: 'bg-slate-200 text-slate-700',
+    pemohon: 'Hendra Kusuma',
+    inisial: 'HK',
+    detailPemohon: 'Usaha: Toko Kelontong "Jaya Makmur"...',
+    verifikasiRT: 'RT 03/02 Terverifikasi',
+    verifikasiOperator: 'Berkas Lengkap Operator',
+    waktu: '45 menit lalu',
+    iconType: 'store'
+  },
+  {
+    id: 'sktm-089',
+    noReg: 'NO REG: 474/089/SKTM/X/2025',
+    jenis: 'SKTM Bantuan Pendidikan',
+    jenisShort: 'SKTM Bantuan Pendidik...',
+    statusBadge: 'SIAP TTE',
+    statusBadgeColor: 'bg-emerald-200 text-emerald-800',
+    pemohon: 'Ibu Sumarni',
+    inisial: 'SM',
+    detailPemohon: 'Keperluan: Beasiswa KIP...',
+    rekomendasi: 'Rekomendasi: Layak',
+    verifikasiRT: 'DTKS Terpadu Valid',
+    verifikasiOperator: 'Surat Pengantar RT 01 Lengkap',
+    waktu: '1 jam lalu',
+    iconType: 'school'
+  }
+];
+
+// Data Aduan Kritis (Untuk Disposisi Kades)
+export const mockAduanKritis = {
+  tiket: 'Tiket #ADU-2025-084',
+  prioritas: 'Prioritas 1',
+  judul: 'Jembatan Penghubung Dusun II Butuh Perbaikan',
+  deskripsi: 'Pondasi kayu sisi timur amblas setelah hujan deras semalam. Rawan dilewati anak sekolah dan kendaraan muatan tani.',
+  gambar: 'https://images.unsplash.com/photo-1541888946425-d0fbb18f15f6?w=400&auto=format&fit=crop&q=80',
+  disposisi: 'Tim Teknis Desa',
+  pj: 'PJ: Kaur Pembangunan • Estimasi Tinjauan 2 Jam',
+  statusMaterial: 'Material Siaga • 32 Warga Mendukung'
+};
+
 

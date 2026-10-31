@@ -90,6 +90,14 @@ export default function Navbar() {
             {/* Desktop Call to Action Buttons */}
             <div className="hidden lg:flex items-center gap-3">
               <Link
+                to="/dashboard"
+                className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 font-bold text-xs shadow-sm transition-all border border-slate-700 hover:border-emerald-500/50"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                <span>Dashboard (6 Role)</span>
+              </Link>
+
+              <Link
                 to="/layanan"
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white font-semibold text-sm shadow-md shadow-brand-600/20 hover:shadow-lg hover:shadow-brand-600/30 transition-all duration-200 transform hover:-translate-y-0.5"
               >
@@ -100,6 +108,13 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="flex items-center gap-2 lg:hidden">
+              <Link
+                to="/dashboard"
+                className="p-2 rounded-xl bg-slate-900 text-emerald-400 text-xs font-bold flex items-center gap-1 border border-slate-700"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                <span>Role</span>
+              </Link>
               <Link
                 to="/layanan"
                 className="p-2 rounded-xl bg-brand-50 text-brand-700 text-xs font-bold flex items-center gap-1 border border-brand-200"
@@ -148,6 +163,14 @@ export default function Navbar() {
             </div>
 
             <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 text-emerald-400 font-bold text-sm shadow-md border border-slate-700"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Buka Dashboard 6 Role (Stitch UI)</span>
+              </Link>
               <Link
                 to="/layanan"
                 onClick={() => setMobileMenuOpen(false)}
