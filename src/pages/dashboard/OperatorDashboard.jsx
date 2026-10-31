@@ -5,38 +5,27 @@ import {
   Search, CheckCircle2, ChevronRight, FileText, Send, 
   RotateCcw, Printer, Filter
 } from 'lucide-react';
+import { getSuratForOperator, forwardToKades, rejectOrReviseSurat } from '../../services/workflowService';
 
 export default function OperatorDashboard() {
-  const [berkasLoket, setBerkasLoket] = useState([
-    {
-      id: 'LKT-01',
-      nama: 'Hendra Kusuma',
-      jenis: 'Surat Keterangan Usaha (SKU)',
-      nik: '3216012804920003',
-      syarat: 'KTP Asli, KK, Pengantar RT 03/02, Foto Usaha',
-      status: 'SIAP DRAF TTE'
-    },
-    {
-      id: 'LKT-02',
-      nama: 'Ibu Sumarni',
-      jenis: 'SKTM Beasiswa KIP',
-      nik: '3216014407880005',
-      syarat: 'DTKS Terpadu, KK, Foto Rumah Tampak Depan',
-      status: 'VERIFIKASI DTKS'
-    },
-    {
-      id: 'LKT-03',
-      nama: 'Ahmad Ramdani',
-      jenis: 'Surat Pengantar SKCK Polsek',
-      nik: '3216011902010007',
-      syarat: 'Pasfoto 4x6 merah, KTP, Akta Lahir',
-      status: 'PEMERIKSAAN BERKAS'
-    }
-  ]);
+  const [berkasLoket, setBerkasLoket] = useState(getSuratForOperator());
+  const [drafKadesCount, setDrafKadesCount] = useState(4);
 
-  const handleForwardToKades = (id) => {
-    setBerkasLoket(prev => prev.filter(b => b.id !== id));
-    alert('Draf surat berhasil diteruskan ke antrean Persetujuan & TTE Kepala Desa!');
+  const refreshList = () => {
+    setBerkasLoket(getSuratForOperator());
+  };
+
+  const handleForwardToKades = (id, jenisSurat) => {
+    forwardToKades(id, 'Dewi Lestari, S.Pd (Operator)');
+    setDrafKadesCount(prev => prev + 1);
+    refreshList();
+    alert(`Berkas ${jenisSurat} telah lengkap diverifikasi dan otomatis masuk ke antrean TTE Kepala Desa!`);
+  };
+
+  const handleReject = (id, jenisSurat) => {
+    rejectOrReviseSurat(id, 'Berkas KTP/KK tidak jelas / belum lengkap', 'Operator Pelayanan');
+    refreshList();
+    alert(`Berkas ${jenisSurat} dikembalikan ke pemohon untuk revisi.`);
   };
 
   return (
@@ -132,7 +121,7 @@ export default function OperatorDashboard() {
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">4</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">{drafKadesCount}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">berkas</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
@@ -207,41 +196,47 @@ export default function OperatorDashboard() {
             </span>
           </div>
 
-          {berkasLoket.map((item) => (
-            <div key={item.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-xs font-extrabold text-slate-900">{item.nama}</span>
-                  <p className="text-[10px] font-mono text-slate-400">NIK: {item.nik}</p>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
-                  {item.status}
-                </span>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-slate-50 text-xs text-slate-600 space-y-1">
-                <p className="font-bold text-slate-800">{item.jenis}</p>
-                <p className="text-[11px] text-slate-500">Berkas: {item.syarat}</p>
-              </div>
-
-              <div className="flex gap-2 pt-1">
-                <button
-                  onClick={() => handleForwardToKades(item.id)}
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Kirim ke TTE Kades</span>
-                </button>
-
-                <button
-                  onClick={() => alert(`Minta pelamar melengkapi berkas ${item.jenis}`)}
-                  className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
-                >
-                  Revisi
-                </button>
-              </div>
+          {berkasLoket.length === 0 ? (
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500">
+              Tidak ada antrean berkas yang menunggu verifikasi loket saat ini.
             </div>
-          ))}
+          ) : (
+            berkasLoket.map((item) => (
+              <div key={item.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-extrabold text-slate-900">{item.pemohonNama || item.nama}</span>
+                    <p className="text-[10px] font-mono text-slate-400">NIK: {item.pemohonNik || item.nik}</p>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                    {item.statusLabel || 'PENGANTAR RT SAH'}
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-50 text-xs text-slate-600 space-y-1">
+                  <p className="font-bold text-slate-800">{item.jenis}</p>
+                  <p className="text-[11px] text-slate-500">Keperluan: {item.keperluan || item.detailUsaha}</p>
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    onClick={() => handleForwardToKades(item.id, item.jenis)}
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Kirim ke TTE Kades</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleReject(item.id, item.jenis)}
+                    className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
+                  >
+                    Revisi
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>

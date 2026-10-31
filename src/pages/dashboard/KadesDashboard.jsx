@@ -6,13 +6,19 @@ import {
   RotateCcw, Ban, Phone, Send, CheckCircle2, AlertTriangle,
   FileText, TrendingUp, ThumbsUp
 } from 'lucide-react';
-import { mockDrafSuratKades, mockAduanKritis } from '../../data/desaData';
+import { mockAduanKritis } from '../../data/desaData';
+import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat } from '../../services/workflowService';
 
 export default function KadesDashboard() {
-  const [antrean, setAntrean] = useState(mockDrafSuratKades);
+  const [antrean, setAntrean] = useState(getSuratForKades());
+  const [suratTerbitCount, setSuratTerbitCount] = useState(28);
   const [modalTTE, setModalTTE] = useState(null);
   const [tteSuccess, setTteSuccess] = useState(false);
   const [disposisiSent, setDisposisiSent] = useState(false);
+
+  const refreshList = () => {
+    setAntrean(getSuratForKades());
+  };
 
   const handleSign = (item) => {
     setModalTTE(item);
@@ -21,10 +27,26 @@ export default function KadesDashboard() {
   const confirmSignTTE = () => {
     setTteSuccess(true);
     setTimeout(() => {
-      setAntrean(prev => prev.filter(i => i.id !== modalTTE.id));
+      if (modalTTE) {
+        signByKadesTTE(modalTTE.id, 'Bpk. H. Suryono, S.Sos.');
+      }
+      setSuratTerbitCount(prev => prev + 1);
+      refreshList();
       setModalTTE(null);
       setTteSuccess(false);
-    }, 1200);
+    }, 1000);
+  };
+
+  const handleReject = (id, noReg) => {
+    rejectOrReviseSurat(id, 'Ditolak oleh Kepala Desa', 'Kepala Desa');
+    refreshList();
+    alert(`Berkas ${noReg} ditolak dan statusnya telah diperbarui.`);
+  };
+
+  const handleRevision = (id, noReg) => {
+    rejectOrReviseSurat(id, 'Perlu perbaikan keterangan', 'Kepala Desa');
+    refreshList();
+    alert(`Berkas ${noReg} dikembalikan ke Operator Pelayanan untuk revisi.`);
   };
 
   return (
@@ -124,7 +146,7 @@ export default function KadesDashboard() {
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">28</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">{suratTerbitCount}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">minggu ini</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
@@ -236,15 +258,15 @@ export default function KadesDashboard() {
                 <div className="p-3 rounded-xl bg-[#f2faf5] flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-full bg-[#ccefe0] text-[#0b5e42] font-black text-xs flex items-center justify-center">
-                      {surat.inisial}
+                      {surat.inisial || (surat.pemohonNama || surat.pemohon || 'W').slice(0, 2).toUpperCase()}
                     </div>
                     <div>
                       <p className="text-xs font-bold text-slate-900 flex items-center gap-1">
-                        <span>{surat.pemohon}</span>
+                        <span>{surat.pemohonNama || surat.pemohon}</span>
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#0b5e42]" />
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        {surat.detailPemohon}
+                        {surat.detailUsaha || surat.detailPemohon || surat.keperluan}
                       </p>
                     </div>
                   </div>
@@ -260,16 +282,14 @@ export default function KadesDashboard() {
                 {/* Verification Chips */}
                 <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-600">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100">
-                    <Check className="w-3 h-3 text-[#0b5e42]" /> {surat.verifikasiRT}
+                    <Check className="w-3 h-3 text-[#0b5e42]" /> {surat.verifikasiRT || 'RT 03/02 Terverifikasi'}
                   </span>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100">
-                    <Check className="w-3 h-3 text-[#0b5e42]" /> {surat.verifikasiOperator}
+                    <Check className="w-3 h-3 text-[#0b5e42]" /> {surat.verifikasiOperator || 'Berkas Lengkap Operator'}
                   </span>
-                  {surat.waktu && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-400">
-                      <Clock className="w-3 h-3" /> {surat.waktu}
-                    </span>
-                  )}
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-400">
+                    <Clock className="w-3 h-3" /> {surat.waktu || 'Hari ini'}
+                  </span>
                 </div>
 
                 {/* Primary Button: TTE */}
@@ -286,7 +306,7 @@ export default function KadesDashboard() {
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={() => alert(`Berkas ${surat.noReg} dikembalikan ke Operator Pelayanan untuk revisi.`)}
+                    onClick={() => handleRevision(surat.id, surat.noReg)}
                     className="py-2 px-3 rounded-xl bg-[#e6f4ed] hover:bg-[#d8ece1] text-slate-700 font-semibold text-[11px] flex items-center justify-center gap-1.5 transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
@@ -295,7 +315,7 @@ export default function KadesDashboard() {
 
                   <button
                     type="button"
-                    onClick={() => alert(`Berkas ${surat.noReg} ditolak.`)}
+                    onClick={() => handleReject(surat.id, surat.noReg)}
                     className="py-2 px-3 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold text-[11px] flex items-center justify-center gap-1.5 transition-colors"
                   >
                     <Ban className="w-3.5 h-3.5 text-rose-600" />

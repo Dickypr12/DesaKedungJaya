@@ -1,9 +1,7 @@
-import React from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
-  Users, Home, Shield, Award, Landmark, 
-  FileCheck, Compass, ArrowLeft, ArrowUpRight
-} from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom';
+import { ArrowLeft, LogOut, ShieldCheck, User } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import KadesDashboard from './KadesDashboard';
 import WargaDashboard from './WargaDashboard';
 import RtRwDashboard from './RtRwDashboard';
@@ -12,24 +10,37 @@ import AdminDashboard from './AdminDashboard';
 import BendaharaDashboard from './BendaharaDashboard';
 
 export default function DashboardLayout() {
-  const { role = 'kades' } = useParams();
+  const { role } = useParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated, loading, logout } = useAuth();
 
-  const roleList = [
-    { id: 'kades', label: 'Kepala Desa', icon: Award, desc: 'Persetujuan TTE & Disposisi' },
-    { id: 'warga', label: 'Warga', icon: Users, desc: 'Layanan Mandiri Warga' },
-    { id: 'rtrw', label: 'Ketua RT/RW', icon: Home, desc: 'Verifikasi Pengantar Lingkungan' },
-    { id: 'operator', label: 'Operator Pelayanan', icon: FileCheck, desc: 'Loket & SIPADES' },
-    { id: 'admin', label: 'Admin Desa', icon: Shield, desc: 'Super Admin & Keamanan' },
-    { id: 'bendahara', label: 'Bendahara', icon: Landmark, desc: 'Kas & SPP APBDes' },
-  ];
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      // Jika URL role tidak sesuai dengan role asli akun yang login, arahkan ke role aslinya
+      if (!role || role !== user.role) {
+        navigate(`/dashboard/${user.role}`, { replace: true });
+      }
+    }
+  }, [role, user, isAuthenticated, loading, navigate]);
 
-  const handleRoleChange = (roleId) => {
-    navigate(`/dashboard/${roleId}`);
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f1faf4] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 border-4 border-[#0b5e42] border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs text-slate-500 font-semibold">Memuat sesi pengguna...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Jika belum login, wajib masuk lewat halaman login
+  if (!isAuthenticated || !user) {
+    return <Navigate to="/login" replace />;
+  }
 
   const renderDashboard = () => {
-    switch (role) {
+    switch (user.role) {
       case 'kades':
         return <KadesDashboard />;
       case 'warga':
@@ -43,62 +54,69 @@ export default function DashboardLayout() {
       case 'bendahara':
         return <BendaharaDashboard />;
       default:
-        return <KadesDashboard />;
+        return <WargaDashboard />;
     }
   };
+
+  const getRoleBadge = (roleName) => {
+    switch (roleName) {
+      case 'kades': return { title: 'Kepala Desa', color: 'bg-emerald-700 text-white' };
+      case 'warga': return { title: 'Warga Terdaftar', color: 'bg-teal-700 text-white' };
+      case 'rtrw': return { title: 'Ketua RT / RW', color: 'bg-blue-700 text-white' };
+      case 'operator': return { title: 'Operator Loket', color: 'bg-cyan-700 text-white' };
+      case 'admin': return { title: 'Admin Sistem', color: 'bg-slate-800 text-white' };
+      case 'bendahara': return { title: 'Bendahara Desa', color: 'bg-amber-700 text-white' };
+      default: return { title: 'Pengguna', color: 'bg-slate-700 text-white' };
+    }
+  };
+
+  const roleInfo = getRoleBadge(user.role);
 
   return (
     <div className="min-h-screen bg-[#e8f5ec]">
       
-      {/* TOP ROLE SWITCHER BAR (Sticky for quick review & test) */}
-      <div className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 py-2.5 px-4 shadow-lg">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      {/* TOP USER SESSION BAR (Clean & Isolated per Account) */}
+      <div className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 py-2.5 px-4 shadow-sm">
+        <div className="max-w-md mx-auto flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Halaman Publik</span>
-            </Link>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Halaman Publik</span>
+            <span className="sm:hidden">Web</span>
+          </Link>
 
-            <span className="text-xs text-slate-400 hidden sm:inline">|</span>
-            <span className="text-xs font-bold text-emerald-400 hidden sm:inline">
-              Simulasi 6 Role Google Stitch:
+          {/* User Authenticated Profile Info */}
+          <div className="flex items-center gap-2">
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${roleInfo.color}`}>
+              {roleInfo.title}
+            </span>
+            <span className="text-xs font-bold text-slate-200 truncate max-w-[120px]">
+              {user.nama}
             </span>
           </div>
 
-          {/* 6 Role Buttons */}
-          <div className="flex items-center gap-1 overflow-x-auto max-w-full pb-1 md:pb-0 scrollbar-none">
-            {roleList.map((r) => {
-              const active = role === r.id;
-              const Icon = r.icon;
-              return (
-                <button
-                  key={r.id}
-                  onClick={() => handleRoleChange(r.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all ${
-                    active
-                      ? 'bg-[#0b5e42] text-white shadow-sm ring-1 ring-emerald-400'
-                      : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white'
-                  }`}
-                  title={r.desc}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{r.label}</span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Logout Button */}
+          <button
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-xs font-bold transition-colors border border-rose-800/60"
+            title="Keluar dari akun ini"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Keluar</span>
+          </button>
 
         </div>
       </div>
 
-      {/* DASHBOARD CONTENT */}
+      {/* RENDER DASHBOARD KHUSUS ROLE YANG LOGIN */}
       {renderDashboard()}
 
     </div>
   );
 }
-

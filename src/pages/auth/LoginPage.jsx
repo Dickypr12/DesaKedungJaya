@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Landmark, User, Lock, Eye, EyeOff, ArrowRight, 
-  AlertCircle, ShieldCheck, CheckCircle2, KeyRound, Sparkles
+  AlertCircle, ShieldCheck, CheckCircle2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -45,13 +45,6 @@ export default function LoginPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Helper autofill untuk akun demo 6 role
-  const fillDemoAccount = (nikVal, passVal = 'KedungJaya2026!') => {
-    setIdentifier(nikVal);
-    setPassword(passVal);
-    setErrorMessage('');
   };
 
   return (
@@ -179,74 +172,10 @@ export default function LoginPage() {
 
         </div>
 
-        {/* DEMO ACCOUNTS HELPER BOX (6 ROLE) */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-2.5">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <h3 className="text-xs font-bold text-slate-800">
-              Uji Coba Cepat 6 Role Sistem Desa (Klik untuk Mengisi):
-            </h3>
-          </div>
-
-          <p className="text-[11px] text-slate-500 font-light">
-            Kata sandi default semua akun demo: <strong className="font-mono text-slate-700">KedungJaya2026!</strong>
-          </p>
-
-          <div className="grid grid-cols-2 gap-2 pt-1 text-[11px]">
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('3216012804920003')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-[#0b5e42] block">👤 Warga</strong>
-              <span className="text-slate-500 text-[10px]">Hendra Kusuma</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('197508122010011001')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-[#0b5e42] block">👑 Kepala Desa</strong>
-              <span className="text-slate-500 text-[10px]">Bpk. H. Suryono</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('3216011503820002')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-blue-700 block">🏡 Ketua RT/RW</strong>
-              <span className="text-slate-500 text-[10px]">Bpk. Mulyono (RT 03)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('199104052017012005')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-cyan-700 block">🖥️ Operator Pelayanan</strong>
-              <span className="text-slate-500 text-[10px]">Dewi Lestari, S.Pd</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('3216019901010001')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-slate-800 block">🛡️ Admin Desa</strong>
-              <span className="text-slate-500 text-[10px]">Tim IT Desa</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => fillDemoAccount('198906202015022003')}
-              className="p-2 rounded-xl bg-[#f2faf5] hover:bg-[#e4f6ec] text-left border border-emerald-100 transition-colors"
-            >
-              <strong className="text-amber-800 block">💰 Bendahara</strong>
-              <span className="text-slate-500 text-[10px]">Siti Rahmawati, S.E</span>
-            </button>
-          </div>
+        {/* SECURITY NOTICE FOOTER */}
+        <div className="text-center text-[11px] text-slate-400 max-w-xs mx-auto pt-2 space-y-1">
+          <p>🔒 Sistem Informasi Terenkripsi Desa Kedung Jaya</p>
+          <p>Akses akun dibatasi sesuai wewenang dan jabatan masing-masing.</p>
         </div>
 
       </div>

@@ -5,30 +5,27 @@ import {
   FileCheck, CheckCircle2, ChevronRight, Home, Phone,
   ThumbsUp, XCircle, AlertCircle
 } from 'lucide-react';
+import { getSuratForRT, approveByRT, rejectOrReviseSurat } from '../../services/workflowService';
 
 export default function RtRwDashboard() {
-  const [antreanRT, setAntreanRT] = useState([
-    {
-      id: 1,
-      nama: "Hendra Kusuma",
-      keperluan: "Pengantar SKU Toko Kelontong 'Jaya Makmur'",
-      alamat: "RT 03 / RW 02 No. 14",
-      status: "TERVERIFIKASI FISIK",
-      waktu: "1 jam lalu"
-    },
-    {
-      id: 2,
-      nama: "Rini Astuti",
-      keperluan: "Pengantar SKCK (Melamar Pekerjaan)",
-      alamat: "RT 03 / RW 02 No. 27",
-      status: "MENUNGGU VERIFIKASI",
-      waktu: "3 jam lalu"
-    }
-  ]);
+  const [antreanRT, setAntreanRT] = useState(getSuratForRT('RT 03 / RW 02'));
+  const [disetujuiCount, setDisetujuiCount] = useState(19);
 
-  const handleApprove = (id) => {
-    setAntreanRT(prev => prev.filter(item => item.id !== id));
-    alert('Pengantar RT berhasil divalidasi secara digital dan diteruskan ke loket Operator Pelayanan!');
+  const refreshList = () => {
+    setAntreanRT(getSuratForRT('RT 03 / RW 02'));
+  };
+
+  const handleApprove = (id, pemohonNama) => {
+    approveByRT(id, 'Bpk. Mulyono (Ketua RT 03)');
+    setDisetujuiCount(prev => prev + 1);
+    refreshList();
+    alert(`Pengantar RT untuk ${pemohonNama} berhasil disahkan! Berkas otomatis diteruskan ke loket Operator Pelayanan.`);
+  };
+
+  const handleReject = (id, pemohonNama) => {
+    rejectOrReviseSurat(id, 'Syarat pengantar RT belum lengkap', 'Ketua RT 03');
+    refreshList();
+    alert(`Berkas ${pemohonNama} dikembalikan untuk melengkapi berkas.`);
   };
 
   return (
@@ -124,7 +121,7 @@ export default function RtRwDashboard() {
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">19</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">{disetujuiCount}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">bulan ini</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
@@ -207,18 +204,23 @@ export default function RtRwDashboard() {
             antreanRT.map((item) => (
               <div key={item.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-slate-900">{item.nama}</span>
-                  <span className="text-[10px] text-slate-400">{item.waktu}</span>
+                  <div>
+                    <span className="text-xs font-extrabold text-slate-900">{item.pemohonNama || item.nama}</span>
+                    <span className="text-[10px] text-slate-400 block font-mono">NIK: {item.pemohonNik || '321601xxxxxxxx'}</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
+                    {item.jenis || item.keperluan}
+                  </span>
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-slate-50 text-xs text-slate-600 space-y-1">
                   <p><strong>Keperluan:</strong> {item.keperluan}</p>
-                  <p className="text-[11px] text-slate-500">Alamat: {item.alamat}</p>
+                  <p className="text-[11px] text-slate-500">Alamat: {item.pemohonAlamat || item.alamat}</p>
                 </div>
 
                 <div className="flex gap-2 pt-1">
                   <button
-                    onClick={() => handleApprove(item.id)}
+                    onClick={() => handleApprove(item.id, item.pemohonNama || item.nama)}
                     className="flex-1 py-2.5 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-colors"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -226,7 +228,7 @@ export default function RtRwDashboard() {
                   </button>
 
                   <button
-                    onClick={() => alert(`Pengantar untuk ${item.nama} ditolak/dikembalikan untuk melengkapi berkas.`)}
+                    onClick={() => handleReject(item.id, item.pemohonNama || item.nama)}
                     className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
                   >
                     Tinjau

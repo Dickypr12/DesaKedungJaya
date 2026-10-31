@@ -6,6 +6,7 @@ import {
   ChevronDown, ChevronUp, Send, Check
 } from 'lucide-react';
 import { daftarLayanan, desaInfo } from '../data/desaData';
+import { ajukanSuratBaru, getAllSurat } from '../services/workflowService';
 
 export default function LayananPage() {
   const location = useLocation();
@@ -90,18 +91,28 @@ export default function LayananPage() {
       return;
     }
 
-    // Generate random Ticket Number
-    const randomDigits = Math.floor(1000 + Math.random() * 9000);
-    const newTicketCode = `KJ-2026-${randomDigits}`;
+    // Daftarkan juga ke Workflow Pipeline Terpadu Desa
+    const workflowSurat = ajukanSuratBaru({
+      jenis: selectedSurat.nama,
+      pemohonNama: formData.nama,
+      pemohonNik: formData.nik,
+      pemohonTelepon: formData.telepon,
+      pemohonAlamat: `${formData.dusun}, RT ${formData.rt} / RW ${formData.rw}`,
+      wilayahRT: `RT ${formData.rt} / RW ${formData.rw}`,
+      keperluan: formData.keperluan,
+      detailUsaha: formData.berkasName || '-'
+    });
+
+    const newTicketCode = workflowSurat.noReg;
     
     const newTicket = {
       kode: newTicketCode,
       jenisSurat: selectedSurat.nama,
       pemohon: formData.nama,
       nikMasked: formData.nik.substring(0, 6) + '********' + formData.nik.substring(formData.nik.length - 2),
-      tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
-      status: 'MENUNGGU_VERIFIKASI',
-      pesan: 'Permohonan berhasil dikirim ke loket pelayanan. Menunggu pengecekan awal petugas desa.',
+      tanggal: workflowSurat.tanggalPengajuan,
+      status: 'MENUNGGU_RT',
+      pesan: 'Permohonan berhasil dikirim. Berkas otomatis diteruskan ke Ketua RT untuk verifikasi pengantar awal.',
       stepActive: 1,
     };
 
@@ -116,10 +127,54 @@ export default function LayananPage() {
 
     const query = trackingInput.trim().toUpperCase();
     if (!query) {
-      setTrackingError('Masukkan nomor tiket (contoh: KJ-2026-1042) atau NIK.');
+      setTrackingError('Masukkan nomor tiket / nomor registrasi (contoh: 470/142/SKU/X/2025 atau KJ-2026-1042) atau NIK.');
       return;
     }
 
+    // 1. Cek dari Workflow Pipeline Interaktif
+    const allWorkflowSurat = getAllSurat();
+    const wfMatch = allWorkflowSurat.find(s => 
+      s.noReg.toUpperCase().includes(query) || 
+      s.id.toUpperCase() === query || 
+      (s.pemohonNik && s.pemohonNik === query)
+    );
+
+    if (wfMatch) {
+      let stepActive = 1;
+      let pesanStatus = 'Permohonan sedang dalam peninjauan.';
+      
+      if (wfMatch.status === 'MENUNGGU_RT') {
+        stepActive = 1;
+        pesanStatus = 'Menunggu verifikasi dan surat pengantar dari Ketua RT/RW setempat.';
+      } else if (wfMatch.status === 'MENUNGGU_OPERATOR') {
+        stepActive = 2;
+        pesanStatus = 'Surat pengantar RT disetujui. Berkas sedang diverifikasi Operator Loket Pelayanan.';
+      } else if (wfMatch.status === 'MENUNGGU_TTE_KADES') {
+        stepActive = 3;
+        pesanStatus = 'Berkas lengkap dan telah diteruskan ke Kepala Desa untuk penandatanganan elektronik (TTE BSrE).';
+      } else if (wfMatch.status === 'SELESAI_TERBIT') {
+        stepActive = 4;
+        pesanStatus = `Surat telah ditandatangani secara digital oleh Kepala Desa (${wfMatch.tteInfo?.sertifikat || 'BSrE BSSN'}) dan sah secara hukum.`;
+      } else if (wfMatch.status === 'PERLU_REVISI') {
+        stepActive = 2;
+        pesanStatus = 'Berkas dikembalikan untuk revisi. Silakan periksa catatan dari petugas/RT.';
+      }
+
+      setTrackingResult({
+        kode: wfMatch.noReg,
+        jenisSurat: wfMatch.jenis,
+        pemohon: wfMatch.pemohonNama,
+        nikMasked: wfMatch.pemohonNik.substring(0, 6) + '********' + wfMatch.pemohonNik.substring(wfMatch.pemohonNik.length - 2),
+        tanggal: wfMatch.tanggalPengajuan,
+        status: wfMatch.status,
+        pesan: pesanStatus,
+        stepActive: stepActive,
+        isSigned: wfMatch.status === 'SELESAI_TERBIT'
+      });
+      return;
+    }
+
+    // 2. Cek dari database statis fallback
     const found = ticketsDatabase.find(t => 
       t.kode.toUpperCase() === query || t.nikMasked.replace(/[^0-9]/g, '') === query.replace(/[^0-9]/g, '')
     );
@@ -127,7 +182,7 @@ export default function LayananPage() {
     if (found) {
       setTrackingResult(found);
     } else {
-      setTrackingError(`Tiket dengan kode "${trackingInput}" tidak ditemukan. Pastikan format nomor tiket benar atau coba contoh: KJ-2026-1042.`);
+      setTrackingError(`Tiket atau nomor registrasi "${trackingInput}" tidak ditemukan. Pastikan format nomor benar.`);
     }
   };
 
