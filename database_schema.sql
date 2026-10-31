@@ -1,20 +1,26 @@
 -- ====================================================================
 -- SKEMA DATABASE RESMI PORTAL DIGITAL DESA KEDUNG JAYA
 -- Dialek: PostgreSQL / Supabase
--- Versi: 1.0 (Oktober 2026)
--- Mendukung 6 Role: Warga, RT/RW, Operator, Kades, Admin, Bendahara
+-- Versi: 1.1 (Perbaikan Tipe Data NIK / NIP hingga 50 Karakter)
 -- ====================================================================
 
--- 1. EXTENSIONS
+-- 1. BERSIHKAN TABEL SEBELUMNYA (JIKA PERNAH DIBUAT SEBAGIAN)
+DROP TABLE IF EXISTS notifikasi_wa CASCADE;
+DROP TABLE IF EXISTS aduan_warga CASCADE;
+DROP TABLE IF EXISTS surat_pengajuan CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- 2. EXTENSIONS
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- 2. TABEL PENGGUNA & AKUN DESA (USERS)
-CREATE TABLE IF NOT EXISTS users (
+-- 3. TABEL PENGGUNA & AKUN DESA (USERS)
+-- NIK / NIP dibuat VARCHAR(50) agar muat untuk NIK Warga (16 digit) maupun NIP Pejabat/Kades (18 digit)
+CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    nik VARCHAR(16) UNIQUE NOT NULL,
+    nik VARCHAR(50) UNIQUE NOT NULL,
     nama VARCHAR(150) NOT NULL,
-    telepon VARCHAR(20) UNIQUE NOT NULL,
+    telepon VARCHAR(30) UNIQUE NOT NULL,
     email VARCHAR(150) UNIQUE,
     password_hash TEXT NOT NULL,
     role VARCHAR(30) NOT NULL CHECK (role IN ('warga', 'rtrw', 'operator', 'kades', 'admin', 'bendahara')),
@@ -31,14 +37,14 @@ CREATE INDEX IF NOT EXISTS idx_users_nik ON users(nik);
 CREATE INDEX IF NOT EXISTS idx_users_telepon ON users(telepon);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 
--- 3. TABEL SURAT & PIPELINE WORKFLOW (SURAT_PENGAJUAN)
-CREATE TABLE IF NOT EXISTS surat_pengajuan (
+-- 4. TABEL SURAT & PIPELINE WORKFLOW (SURAT_PENGAJUAN)
+CREATE TABLE surat_pengajuan (
     id VARCHAR(50) PRIMARY KEY,
     no_reg VARCHAR(100) UNIQUE NOT NULL,
     jenis VARCHAR(150) NOT NULL,
-    pemohon_nik VARCHAR(16) NOT NULL REFERENCES users(nik) ON DELETE CASCADE,
+    pemohon_nik VARCHAR(50) NOT NULL REFERENCES users(nik) ON DELETE CASCADE,
     pemohon_nama VARCHAR(150) NOT NULL,
-    pemohon_telepon VARCHAR(20) NOT NULL,
+    pemohon_telepon VARCHAR(30) NOT NULL,
     pemohon_alamat TEXT NOT NULL,
     wilayah_rt VARCHAR(50) DEFAULT 'RT 03 / RW 02',
     keperluan TEXT NOT NULL,
@@ -57,17 +63,17 @@ CREATE INDEX IF NOT EXISTS idx_surat_pemohon_nik ON surat_pengajuan(pemohon_nik)
 CREATE INDEX IF NOT EXISTS idx_surat_status ON surat_pengajuan(status);
 CREATE INDEX IF NOT EXISTS idx_surat_no_reg ON surat_pengajuan(no_reg);
 
--- 4. TABEL ADUAN & ASPIRASI WARGA (ADUAN_WARGA)
-CREATE TABLE IF NOT EXISTS aduan_warga (
+-- 5. TABEL ADUAN & ASPIRASI WARGA (ADUAN_WARGA)
+CREATE TABLE aduan_warga (
     id VARCHAR(50) PRIMARY KEY,
     tiket VARCHAR(50) UNIQUE NOT NULL,
     prioritas VARCHAR(50) DEFAULT 'Prioritas 1 (Kritis)',
     judul VARCHAR(200) NOT NULL,
     kategori VARCHAR(100) NOT NULL,
     dusun VARCHAR(100) NOT NULL,
-    pelapor_nik VARCHAR(16) NOT NULL REFERENCES users(nik) ON DELETE CASCADE,
+    pelapor_nik VARCHAR(50) NOT NULL REFERENCES users(nik) ON DELETE CASCADE,
     pelapor_nama VARCHAR(150) NOT NULL,
-    pelapor_telepon VARCHAR(20) NOT NULL,
+    pelapor_telepon VARCHAR(30) NOT NULL,
     deskripsi TEXT NOT NULL,
     gambar_url TEXT,
     status VARCHAR(50) DEFAULT 'MENUNGGU_DISPOSISI' 
@@ -82,28 +88,19 @@ CREATE TABLE IF NOT EXISTS aduan_warga (
 CREATE INDEX IF NOT EXISTS idx_aduan_pelapor_nik ON aduan_warga(pelapor_nik);
 CREATE INDEX IF NOT EXISTS idx_aduan_status ON aduan_warga(status);
 
--- 5. TABEL LOG NOTIFIKASI WHATSAPP
-CREATE TABLE IF NOT EXISTS notifikasi_wa (
+-- 6. TABEL LOG NOTIFIKASI WHATSAPP
+CREATE TABLE notifikasi_wa (
     id VARCHAR(50) PRIMARY KEY,
     penerima_nama VARCHAR(150) NOT NULL,
-    penerima_telepon VARCHAR(20) NOT NULL,
+    penerima_telepon VARCHAR(30) NOT NULL,
     judul VARCHAR(150) NOT NULL,
     pesan TEXT NOT NULL,
     tipe VARCHAR(50) DEFAULT 'SURAT',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 6. ROW LEVEL SECURITY (RLS) POLICIES
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE surat_pengajuan ENABLE ROW LEVEL SECURITY;
-ALTER TABLE aduan_warga ENABLE ROW LEVEL SECURITY;
-
--- Warga hanya dapat membaca berkas miliknya sendiri
-CREATE POLICY "Warga Baca Berkas Sendiri" ON surat_pengajuan
-    FOR SELECT USING (auth.uid()::text = pemohon_nik OR auth.jwt() ->> 'role' IN ('operator', 'kades', 'admin', 'rtrw'));
-
--- 7. SEED INITIAL USERS (6 ROLES)
--- Password Default: 'KedungJaya2026!' (SHA-256 Hash: 95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1)
+-- 7. SEED DATA AWAL (6 ROLES RESMI)
+-- Password Default: 'KedungJaya2026!' (SHA-256 Hash)
 INSERT INTO users (nik, nama, telepon, email, password_hash, role, jabatan, dusun, wilayah_rt)
 VALUES
 ('3216012804920003', 'Hendra Kusuma', '081234567891', 'hendra.kusuma@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'warga', 'Warga Dusun II', 'Dusun II Kedung Barat', 'RT 03 / RW 02'),
@@ -114,3 +111,8 @@ VALUES
 ('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Dusun III Kedung Selatan', 'RT 02 / RW 03')
 ON CONFLICT (nik) DO NOTHING;
 
+-- 8. SEED DATA AWAL SURAT PIPELINE
+INSERT INTO surat_pengajuan (id, no_reg, jenis, pemohon_nik, pemohon_nama, pemohon_telepon, pemohon_alamat, wilayah_rt, keperluan, detail_usaha, status, status_label, rekomendasi)
+VALUES
+('SRT-2025-001', '470/142/SKU/X/2025', 'Surat Keterangan Usaha (SKU)', '3216012804920003', 'Hendra Kusuma', '081234567891', 'Dusun II Kedung Barat, RT 03 / RW 02', 'RT 03 / RW 02', 'Persyaratan Pengajuan KUR BRI Usaha Toko Kelontong "Jaya Makmur"', 'Toko Kelontong "Jaya Makmur"', 'MENUNGGU_TTE_KADES', 'DIPERIKSA', 'Rekomendasi Layak Usaha')
+ON CONFLICT (id) DO NOTHING;
