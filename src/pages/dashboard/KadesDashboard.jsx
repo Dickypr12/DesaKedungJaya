@@ -8,16 +8,21 @@ import {
 } from 'lucide-react';
 import { mockAduanKritis } from '../../data/desaData';
 import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat } from '../../services/workflowService';
+import { getAllAduan, disposisiOlehKades } from '../../services/aduanService';
 
 export default function KadesDashboard() {
   const [antrean, setAntrean] = useState(getSuratForKades());
   const [suratTerbitCount, setSuratTerbitCount] = useState(28);
   const [modalTTE, setModalTTE] = useState(null);
   const [tteSuccess, setTteSuccess] = useState(false);
-  const [disposisiSent, setDisposisiSent] = useState(false);
+  const [daftarAduan, setDaftarAduan] = useState(getAllAduan());
+  const [modalDisposisi, setModalDisposisi] = useState(null);
+  const [disposisiTarget, setDisposisiTarget] = useState('Tim Teknis Desa (Kaur Pembangunan)');
+  const [instruksiText, setInstruksiText] = useState('Segera lakukan peninjauan lokasi darurat dan siapkan material pengamanan jembatan.');
 
   const refreshList = () => {
     setAntrean(getSuratForKades());
+    setDaftarAduan(getAllAduan());
   };
 
   const handleSign = (item) => {
@@ -357,73 +362,78 @@ export default function KadesDashboard() {
             </span>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">
-                  *
-                </span>
-                <span className="text-[10px] font-bold font-mono text-slate-500">
-                  {mockAduanKritis.tiket}
+          {daftarAduan.map((aduan) => (
+            <div key={aduan.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">
+                    *
+                  </span>
+                  <span className="text-[10px] font-bold font-mono text-slate-500">
+                    {aduan.tiket}
+                  </span>
+                </div>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  aduan.status === 'DIDISPOSISIKAN' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-600'
+                }`}>
+                  {aduan.status === 'DIDISPOSISIKAN' ? '✓ DIDISPOSISI' : aduan.prioritas}
                 </span>
               </div>
-              <span className="text-[10px] font-bold text-rose-600">
-                {mockAduanKritis.prioritas}
-              </span>
-            </div>
 
-            <h4 className="text-sm font-extrabold text-slate-900 leading-snug">
-              {mockAduanKritis.judul}
-            </h4>
+              <h4 className="text-sm font-extrabold text-slate-900 leading-snug">
+                {aduan.judul}
+              </h4>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
-              {mockAduanKritis.deskripsi}
-            </p>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                {aduan.deskripsi}
+              </p>
 
-            {/* Thumbnail & Disposisi Info */}
-            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-              <img
-                src={mockAduanKritis.gambar}
-                alt="Jembatan Rusak"
-                className="w-14 h-14 rounded-lg object-cover shrink-0"
-              />
-              <div className="text-[11px] space-y-0.5 min-w-0">
-                <p className="font-bold text-slate-800">
-                  • Disposisi: {mockAduanKritis.disposisi}
-                </p>
-                <p className="text-slate-500 truncate">
-                  {mockAduanKritis.pj}
-                </p>
-                <p className="text-[10px] text-emerald-700 font-semibold">
-                  {mockAduanKritis.statusMaterial}
-                </p>
+              {/* Thumbnail & Disposisi Info */}
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+                <img
+                  src={aduan.gambar}
+                  alt={aduan.judul}
+                  className="w-14 h-14 rounded-lg object-cover shrink-0"
+                />
+                <div className="text-[11px] space-y-0.5 min-w-0">
+                  <p className="font-bold text-slate-800">
+                    • Disposisi: {aduan.disposisiTarget}
+                  </p>
+                  <p className="text-slate-500 truncate">
+                    {aduan.disposisiCatatan}
+                  </p>
+                  <p className="text-[10px] text-emerald-700 font-semibold">
+                    Pelapor: {aduan.pelaporNama} ({aduan.dusun})
+                  </p>
+                </div>
               </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href={`tel:${aduan.pelaporTelepon}`}
+                  className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-slate-600" />
+                  <span>Hubungi Pelapor</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setModalDisposisi(aduan)}
+                  className={`py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-colors ${
+                    aduan.status === 'DIDISPOSISIKAN'
+                      ? 'bg-emerald-800 text-emerald-100 hover:bg-emerald-700'
+                      : 'bg-[#0b5e42] hover:bg-[#084832] text-white'
+                  }`}
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{aduan.status === 'DIDISPOSISIKAN' ? 'Ubah Disposisi' : 'Instruksikan Tindakan'}</span>
+                </button>
+              </div>
+
             </div>
-
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <a
-                href="tel:081244556677"
-                className="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <Phone className="w-3.5 h-3.5 text-slate-600" />
-                <span>Hubungi Tim Teknis</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setDisposisiSent(true);
-                  setTimeout(() => setDisposisiSent(false), 2500);
-                }}
-                className="py-2.5 px-3 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-colors"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>{disposisiSent ? 'Terkirim ✓' : 'Instruksikan Tindakan'}</span>
-              </button>
-            </div>
-
-          </div>
+          ))}
         </div>
 
         {/* SECTION: MONITORING TREN PELAYANAN */}
@@ -565,6 +575,98 @@ export default function KadesDashboard() {
                 </button>
               </div>
             )}
+
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DISPOSISI ADUAN KRITIS OLEH KEPALA DESA */}
+      {modalDisposisi && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp">
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">
+                  Disposisi Kepala Desa
+                </span>
+                <h3 className="text-sm font-black text-slate-900 mt-0.5">
+                  Instruksikan Penanganan
+                </h3>
+              </div>
+              <button
+                onClick={() => setModalDisposisi(null)}
+                className="text-slate-400 hover:text-slate-600 p-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+              <span className="text-[10px] font-mono text-slate-500 font-bold">{modalDisposisi.tiket}</span>
+              <p className="font-bold text-slate-900">{modalDisposisi.judul}</p>
+              <p className="text-slate-600">Pelapor: {modalDisposisi.pelaporNama} ({modalDisposisi.dusun})</p>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                disposisiOlehKades(modalDisposisi.id, disposisiTarget, instruksiText);
+                refreshList();
+                setModalDisposisi(null);
+                alert(`Disposisi berhasil dikirim ke ${disposisiTarget}! Notifikasi WhatsApp otomatis terkirim ke HP warga pelapor.`);
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Tujuan Disposisi (Pejabat / Tim Teknis)
+                </label>
+                <select
+                  value={disposisiTarget}
+                  onChange={(e) => setDisposisiTarget(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-medium"
+                >
+                  <option>Tim Teknis Desa (Kaur Pembangunan)</option>
+                  <option>Kepala Dusun I Kedung Timur</option>
+                  <option>Kepala Dusun II Kedung Barat</option>
+                  <option>Kepala Dusun III Kedung Selatan</option>
+                  <option>Kepala Dusun IV Kedung Utara</option>
+                  <option>Satgas Linmas & Trantibum</option>
+                  <option>Bhabinkamtibmas & Babinsa Desa</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Instruksi & Catatan Khusus Kades *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={instruksiText}
+                  onChange={(e) => setInstruksiText(e.target.value)}
+                  placeholder="Tuliskan arahan Kepala Desa..."
+                  className="w-full p-2.5 rounded-xl border border-slate-300 font-medium"
+                />
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalDisposisi(null)}
+                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-md"
+                >
+                  Kirim Disposisi →
+                </button>
+              </div>
+            </form>
 
           </div>
         </div>

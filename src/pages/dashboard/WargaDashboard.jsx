@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getSuratByWarga, ajukanSuratBaru } from '../../services/workflowService';
+import { getAduanByWarga, buatAduanBaru } from '../../services/aduanService';
+import SuratResmiModal from '../../components/SuratResmiModal';
 
 export default function WargaDashboard() {
   const { user } = useAuth();
@@ -14,16 +16,25 @@ export default function WargaDashboard() {
   const citizenNama = user?.nama || 'Hendra Kusuma';
 
   const [suratList, setSuratList] = useState([]);
+  const [aduanList, setAduanList] = useState([]);
   const [modalAjukan, setModalAjukan] = useState(false);
   const [modalPreview, setModalPreview] = useState(null);
+  const [modalAduan, setModalAduan] = useState(false);
 
   // Form input pengajuan baru
   const [jenisSurat, setJenisSurat] = useState('Surat Keterangan Usaha (SKU)');
   const [keperluan, setKeperluan] = useState('');
   const [detailUsaha, setDetailUsaha] = useState('');
 
+  // Form input aduan baru
+  const [judulAduan, setJudulAduan] = useState('');
+  const [kategoriAduan, setKategoriAduan] = useState('Infrastruktur Jalan & Jembatan');
+  const [dusunAduan, setDusunAduan] = useState('Dusun II Kedung Barat');
+  const [deskripsiAduan, setDeskripsiAduan] = useState('');
+
   const loadData = () => {
     setSuratList(getSuratByWarga(citizenNik));
+    setAduanList(getAduanByWarga(citizenNik));
   };
 
   useEffect(() => {
@@ -57,6 +68,30 @@ export default function WargaDashboard() {
     setModalAjukan(false);
     loadData();
     alert('Permohonan surat berhasil diajukan! Berkas otomatis diteruskan ke Ketua RT 03 untuk pengesahan pengantar.');
+  };
+
+  const handleBuatAduan = (e) => {
+    e.preventDefault();
+    if (!judulAduan.trim() || !deskripsiAduan.trim()) {
+      alert('Mohon lengkapi judul dan deskripsi aduan.');
+      return;
+    }
+
+    buatAduanBaru({
+      judul: judulAduan,
+      kategori: kategoriAduan,
+      dusun: dusunAduan,
+      deskripsi: deskripsiAduan,
+      pelaporNama: citizenNama,
+      pelaporNik: citizenNik,
+      pelaporTelepon: user?.telepon || '081234567891'
+    });
+
+    setJudulAduan('');
+    setDeskripsiAduan('');
+    setModalAduan(false);
+    loadData();
+    alert('Laporan aduan berhasil diajukan! Notifikasi WhatsApp konfirmasi telah dikirim dan berkas langsung masuk ke antrean disposisi Kepala Desa.');
   };
 
   return (
@@ -310,13 +345,65 @@ export default function WargaDashboard() {
 
               <button
                 onClick={() => setModalPreview(doc)}
-                className="px-3 py-1.5 rounded-xl bg-[#eefaf2] hover:bg-[#d8ece1] text-[#0b5e42] font-bold text-xs flex items-center gap-1.5 transition-colors border border-emerald-200"
+                className="px-3 py-1.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
               >
-                <QrCode className="w-3.5 h-3.5" />
-                <span>Lihat & Barcode</span>
+                <Eye className="w-3.5 h-3.5" />
+                <span>Lihat & Cetak Surat</span>
               </button>
             </div>
           ))}
+        </div>
+
+        {/* SECTION: LAPORAN & ADUAN WARGA (DUSUN & LINGKUNGAN) */}
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-1 h-5 rounded-full bg-rose-600"></span>
+              <h3 className="text-sm font-extrabold text-slate-900">
+                Aspirasi & Laporan Lingkungan
+              </h3>
+            </div>
+            <button
+              onClick={() => setModalAduan(true)}
+              className="text-[11px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-xl transition-colors border border-rose-200"
+            >
+              + Lapor Aduan Baru
+            </button>
+          </div>
+
+          {aduanList.length === 0 ? (
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
+              Belum ada aduan yang Anda laporkan.
+            </div>
+          ) : (
+            aduanList.map((adu) => (
+              <div key={adu.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400 font-bold">{adu.tiket}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    adu.status === 'DIDISPOSISIKAN' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'
+                  }`}>
+                    {adu.status === 'DIDISPOSISIKAN' ? '✓ DITINDAKLANJUTI KADES' : '⌛ MENUNGGU DISPOSISI'}
+                  </span>
+                </div>
+
+                <div>
+                  <h4 className="text-xs font-black text-slate-900">{adu.judul}</h4>
+                  <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">{adu.deskripsi}</p>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] space-y-1">
+                  <p className="text-slate-700"><strong>Wilayah:</strong> {adu.dusun}</p>
+                  <p className="text-slate-700"><strong>Status Tindakan:</strong> {adu.disposisiCatatan}</p>
+                  {adu.status === 'DIDISPOSISIKAN' && (
+                    <p className="text-emerald-700 font-bold text-[10px]">
+                      • Ditugaskan kepada: {adu.disposisiTarget}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>
@@ -387,46 +474,104 @@ export default function WargaDashboard() {
         </div>
       )}
 
-      {/* MODAL SALINAN RESMI SURAT TTE BER-BARCODE */}
-      {modalPreview && (
+      {/* MODAL LAPORKAN ADUAN LINGKUNGAN / ASPIRASI BARU */}
+      {modalAduan && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#0b5e42] uppercase tracking-wider">
-                Dokumen Sah Elektronik
-              </span>
-              <button onClick={() => setModalPreview(null)} className="text-slate-400 hover:text-slate-600">
+              <div>
+                <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">
+                  Lapor Warga Terpadu
+                </span>
+                <h3 className="text-sm font-black text-slate-900 mt-0.5">
+                  Aspirasi / Masalah Lingkungan
+                </h3>
+              </div>
+              <button onClick={() => setModalAduan(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-3">
-              <div className="w-16 h-16 rounded-xl bg-white p-2 mx-auto shadow-sm border border-slate-200 flex items-center justify-center">
-                <QrCode className="w-12 h-12 text-[#0b5e42]" />
-              </div>
+            <form onSubmit={handleBuatAduan} className="space-y-3 text-xs">
               <div>
-                <h4 className="text-sm font-black text-slate-900">{modalPreview.jenis}</h4>
-                <p className="text-[10px] font-mono text-slate-500 mt-0.5">{modalPreview.noReg}</p>
+                <label className="block font-bold text-slate-700 mb-1">Judul Laporan *</label>
+                <input
+                  type="text"
+                  required
+                  value={judulAduan}
+                  onChange={(e) => setJudulAduan(e.target.value)}
+                  placeholder="Contoh: Jalan Dusun II Rusak / Lampu Mati"
+                  className="w-full p-2.5 rounded-xl border border-slate-300"
+                />
               </div>
-              <div className="text-[11px] text-slate-600 space-y-1 pt-2 border-t border-slate-200 text-left">
-                <p><strong>Nama Pemohon:</strong> {modalPreview.pemohonNama}</p>
-                <p><strong>Penandatangan:</strong> {modalPreview.tteInfo?.penandatangan || 'Kepala Desa'}</p>
-                <p><strong>Sertifikasi:</strong> BSrE BSSN Indonesia</p>
-                <p className="text-[10px] text-emerald-700 font-bold">✓ Dokumen berkekuatan hukum sah sesuai UU ITE</p>
-              </div>
-            </div>
 
-            <button
-              onClick={() => {
-                alert(`Mengunduh berkas resmi ${modalPreview.jenis} format PDF ber-barcode.`);
-                setModalPreview(null);
-              }}
-              className="w-full py-2.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-md"
-            >
-              Unduh Salinan PDF
-            </button>
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Kategori Masalah</label>
+                <select
+                  value={kategoriAduan}
+                  onChange={(e) => setKategoriAduan(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white"
+                >
+                  <option>Infrastruktur Jalan & Jembatan</option>
+                  <option>Fasilitas Umum & Penerangan (PJU)</option>
+                  <option>Kebersihan & Sampah Liar</option>
+                  <option>Bencana Alam & Saluran Air (Drainase)</option>
+                  <option>Ketertiban & Keamanan Lingkungan</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Wilayah Dusun</label>
+                <select
+                  value={dusunAduan}
+                  onChange={(e) => setDusunAduan(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 bg-white"
+                >
+                  <option>Dusun I Kedung Timur</option>
+                  <option>Dusun II Kedung Barat</option>
+                  <option>Dusun III Kedung Selatan</option>
+                  <option>Dusun IV Kedung Utara</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Deskripsi Lengkap *</label>
+                <textarea
+                  required
+                  rows={3}
+                  value={deskripsiAduan}
+                  onChange={(e) => setDeskripsiAduan(e.target.value)}
+                  placeholder="Jelaskan kondisi dan titik lokasi kejadian secara detail..."
+                  className="w-full p-2.5 rounded-xl border border-slate-300"
+                />
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalAduan(false)}
+                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-md"
+                >
+                  Kirim Aduan →
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      )}
+
+      {/* MODAL SALINAN RESMI SURAT TTE SIAP CETAK / PDF */}
+      {modalPreview && (
+        <SuratResmiModal
+          surat={modalPreview}
+          onClose={() => setModalPreview(null)}
+        />
       )}
 
     </div>

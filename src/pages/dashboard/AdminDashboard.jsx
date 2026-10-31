@@ -5,8 +5,10 @@ import {
   Key, Users, ShieldCheck, Activity, Terminal, RefreshCw
 } from 'lucide-react';
 import { daftarRole } from '../../data/desaData';
+import { getDatabaseStatus } from '../../services/dbClient';
 
 export default function AdminDashboard() {
+  const dbStatus = getDatabaseStatus();
   return (
     <div className="min-h-screen bg-[#f1faf4] text-slate-800 pb-16">
       <div className="max-w-md mx-auto px-4 pt-4 sm:pt-6 space-y-4">
@@ -140,22 +142,22 @@ export default function AdminDashboard() {
 
         </div>
 
-        {/* NOTICE CARD KEAMANAN */}
+        {/* NOTICE CARD KEAMANAN & DATABASE READY */}
         <div className="bg-slate-900 text-white rounded-2xl p-4 shadow-sm space-y-2">
           <div className="flex items-start justify-between">
             <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center">
               <Shield className="w-4 h-4 text-emerald-400" />
             </div>
             <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-emerald-400 font-mono text-[10px]">
-              SECURITY AUDIT OK
+              {dbStatus.status}
             </span>
           </div>
 
           <h3 className="text-xs font-extrabold text-white pt-1">
-            Enkripsi Data Kependudukan & Token TTE
+            Status Database: {dbStatus.provider}
           </h3>
           <p className="text-[11px] text-slate-300 leading-relaxed font-light">
-            Seluruh berkas dokumen warga disimpan menggunakan enkripsi AES-256. Akses hanya diberikan pada petugas berwenang sesuai matriks hak akses 6 role desa.
+            Sistem saat ini aktif menggunakan mesin reaktif lokal terenkripsi SHA-256. Skema migrasi PostgreSQL/Supabase (<code className="text-emerald-300 font-mono">database_schema.sql</code>) telah siap untuk sinkronisasi cloud online.
           </p>
         </div>
 

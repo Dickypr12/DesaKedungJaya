@@ -4,6 +4,8 @@
  * Warga (Ajukan) -> RT/RW (Verifikasi Pengantar) -> Operator (Validasi Berkas) -> Kades (TTE BSrE) -> Warga (Surat Terbit)
  */
 
+import { sendWhatsAppNotification } from './notificationService';
+
 const STORAGE_WORKFLOW_KEY = 'kedungjaya_surat_pipeline';
 
 // Inisialisasi data awal jika belum ada
@@ -164,6 +166,15 @@ export function ajukanSuratBaru({ jenis, pemohonNama, pemohonNik, pemohonTelepon
 
   all.unshift(newSurat);
   saveSuratList(all);
+
+  // Kirim Notifikasi WhatsApp ke Warga
+  sendWhatsAppNotification({
+    penerimaNama: pemohonNama,
+    penerimaTelepon: pemohonTelepon,
+    judul: 'Pengajuan Surat Berhasil',
+    pesan: `Permohonan ${jenis} (No Reg: ${newSurat.noReg}) berhasil diajukan online dan telah masuk antrean Ketua RT untuk verifikasi pengantar.`
+  });
+
   return newSurat;
 }
 
@@ -186,6 +197,15 @@ export function approveByRT(suratId, namaRT = 'Bpk. Mulyono (Ketua RT 03)') {
   });
 
   saveSuratList(all);
+
+  // Kirim Notifikasi WhatsApp ke Warga
+  sendWhatsAppNotification({
+    penerimaNama: all[index].pemohonNama,
+    penerimaTelepon: all[index].pemohonTelepon,
+    judul: 'Surat Pengantar RT Disetujui',
+    pesan: `Pengantar RT untuk ${all[index].jenis} telah disahkan oleh ${namaRT}. Berkas saat ini sedang diproses oleh Operator Loket Desa.`
+  });
+
   return all[index];
 }
 
@@ -208,6 +228,15 @@ export function forwardToKades(suratId, operatorNama = 'Dewi Lestari, S.Pd (Oper
   });
 
   saveSuratList(all);
+
+  // Kirim Notifikasi WhatsApp ke Warga
+  sendWhatsAppNotification({
+    penerimaNama: all[index].pemohonNama,
+    penerimaTelepon: all[index].pemohonTelepon,
+    judul: 'Berkas Lengkap Menunggu TTE Kades',
+    pesan: `Berkas ${all[index].jenis} telah lengkap diverifikasi Operator dan diteruskan ke Kepala Desa untuk penandatanganan elektronik (TTE BSrE).`
+  });
+
   return all[index];
 }
 
@@ -236,6 +265,15 @@ export function signByKadesTTE(suratId, kadesNama = 'Bpk. H. Suryono, S.Sos.') {
   });
 
   saveSuratList(all);
+
+  // Kirim Notifikasi WhatsApp ke Warga
+  sendWhatsAppNotification({
+    penerimaNama: all[index].pemohonNama,
+    penerimaTelepon: all[index].pemohonTelepon,
+    judul: 'Surat Resmi Terbit (Sah TTE BSrE)',
+    pesan: `Selamat! Surat ${all[index].jenis} (${all[index].noReg}) telah disahkan secara digital oleh Kepala Desa (${kadesNama}) bersertifikasi BSrE BSSN. Dokumen resmi siap diunduh & dicetak!`
+  });
+
   return all[index];
 }
 
@@ -255,5 +293,15 @@ export function rejectOrReviseSurat(suratId, alasan, tahapNama) {
   });
 
   saveSuratList(all);
+
+  // Kirim Notifikasi WhatsApp ke Warga
+  sendWhatsAppNotification({
+    penerimaNama: all[index].pemohonNama,
+    penerimaTelepon: all[index].pemohonTelepon,
+    judul: 'Pemberitahuan Revisi Berkas',
+    pesan: `Pemberitahuan: Berkas ${all[index].jenis} memerlukan perbaikan dari ${tahapNama}. Catatan: "${alasan || 'Lengkapi dokumen persyaratan'}".`
+  });
+
   return all[index];
 }
+

@@ -26,6 +26,9 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 // Dashboards (6 Role)
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 
+// Toast Notifikasi WhatsApp
+import WhatsAppToast from './components/WhatsAppToast';
+
 // Floating WhatsApp Button
 import { MessageCircle } from 'lucide-react';
 import { desaInfo } from './data/desaData';
@@ -80,6 +83,9 @@ export default function App() {
             Bantuan WhatsApp
           </span>
         </a>
+
+        {/* Toast Notifikasi WhatsApp Otomatis */}
+        <WhatsAppToast />
 
         {/* Footer */}
         <Footer />
