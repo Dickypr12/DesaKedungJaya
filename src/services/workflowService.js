@@ -50,10 +50,22 @@ export function getSuratByWarga(nik) {
   return all.filter(s => s.pemohonNik === nik);
 }
 
-// 2. Ambil antrean verifikasi untuk Ketua RT
-export function getSuratForRT(wilayahRT = 'RT 03 / RW 02') {
+// 2. Ambil antrean verifikasi untuk Ketua RT tertentu (Hanya masuk ke RT/RW yang dipilih)
+export function getSuratForRT(wilayahRT) {
   const all = getAllSurat();
-  return all.filter(s => s.status === 'MENUNGGU_RT' && (s.wilayahRT === wilayahRT || !s.wilayahRT));
+  if (!wilayahRT || wilayahRT === 'SEMUA') {
+    return all.filter(s => s.status === 'MENUNGGU_RT');
+  }
+
+  // Normalisasi string RT/RW agar pencocokan tepat (contoh: "RT 01 / RW 01" cocok dengan "RT 01 / RW 01")
+  const clean = (str) => (str || '').replace(/[\s\-_/]/g, '').toUpperCase();
+  const target = clean(wilayahRT);
+
+  return all.filter(s => {
+    if (s.status !== 'MENUNGGU_RT') return false;
+    const suratWilayah = clean(s.wilayahRT);
+    return suratWilayah === target;
+  });
 }
 
 // 3. Ambil antrean untuk Operator Pelayanan

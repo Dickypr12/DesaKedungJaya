@@ -15,6 +15,10 @@ export default function RegisterPage() {
     nama: '',
     telepon: '',
     email: '',
+    role: 'warga', // 'warga' atau 'rtrw'
+    dusun: 'Kp. Wates (Dusun I)',
+    rt: '01',
+    rw: '01',
     password: '',
     confirmPassword: '',
     agreeTerms: false
@@ -79,7 +83,11 @@ export default function RegisterPage() {
         nama: formData.nama,
         telepon: formData.telepon,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        role: formData.role,
+        rt: formData.rt,
+        rw: formData.rw,
+        dusun: formData.dusun
       });
 
       // Lanjut ke langkah 2: Verifikasi OTP
@@ -287,6 +295,110 @@ export default function RegisterPage() {
             <p className="text-[11px] text-slate-400 pt-0.5">
               Untuk penerimaan tembusan surat ber-barcode dan arsip digital.
             </p>
+          </div>
+
+          {/* FIELD PILIHAN TIPE AKUN: WARGA ATAU KETUA RT/RW */}
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-800">
+                Tipe Akun Pendaftaran <span className="text-rose-500">*</span>
+              </label>
+              <p className="text-[11px] text-slate-400">
+                Pilih apakah Anda mendaftar sebagai warga pemohon atau pengurus RT/RW pengesah surat.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, role: 'warga' }))}
+                className={`p-3 rounded-xl border text-left transition-all ${
+                  formData.role === 'warga'
+                    ? 'border-[#0b5e42] bg-[#f1faf4] text-[#0b5e42] font-bold shadow-xs'
+                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <div className="text-xs font-bold flex items-center justify-between">
+                  <span>Warga Masyarakat</span>
+                  {formData.role === 'warga' && <Check className="w-3.5 h-3.5 text-[#0b5e42]" />}
+                </div>
+                <p className="text-[10px] text-slate-400 font-normal mt-0.5">Pemohon surat mandiri</p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, role: 'rtrw' }))}
+                className={`p-3 rounded-xl border text-left transition-all ${
+                  formData.role === 'rtrw'
+                    ? 'border-blue-600 bg-blue-50 text-blue-800 font-bold shadow-xs'
+                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <div className="text-xs font-bold flex items-center justify-between">
+                  <span>Ketua RT / RW</span>
+                  {formData.role === 'rtrw' && <Check className="w-3.5 h-3.5 text-blue-700" />}
+                </div>
+                <p className="text-[10px] text-slate-400 font-normal mt-0.5">Verifikator pengantar</p>
+              </button>
+            </div>
+
+            {/* FIELD WILAYAH RT DAN RW */}
+            <div className="pt-2 border-t border-slate-100 space-y-2.5">
+              <label className="block text-xs font-bold text-slate-800">
+                {formData.role === 'rtrw' ? 'Wilayah Tugas RT / RW Anda' : 'Domisili Tempat Tinggal (RT / RW)'}
+              </label>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-[11px] font-semibold text-slate-600 block mb-1">Rukun Tetangga (RT)</span>
+                  <select
+                    name="rt"
+                    value={formData.rt}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e42]"
+                  >
+                    {Array.from({ length: 22 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                      <option key={num} value={num}>RT {num}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-semibold text-slate-600 block mb-1">Rukun Warga (RW)</span>
+                  <select
+                    name="rw"
+                    value={formData.rw}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e42]"
+                  >
+                    {Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                      <option key={num} value={num}>RW {num}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-semibold text-slate-600 block mb-1">Dusun / Lingkungan</span>
+                <select
+                  name="dusun"
+                  value={formData.dusun}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e42]"
+                >
+                  <option value="Kp. Wates (Dusun I)">Dusun I (Kp. Wates)</option>
+                  <option value="Dusun II (Kedung Barat)">Dusun II (Kedung Barat)</option>
+                  <option value="Dusun III (Kp. Pengawas)">Dusun III (Kp. Pengawas)</option>
+                  <option value="Dusun IV (Lingkungan IV)">Dusun IV (Lingkungan IV)</option>
+                </select>
+              </div>
+
+              {formData.role === 'rtrw' && (
+                <div className="p-2.5 rounded-xl bg-blue-50 text-[11px] text-blue-900 border border-blue-200">
+                  ℹ️ Akun ini akan menerima permohonan surat pengantar khusus yang diajukan oleh warga di <strong>RT {formData.rt} / RW {formData.rw}</strong>.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* FIELD 5: KATA SANDI BARU & STRENGTH CHECKER */}

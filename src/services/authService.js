@@ -201,8 +201,8 @@ function resetFailedAttempts(identifier) {
   }
 }
 
-// Pendaftaran Warga Baru
-export async function registerWarga({ nik, nama, telepon, email, password }) {
+// Pendaftaran Akun Baru (Warga atau Pengurus RT/RW)
+export async function registerWarga({ nik, nama, telepon, email, password, role = 'warga', rt = '01', rw = '01', dusun }) {
   await initSeedUsers();
   
   // Validasi NIK
@@ -233,26 +233,33 @@ export async function registerWarga({ nik, nama, telepon, email, password }) {
   }
 
   const passwordHash = await hashPassword(password);
+  const wilayahStr = `RT ${rt.toString().padStart(2, '0')} / RW ${rw.toString().padStart(2, '0')}`;
+  const selectedDusun = dusun || 'Kp. Wates (Dusun I)';
 
-  const newWarga = {
+  const newUser = {
     id: `usr_${Date.now()}`,
     nik: cleanNik,
     nama: nama.trim(),
     telepon: cleanPhone,
     email: email ? email.trim() : '',
-    role: 'warga', // Publik hanya bisa mendaftar sebagai WARGA
-    statusVerifikasi: 'MENUNGGU_VERIFIKASI_PETUGAS', // Status verifikasi identitas resmi
-    otpVerified: false,
+    role: role === 'rtrw' ? 'rtrw' : 'warga',
+    jabatan: role === 'rtrw' ? `Ketua ${wilayahStr}` : `Warga ${wilayahStr}`,
+    wilayahTugas: wilayahStr,
+    wilayah_rt: wilayahStr,
+    rtRw: wilayahStr,
+    dusun: selectedDusun,
+    statusVerifikasi: 'TERVERIFIKASI',
+    otpVerified: true,
     tanggalDaftar: new Date().toISOString()
   };
 
   // Simpan password hash
-  users.push({ ...newWarga, passwordHash });
+  users.push({ ...newUser, passwordHash });
   saveUsers(users);
 
   // Buat sesi sementara untuk verifikasi OTP
   const tempToken = {
-    userId: newWarga.id,
+    userId: newUser.id,
     nikMasked: cleanNik.substring(0, 4) + '********' + cleanNik.substring(cleanNik.length - 2),
     telepon: cleanPhone,
     step: 'OTP_PENDING',
@@ -260,7 +267,7 @@ export async function registerWarga({ nik, nama, telepon, email, password }) {
   };
   sessionStorage.setItem('kedungjaya_temp_reg', JSON.stringify(tempToken));
 
-  return newWarga;
+  return newUser;
 }
 
 // Verifikasi Kode OTP (Simulasi Terintegrasi)
@@ -323,20 +330,58 @@ export async function loginUser(identifier, password) {
     token: `token_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
     user: {
       id: user.id,
+      nik: user.nik,
       nikMasked: user.nik.substring(0, 6) + '********' + user.nik.substring(user.nik.length - 2),
       nama: user.nama,
       role: user.role,
+      jabatan: user.jabatan || '',
       statusVerifikasi: user.statusVerifikasi,
       telepon: user.telepon,
       email: user.email,
-      dusun: user.dusun || '',
-      wilayahTugas: user.wilayahTugas || ''
+      dusun: user.dusun || 'Kp. Wates (Dusun I)',
+      wilayahTugas: user.wilayahTugas || user.wilayah_rt || user.rtRw || 'RT 03 / RW 02',
+      wilayah_rt: user.wilayah_rt || user.wilayahTugas || user.rtRw || 'RT 03 / RW 02'
     },
     loginAt: Date.now()
   };
 
   localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify(session));
   return session.user;
+}
+
+// Update Wilayah RT/RW Akun (Dapat diganti oleh Pak RT/RW atau Warga)
+export function updateUserWilayahRT(userId, newWilayahRT) {
+  const users = getAllUsers();
+  const index = users.findIndex(u => u.id === userId || u.nik === userId);
+  if (index !== -1) {
+    users[index].wilayahTugas = newWilayahRT;
+    users[index].wilayah_rt = newWilayahRT;
+    users[index].rtRw = newWilayahRT;
+    if (users[index].role === 'rtrw') {
+      users[index].jabatan = `Ketua ${newWilayahRT}`;
+    }
+    saveUsers(users);
+
+    const sessionRaw = localStorage.getItem(STORAGE_SESSION_KEY);
+    if (sessionRaw) {
+      try {
+        const session = JSON.parse(sessionRaw);
+        if (session.user && (session.user.id === users[index].id || session.user.nik === users[index].nik)) {
+          session.user.wilayahTugas = newWilayahRT;
+          session.user.wilayah_rt = newWilayahRT;
+          session.user.rtRw = newWilayahRT;
+          if (users[index].role === 'rtrw') {
+            session.user.jabatan = `Ketua ${newWilayahRT}`;
+          }
+          localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify(session));
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+    return users[index];
+  }
+  return null;
 }
 
 // Ambil Sesi Pengguna Aktif

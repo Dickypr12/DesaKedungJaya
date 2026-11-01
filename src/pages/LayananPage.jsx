@@ -95,14 +95,18 @@ export default function LayananPage() {
       return;
     }
 
+    const formattedRT = (formData.rt || '01').toString().padStart(2, '0');
+    const formattedRW = (formData.rw || '01').toString().padStart(2, '0');
+    const targetWilayahRT = `RT ${formattedRT} / RW ${formattedRW}`;
+
     // Daftarkan juga ke Workflow Pipeline Terpadu Desa
     const workflowSurat = ajukanSuratBaru({
       jenis: selectedSurat.nama,
       pemohonNama: formData.nama,
       pemohonNik: formData.nik,
       pemohonTelepon: formData.telepon,
-      pemohonAlamat: `${formData.dusun}, RT ${formData.rt} / RW ${formData.rw}`,
-      wilayahRT: `RT ${formData.rt} / RW ${formData.rw}`,
+      pemohonAlamat: `${formData.dusun}, ${targetWilayahRT}`,
+      wilayahRT: targetWilayahRT,
       keperluan: formData.keperluan,
       detailUsaha: formData.berkasName || '-'
     });
@@ -116,8 +120,9 @@ export default function LayananPage() {
       nikMasked: formData.nik.substring(0, 6) + '********' + formData.nik.substring(formData.nik.length - 2),
       tanggal: workflowSurat.tanggalPengajuan,
       status: 'MENUNGGU_RT',
-      pesan: 'Permohonan berhasil dikirim. Berkas otomatis diteruskan ke Ketua RT untuk verifikasi pengantar awal.',
+      pesan: `Permohonan berhasil dikirim. Berkas otomatis diteruskan khusus ke Ketua ${targetWilayahRT} untuk verifikasi pengantar awal.`,
       stepActive: 1,
+      suratOriginal: workflowSurat
     };
 
     setTicketsDatabase(prev => [newTicket, ...prev]);
@@ -468,29 +473,33 @@ export default function LayananPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                        RT *
+                        Rukun Tetangga (RT) *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         name="rt"
                         value={formData.rt}
                         onChange={handleInputChange}
-                        placeholder="01"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"
-                      />
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm font-bold bg-white"
+                      >
+                        {Array.from({ length: 22 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                          <option key={num} value={num}>RT {num}</option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                        RW *
+                        Rukun Warga (RW) *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         name="rw"
                         value={formData.rw}
                         onChange={handleInputChange}
-                        placeholder="01"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"
-                      />
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm font-bold bg-white"
+                      >
+                        {Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                          <option key={num} value={num}>RW {num}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

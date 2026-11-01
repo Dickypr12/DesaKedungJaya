@@ -23,6 +23,9 @@ export default function WargaDashboard() {
 
   // Form input pengajuan baru
   const [jenisSurat, setJenisSurat] = useState('Surat Keterangan Usaha (SKU)');
+  const [targetRT, setTargetRT] = useState('03');
+  const [targetRW, setTargetRW] = useState('02');
+  const [targetDusun, setTargetDusun] = useState('Kp. Wates (Dusun I)');
   const [keperluan, setKeperluan] = useState('');
   const [detailUsaha, setDetailUsaha] = useState('');
 
@@ -52,13 +55,14 @@ export default function WargaDashboard() {
       return;
     }
 
+    const selectedWilayahRT = `RT ${targetRT} / RW ${targetRW}`;
     ajukanSuratBaru({
       jenis: jenisSurat,
       pemohonNama: citizenNama,
       pemohonNik: citizenNik,
       pemohonTelepon: user?.telepon || '081234567891',
-      pemohonAlamat: user?.dusun || 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan',
-      wilayahRT: 'RT 03 / RW 02',
+      pemohonAlamat: `${targetDusun}, ${selectedWilayahRT}, Kedungjaya, Kec. Babelan`,
+      wilayahRT: selectedWilayahRT,
       keperluan,
       detailUsaha
     });
@@ -67,7 +71,7 @@ export default function WargaDashboard() {
     setDetailUsaha('');
     setModalAjukan(false);
     loadData();
-    alert('Permohonan surat berhasil diajukan! Berkas otomatis diteruskan ke Ketua RT 03 untuk pengesahan pengantar.');
+    alert(`Permohonan surat berhasil diajukan! Berkas otomatis diteruskan khusus ke Ketua ${selectedWilayahRT} untuk verifikasi.`);
   };
 
   const handleBuatAduan = (e) => {
@@ -293,7 +297,7 @@ export default function WargaDashboard() {
                     <div className={`p-1.5 rounded-lg font-bold border ${
                       !isRT ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' : 'bg-blue-100 text-blue-800 border-blue-300 animate-pulse'
                     }`}>
-                      {!isRT ? '✓ RT 03/02' : '⌛ RT 03/02'}
+                      {!isRT ? `✓ ${surat.wilayahRT || 'RT'}` : `⌛ ${surat.wilayahRT || 'RT'}`}
                     </div>
                     <div className={`p-1.5 rounded-lg font-bold border ${
                       isKades ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' :
@@ -310,7 +314,7 @@ export default function WargaDashboard() {
 
                   <p className="text-[11px] text-slate-400">
                     Posisi saat ini: <strong className="text-slate-700">
-                      {isRT ? 'Menunggu verifikasi faktual Ketua RT 03' :
+                      {isRT ? `Menunggu verifikasi faktual Ketua ${surat.wilayahRT || 'RT'}` :
                        isOperator ? 'Pemeriksaan berkas e-KTP oleh Operator Desa' :
                        'Menunggu pengesahan tanda tangan elektronik Kepala Desa'}
                     </strong>
@@ -442,6 +446,59 @@ export default function WargaDashboard() {
                   <option>Surat Keterangan Kelahiran</option>
                   <option>Surat Pengantar Pindah (SKPWNI)</option>
                 </select>
+              </div>
+
+              {/* PILIHAN RT / RW TUJUAN PENGANTAR */}
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <span className="font-bold text-slate-800 block text-[11px]">
+                  Tujuan Pengesahan RT / RW Pemohon *
+                </span>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-semibold block mb-0.5">Rukun Tetangga</label>
+                    <select
+                      value={targetRT}
+                      onChange={(e) => setTargetRT(e.target.value)}
+                      className="w-full p-2 rounded-xl border border-slate-300 bg-white font-bold"
+                    >
+                      {Array.from({ length: 22 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                        <option key={num} value={num}>RT {num}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-semibold block mb-0.5">Rukun Warga</label>
+                    <select
+                      value={targetRW}
+                      onChange={(e) => setTargetRW(e.target.value)}
+                      className="w-full p-2 rounded-xl border border-slate-300 bg-white font-bold"
+                    >
+                      {Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                        <option key={num} value={num}>RW {num}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-slate-500 font-semibold block mb-0.5">Dusun</label>
+                  <select
+                    value={targetDusun}
+                    onChange={(e) => setTargetDusun(e.target.value)}
+                    className="w-full p-2 rounded-xl border border-slate-300 bg-white text-xs"
+                  >
+                    <option value="Kp. Wates (Dusun I)">Dusun I (Kp. Wates)</option>
+                    <option value="Dusun II (Kedung Barat)">Dusun II (Kedung Barat)</option>
+                    <option value="Dusun III (Kp. Pengawas)">Dusun III (Kp. Pengawas)</option>
+                    <option value="Dusun IV (Lingkungan IV)">Dusun IV (Lingkungan IV)</option>
+                  </select>
+                </div>
+
+                <p className="text-[10px] text-[#0b5e42] font-semibold">
+                  ✓ Berkas HANYA akan masuk ke antrean Ketua RT {targetRT} / RW {targetRW}.
+                </p>
               </div>
 
               <div>
