@@ -84,7 +84,16 @@ export default function LayananPage() {
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, berkasName: e.target.files[0].name }));
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData(prev => ({ 
+          ...prev, 
+          fotoKK: reader.result, 
+          berkasName: file.name 
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -92,6 +101,11 @@ export default function LayananPage() {
     e.preventDefault();
     if (!formData.nik || !formData.nama || !formData.telepon || !formData.keperluan) {
       alert('Mohon lengkapi NIK, Nama Lengkap, Nomor HP/WhatsApp, dan Keperluan Surat.');
+      return;
+    }
+
+    if (!formData.fotoKK) {
+      alert('Foto Kartu Keluarga (KK) wajib dilampirkan agar Ketua RT dapat memverifikasi kesesuaian data warganya sebelum disahkan.');
       return;
     }
 
@@ -108,7 +122,8 @@ export default function LayananPage() {
       pemohonAlamat: `${formData.dusun}, ${targetWilayahRT}`,
       wilayahRT: targetWilayahRT,
       keperluan: formData.keperluan,
-      detailUsaha: formData.berkasName || '-'
+      detailUsaha: formData.berkasName || '-',
+      fotoKK: formData.fotoKK
     });
 
     const newTicketCode = workflowSurat.noReg;
@@ -519,30 +534,45 @@ export default function LayananPage() {
                     ></textarea>
                   </div>
 
-                  {/* Upload Berkas Dokumen (Simulasi) */}
+                  {/* Upload Foto Kartu Keluarga (Wajib untuk Verifikasi RT) */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                      Unggah Foto Dokumen Pendukung (KTP / KK / Surat RT)
-                    </label>
-                    <div className="border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-2xl p-6 text-center cursor-pointer transition-colors relative bg-slate-50 hover:bg-slate-100">
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-bold text-slate-700 uppercase">
+                        Foto Kartu Keluarga (KK) Asli Pemohon <span className="text-rose-600">*</span>
+                      </label>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">
+                        Wajib untuk Pak RT
+                      </span>
+                    </div>
+
+                    <div className="border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-2xl p-5 text-center cursor-pointer transition-colors relative bg-slate-50 hover:bg-slate-100">
                       <input
                         type="file"
+                        required
                         onChange={handleFileChange}
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        accept="image/*,application/pdf"
+                        accept="image/*"
                       />
-                      <UploadCloud className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                      {formData.berkasName ? (
-                        <p className="text-xs font-bold text-brand-700">
-                          File terpilih: {formData.berkasName}
-                        </p>
+                      {formData.fotoKK ? (
+                        <div className="space-y-2">
+                          <img
+                            src={formData.fotoKK}
+                            alt="Pratinjau KK"
+                            className="max-h-40 mx-auto rounded-xl shadow-sm border border-slate-200 object-contain"
+                          />
+                          <p className="text-xs font-bold text-emerald-700 flex items-center justify-center gap-1">
+                            <Check className="w-4 h-4" /> Foto KK siap diverifikasi: {formData.berkasName}
+                          </p>
+                          <span className="text-[10px] text-slate-400">Klik untuk mengganti foto</span>
+                        </div>
                       ) : (
                         <>
+                          <UploadCloud className="w-8 h-8 text-slate-400 mx-auto mb-2" />
                           <p className="text-xs font-semibold text-slate-700">
-                            Klik atau seret file foto KTP / KK ke sini
+                            Ambil foto atau pilih file Kartu Keluarga (KK)
                           </p>
                           <p className="text-[11px] text-slate-400 mt-1">
-                            Format JPG, PNG, atau PDF (Maksimal 5 MB)
+                            Format JPG / PNG (Pak RT akan mengecek keaslian data warga dari foto ini)
                           </p>
                         </>
                       )}

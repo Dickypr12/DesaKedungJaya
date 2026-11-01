@@ -80,8 +80,8 @@ export function getSuratForKades() {
   return all.filter(s => s.status === 'MENUNGGU_TTE_KADES');
 }
 
-// AKSI 1: Warga Mengajukan Surat Baru
-export function ajukanSuratBaru({ jenis, pemohonNama, pemohonNik, pemohonTelepon, pemohonAlamat, wilayahRT, keperluan, detailUsaha }) {
+// AKSI 1: Warga Mengajukan Surat Baru (Wajib Lampirkan Foto KK)
+export function ajukanSuratBaru({ jenis, pemohonNama, pemohonNik, pemohonTelepon, pemohonAlamat, wilayahRT, keperluan, detailUsaha, fotoKK }) {
   const all = getAllSurat();
   const idNumber = Math.floor(100 + Math.random() * 900);
   const now = new Date();
@@ -99,6 +99,7 @@ export function ajukanSuratBaru({ jenis, pemohonNama, pemohonNik, pemohonTelepon
     wilayahRT: wilayahRT || 'RT 03 / RW 02',
     keperluan,
     detailUsaha: detailUsaha || '-',
+    fotoKK: fotoKK || null,
     tanggalPengajuan: waktuStr,
     status: 'MENUNGGU_RT', // Berkas langsung masuk ke antrean Ketua RT!
     statusLabel: 'VERIFIKASI RT',
@@ -108,7 +109,7 @@ export function ajukanSuratBaru({ jenis, pemohonNama, pemohonNik, pemohonTelepon
         tahap: 'Pengajuan Warga',
         waktu: waktuStr,
         oleh: `${pemohonNama} (Warga)`,
-        catatan: `Permohonan ${jenis} berhasil diajukan online.`
+        catatan: `Permohonan ${jenis} berhasil diajukan online dengan lampiran Kartu Keluarga.`
       }
     ],
     tteInfo: null

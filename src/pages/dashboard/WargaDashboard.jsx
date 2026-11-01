@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, User, Shield, Check, Clock, FileText, 
   Download, PlusCircle, AlertCircle, CheckCircle2, ChevronRight,
-  QrCode, ExternalLink, Send, X, Eye
+  QrCode, ExternalLink, Send, X, Eye, UploadCloud, Camera, Image
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getSuratByWarga, ajukanSuratBaru } from '../../services/workflowService';
@@ -28,6 +28,20 @@ export default function WargaDashboard() {
   const [targetDusun, setTargetDusun] = useState('Kp. Wates (Dusun I)');
   const [keperluan, setKeperluan] = useState('');
   const [detailUsaha, setDetailUsaha] = useState('');
+  const [fotoKK, setFotoKK] = useState(null);
+  const [berkasNameKK, setBerkasNameKK] = useState('');
+
+  const handleFileKKChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFotoKK(reader.result);
+        setBerkasNameKK(file.name);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Form input aduan baru
   const [judulAduan, setJudulAduan] = useState('');
@@ -55,6 +69,11 @@ export default function WargaDashboard() {
       return;
     }
 
+    if (!fotoKK) {
+      alert('Foto Kartu Keluarga (KK) wajib dilampirkan agar Ketua RT dapat memeriksa apakah Anda benar warga di wilayahnya.');
+      return;
+    }
+
     const selectedWilayahRT = `RT ${targetRT} / RW ${targetRW}`;
     ajukanSuratBaru({
       jenis: jenisSurat,
@@ -64,11 +83,14 @@ export default function WargaDashboard() {
       pemohonAlamat: `${targetDusun}, ${selectedWilayahRT}, Kedungjaya, Kec. Babelan`,
       wilayahRT: selectedWilayahRT,
       keperluan,
-      detailUsaha
+      detailUsaha,
+      fotoKK
     });
 
     setKeperluan('');
     setDetailUsaha('');
+    setFotoKK(null);
+    setBerkasNameKK('');
     setModalAjukan(false);
     loadData();
     alert(`Permohonan surat berhasil diajukan! Berkas otomatis diteruskan khusus ke Ketua ${selectedWilayahRT} untuk verifikasi.`);
@@ -522,6 +544,51 @@ export default function WargaDashboard() {
                   placeholder="Contoh: Usaha Toko Kelontong RT 03"
                   className="w-full p-2.5 rounded-xl border border-slate-300"
                 />
+              </div>
+
+              {/* UPLOAD FOTO KARTU KELUARGA (WAJIB UNTUK PAK RT) */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block font-bold text-slate-700 text-[11px]">
+                    Foto Kartu Keluarga (KK) Asli <span className="text-rose-600">*</span>
+                  </label>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">
+                    Wajib untuk Pak RT
+                  </span>
+                </div>
+
+                <div className="border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-4 text-center cursor-pointer transition-colors relative bg-slate-50 hover:bg-slate-100">
+                  <input
+                    type="file"
+                    required
+                    onChange={handleFileKKChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    accept="image/*"
+                  />
+                  {fotoKK ? (
+                    <div className="space-y-1.5">
+                      <img
+                        src={fotoKK}
+                        alt="Pratinjau KK"
+                        className="max-h-28 mx-auto rounded-xl shadow-xs border border-slate-200 object-contain"
+                      />
+                      <p className="text-[11px] font-bold text-emerald-700 flex items-center justify-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> KK Terunggah: {berkasNameKK}
+                      </p>
+                      <span className="text-[9px] text-slate-400">Klik untuk mengganti foto</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Camera className="w-6 h-6 text-slate-400 mx-auto mb-1" />
+                      <p className="text-xs font-semibold text-slate-700">
+                        Foto atau Upload Kartu Keluarga (KK)
+                      </p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">
+                        Pak RT akan memeriksa foto KK ini untuk memastikan Anda warganya
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="pt-2">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, User, Shield, Check, Clock, Users, 
   FileCheck, CheckCircle2, ChevronRight, Home, Phone,
-  ThumbsUp, XCircle, AlertCircle, MapPin, Settings
+  ThumbsUp, XCircle, AlertCircle, MapPin, Settings, Eye, X, Image, FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { updateUserWilayahRT } from '../../services/authService';
@@ -21,6 +21,7 @@ export default function RtRwDashboard() {
 
   const [selectedRT, setSelectedRT] = useState(parsedRT);
   const [selectedRW, setSelectedRW] = useState(parsedRW);
+  const [modalFotoKK, setModalFotoKK] = useState(null);
 
   const activeWilayah = `RT ${selectedRT} / RW ${selectedRW}`;
 
@@ -290,6 +291,25 @@ export default function RtRwDashboard() {
                   <p className="text-[10px] font-semibold text-blue-700">Wilayah Pemohon: {item.wilayahRT || activeWilayah}</p>
                 </div>
 
+                {/* TOMBOL LIHAT FOTO KARTU KELUARGA (KK) */}
+                <div>
+                  {item.fotoKK ? (
+                    <button
+                      type="button"
+                      onClick={() => setModalFotoKK(item)}
+                      className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[#0b5e42] font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-2xs"
+                    >
+                      <Eye className="w-4 h-4 text-emerald-700" />
+                      <span>Periksa Foto Kartu Keluarga (KK)</span>
+                    </button>
+                  ) : (
+                    <div className="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] flex items-center gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>Foto KK belum dilampirkan pemohon.</span>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex gap-2 pt-1">
                   <button
                     onClick={() => handleApprove(item.id, item.pemohonNama || item.nama)}
@@ -312,6 +332,100 @@ export default function RtRwDashboard() {
         </div>
 
       </div>
+
+      {/* MODAL VERIFIKASI FOTO KARTU KELUARGA (KK) UNTUK PAK RT */}
+      {modalFotoKK && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider block">
+                  Verifikasi Faktual Warga Lingkungan
+                </span>
+                <h3 className="text-base font-black text-slate-900 mt-0.5">
+                  Foto Kartu Keluarga (KK) Pemohon
+                </h3>
+              </div>
+              <button
+                onClick={() => setModalFotoKK(null)}
+                className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* INFO PEMOHON */}
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Nama Pemohon:</span>
+                <strong className="text-slate-900">{modalFotoKK.pemohonNama}</strong>
+              </div>
+              <div className="flex justify-between font-mono">
+                <span className="text-slate-500 font-sans">NIK:</span>
+                <span className="font-bold text-slate-800">{modalFotoKK.pemohonNik}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Wilayah Pengesahan:</span>
+                <span className="font-bold text-blue-800">{modalFotoKK.wilayahRT}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Jenis Surat:</span>
+                <span className="text-slate-800 font-semibold">{modalFotoKK.jenis}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Keperluan:</span>
+                <span className="text-slate-700 italic">{modalFotoKK.keperluan}</span>
+              </div>
+            </div>
+
+            {/* HASIL FOTO KARTU KELUARGA */}
+            <div className="space-y-1.5">
+              <span className="text-[11px] font-bold text-slate-700 block">
+                Foto Dokumen Kartu Keluarga (KK):
+              </span>
+              <div className="bg-slate-900 rounded-2xl p-2 border border-slate-300 flex items-center justify-center overflow-hidden max-h-80">
+                <img
+                  src={modalFotoKK.fotoKK}
+                  alt="Kartu Keluarga Pemohon"
+                  className="w-full h-full object-contain rounded-lg"
+                />
+              </div>
+              <p className="text-[10px] text-slate-400 text-center italic">
+                Periksa apakah nama dan NIK pemohon tercantum dalam Kartu Keluarga di atas dan benar warga {activeWilayah}.
+              </p>
+            </div>
+
+            {/* TOMBOL TINDAKAN PAK RT */}
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  handleApprove(modalFotoKK.id, modalFotoKK.pemohonNama);
+                  setModalFotoKK(null);
+                }}
+                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition-all active:scale-95"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>✓ Benar Warga Saya (Sahkan Pengantar RT)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleReject(modalFotoKK.id, modalFotoKK.pemohonNama);
+                  setModalFotoKK(null);
+                }}
+                className="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition-colors"
+              >
+                ✕ Bukan Warga / Foto Tidak Sesuai (Tolak)
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
