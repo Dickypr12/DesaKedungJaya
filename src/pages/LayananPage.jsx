@@ -38,29 +38,8 @@ export default function LayananPage() {
   const [trackingResult, setTrackingResult] = useState(null);
   const [trackingError, setTrackingError] = useState('');
 
-  // Sample database tracking tickets
-  const [ticketsDatabase, setTicketsDatabase] = useState([
-    {
-      kode: 'KJ-2026-1042',
-      jenisSurat: 'Surat Keterangan Usaha (SKU)',
-      pemohon: 'Agus Setiawan',
-      nikMasked: '321601********02',
-      tanggal: '30 Oktober 2026, 09:15 WIB',
-      status: 'SELESAI',
-      pesan: 'Surat telah ditandatangani secara elektronik oleh Kepala Desa dan siap diambil di Kantor Desa atau diunduh.',
-      stepActive: 4,
-    },
-    {
-      kode: 'KJ-2026-1043',
-      jenisSurat: 'Surat Pengantar SKCK Polsek',
-      pemohon: 'Dina Mariyana',
-      nikMasked: '321601********18',
-      tanggal: '31 Oktober 2026, 08:30 WIB',
-      status: 'PROSES_VERIFIKASI',
-      pesan: 'Berkas e-KTP dan KK sedang diverifikasi oleh Kasi Pelayanan.',
-      stepActive: 2,
-    }
-  ]);
+  // Database tracking tiket permohonan mandiri (Mulai dari Nol)
+  const [ticketsDatabase, setTicketsDatabase] = useState([]);
 
   useEffect(() => {
     if (searchParams.get('type')) {
@@ -590,33 +569,6 @@ export default function LayananPage() {
                 <span>Cari Status</span>
               </button>
             </form>
-
-            {/* Quick Demo Helpers */}
-            <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-slate-500">
-              <span>Coba tiket demo:</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setTrackingInput('KJ-2026-1042');
-                  setTrackingResult(ticketsDatabase.find(t => t.kode === 'KJ-2026-1042'));
-                  setTrackingError('');
-                }}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-brand-700 font-mono font-semibold"
-              >
-                KJ-2026-1042 (Selesai)
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setTrackingInput('KJ-2026-1043');
-                  setTrackingResult(ticketsDatabase.find(t => t.kode === 'KJ-2026-1043'));
-                  setTrackingError('');
-                }}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-brand-700 font-mono font-semibold"
-              >
-                KJ-2026-1043 (Verifikasi)
-              </button>
-            </div>
 
             {trackingError && (
               <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">

@@ -20,36 +20,8 @@ export default function KontakPage() {
   const [submittedReport, setSubmittedReport] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  // Data mock riwayat pengaduan yang telah ditangani pemerintah desa
-  const [riwayatLaporan, setRiwayatLaporan] = useState([
-    {
-      id: 'LPR-2026-081',
-      kategori: 'Infrastruktur',
-      lokasi: 'Jl. Melati RT 03 RW 02, Dusun II',
-      judul: 'Lampu Penerangan Jalan Umum (PJU) Mati',
-      status: 'SELESAI DITANGANI',
-      tindakLanjut: 'Petugas PLN bersama Kaur Pembangunan telah mengganti bohlam LED solar cell pada 29 Oktober 2026.',
-      tanggal: '28 Okt 2026'
-    },
-    {
-      id: 'LPR-2026-082',
-      kategori: 'Pelayanan Publik',
-      lokasi: 'Loket Pelayanan Desa',
-      judul: 'Permintaan Percepatan Legalisir Dokumen KTP',
-      status: 'SELESAI DITANGANI',
-      tindakLanjut: 'Dokumen pemohon telah divalidasi dan diambil langsung di loket pelayanan pada 30 Oktober 2026.',
-      tanggal: '29 Okt 2026'
-    },
-    {
-      id: 'LPR-2026-083',
-      kategori: 'Lingkungan',
-      lokasi: 'Saluran Irigasi Tersier Dusun I',
-      judul: 'Sampah Menumpuk di Pintu Air',
-      status: 'DALAM PENGERJAAN',
-      tindakLanjut: 'Jadwal kerja bakti Karang Taruna dan Satgas Lingkungan diagendakan Minggu pagi ini.',
-      tanggal: '30 Okt 2026'
-    }
-  ]);
+  // Riwayat pengaduan warga (Mulai dari Nol)
+  const [riwayatLaporan, setRiwayatLaporan] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -416,38 +388,46 @@ export default function KontakPage() {
               </div>
 
               <div className="space-y-3">
-                {riwayatLaporan.map((lpr) => (
-                  <div
-                    key={lpr.id}
-                    className="p-4 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-2xs"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] font-bold text-slate-400">
-                        {lpr.id}
-                      </span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        lpr.status === 'SELESAI DITANGANI'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        {lpr.status}
-                      </span>
-                    </div>
-
-                    <h4 className="text-xs font-bold text-slate-900">
-                      {lpr.judul}
-                    </h4>
-
-                    <p className="text-[11px] text-slate-500">
-                      📍 {lpr.lokasi} • {lpr.tanggal}
-                    </p>
-
-                    <div className="p-2.5 rounded-xl bg-slate-50 text-[11px] text-slate-700 border border-slate-100 leading-snug">
-                      <strong className="text-brand-700 block">Tindak Lanjut Pemdes:</strong>
-                      {lpr.tindakLanjut}
-                    </div>
+                {riwayatLaporan.length === 0 ? (
+                  <div className="p-8 text-center bg-white rounded-2xl border border-dashed border-slate-200 space-y-2">
+                    <MessageSquare className="w-8 h-8 text-slate-300 mx-auto" />
+                    <p className="text-xs font-bold text-slate-600">Belum ada laporan pengaduan</p>
+                    <p className="text-[11px] text-slate-400">Setiap aspirasi atau keluhan yang masuk melalui form di samping akan dipantau dan diperbarui status tindak lanjutnya di sini.</p>
                   </div>
-                ))}
+                ) : (
+                  riwayatLaporan.map((lpr) => (
+                    <div
+                      key={lpr.id}
+                      className="p-4 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-2xs"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[10px] font-bold text-slate-400">
+                          {lpr.id}
+                        </span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          lpr.status === 'SELESAI DITANGANI'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {lpr.status}
+                        </span>
+                      </div>
+
+                      <h4 className="text-xs font-bold text-slate-900">
+                        {lpr.judul}
+                      </h4>
+
+                      <p className="text-[11px] text-slate-500">
+                        📍 {lpr.lokasi} • {lpr.tanggal}
+                      </p>
+
+                      <div className="p-2.5 rounded-xl bg-slate-50 text-[11px] text-slate-700 border border-slate-100 leading-snug">
+                        <strong className="text-brand-700 block">Tindak Lanjut Pemdes:</strong>
+                        {lpr.tindakLanjut}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

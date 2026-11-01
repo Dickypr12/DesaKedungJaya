@@ -7,22 +7,23 @@ import {
   FileText, TrendingUp, ThumbsUp
 } from 'lucide-react';
 import { mockAduanKritis } from '../../data/desaData';
-import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat } from '../../services/workflowService';
+import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 import { getAllAduan, disposisiOlehKades } from '../../services/aduanService';
 
 export default function KadesDashboard() {
   const [antrean, setAntrean] = useState(getSuratForKades());
-  const [suratTerbitCount, setSuratTerbitCount] = useState(28);
+  const [suratTerbitCount, setSuratTerbitCount] = useState(() => getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length);
   const [modalTTE, setModalTTE] = useState(null);
   const [tteSuccess, setTteSuccess] = useState(false);
   const [daftarAduan, setDaftarAduan] = useState(getAllAduan());
   const [modalDisposisi, setModalDisposisi] = useState(null);
   const [disposisiTarget, setDisposisiTarget] = useState('Tim Teknis Desa (Kaur Pembangunan)');
-  const [instruksiText, setInstruksiText] = useState('Segera lakukan peninjauan lokasi darurat dan siapkan material pengamanan jembatan.');
+  const [instruksiText, setInstruksiText] = useState('Segera lakukan peninjauan lokasi darurat dan siapkan material pengamanan.');
 
   const refreshList = () => {
     setAntrean(getSuratForKades());
     setDaftarAduan(getAllAduan());
+    setSuratTerbitCount(getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length);
   };
 
   const handleSign = (item) => {
@@ -168,11 +169,13 @@ export default function KadesDashboard() {
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">2</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">
+                {daftarAduan.filter(a => a.status === 'MENUNGGU_DISPOSISI').length}
+              </span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">prioritas</span>
             </div>
             <p className="text-[11px] font-semibold text-slate-500 mt-1">
-              Dusun II & Lingk. IV
+              {daftarAduan.filter(a => a.status === 'MENUNGGU_DISPOSISI').length > 0 ? 'Perlu arahan Kades' : 'Semua tertangani'}
             </p>
           </div>
 
@@ -362,8 +365,13 @@ export default function KadesDashboard() {
             </span>
           </div>
 
-          {daftarAduan.map((aduan) => (
-            <div key={aduan.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
+          {daftarAduan.length === 0 ? (
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500">
+              Belum ada aduan warga yang masuk. Situasi wilayah aman dan terkendali.
+            </div>
+          ) : (
+            daftarAduan.map((aduan) => (
+              <div key={aduan.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">
@@ -433,7 +441,7 @@ export default function KadesDashboard() {
               </div>
 
             </div>
-          ))}
+          )))}
         </div>
 
         {/* SECTION: MONITORING TREN PELAYANAN */}

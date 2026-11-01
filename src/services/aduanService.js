@@ -10,53 +10,20 @@ const STORAGE_ADUAN_KEY = 'kedungjaya_aduan_pipeline';
 export function initAduanPipeline() {
   const existing = localStorage.getItem(STORAGE_ADUAN_KEY);
   if (!existing) {
-    const initialAduan = [
-      {
-        id: 'ADU-2025-084',
-        tiket: 'Tiket #ADU-2025-084',
-        prioritas: 'Prioritas 1 (Kritis)',
-        judul: 'Jembatan Penghubung Kp. Wates Butuh Perbaikan',
-        kategori: 'Infrastruktur Jalan & Jembatan',
-        dusun: 'Kp. Wates, Kedungjaya',
-        pelaporNama: 'Hendra Kusuma',
-        pelaporNik: '3216012804920003',
-        pelaporTelepon: '081234567891',
-        deskripsi: 'Pondasi kayu sisi timur amblas setelah hujan deras semalam. Rawan dilewati anak sekolah dan kendaraan muatan hasil tani.',
-        gambar: 'https://images.unsplash.com/photo-1541888946425-d0fbb18f15f6?w=400&auto=format&fit=crop&q=80',
-        status: 'MENUNGGU_DISPOSISI', // Perlu tindakan Kades
-        disposisiTarget: 'Tim Teknis Desa (Kaur Pembangunan)',
-        disposisiCatatan: 'PJ: Kaur Pembangunan • Estimasi Tinjauan 2 Jam',
-        statusMaterial: 'Material Siaga • 32 Warga Mendukung',
-        tanggalLapor: '31 Oktober 2025, 07:15 WIB',
-        riwayat: [
-          { waktu: '31 Okt 2025, 07:15', oleh: 'Hendra Kusuma (Warga)', teks: 'Laporan aduan diunggah lewat Portal Desa' }
-        ]
-      },
-      {
-        id: 'ADU-2025-085',
-        tiket: 'Tiket #ADU-2025-085',
-        prioritas: 'Prioritas 2',
-        judul: 'Penerangan Jalan Umum (PJU) Lingkungan RT 04 Padam',
-        kategori: 'Fasilitas Umum & Lingkungan',
-        dusun: 'Dusun IV Lingkungan IV',
-        pelaporNama: 'Bambang Irawan',
-        pelaporNik: '3216012804920088',
-        pelaporTelepon: '081299112233',
-        deskripsi: 'Dua tiang lampu penerangan jalan di perempatan RT 04 padam sejak 2 malam lalu, mohon bantuan penggantian bohlam / sambungan listrik.',
-        gambar: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=400&auto=format&fit=crop&q=80',
-        status: 'DIDISPOSISIKAN',
-        disposisiTarget: 'Kepala Dusun IV & Petugas PJU',
-        disposisiCatatan: 'Instruksi Kades: Koordinasikan dengan PLN Rayon Babelan hari ini.',
-        statusMaterial: 'Dalam Penanganan',
-        tanggalLapor: '30 Oktober 2025, 19:40 WIB',
-        riwayat: [
-          { waktu: '30 Okt 2025, 19:40', oleh: 'Bambang Irawan', teks: 'Laporan aduan didaftarkan' },
-          { waktu: '31 Okt 2025, 08:00', oleh: 'Bpk. H. Suryono, S.Sos. (Kades)', teks: 'Didisposisikan ke Kadus IV & Teknisi Listrik Desa' }
-        ]
+    localStorage.setItem(STORAGE_ADUAN_KEY, JSON.stringify([]));
+  } else {
+    try {
+      const items = JSON.parse(existing);
+      // Bersihkan data dummy lama jika ada di browser
+      const cleaned = Array.isArray(items)
+        ? items.filter(a => !['ADU-2025-084', 'ADU-2025-085'].includes(a.id))
+        : [];
+      if (cleaned.length !== items.length) {
+        localStorage.setItem(STORAGE_ADUAN_KEY, JSON.stringify(cleaned));
       }
-    ];
-
-    localStorage.setItem(STORAGE_ADUAN_KEY, JSON.stringify(initialAduan));
+    } catch {
+      localStorage.setItem(STORAGE_ADUAN_KEY, JSON.stringify([]));
+    }
   }
 }
 

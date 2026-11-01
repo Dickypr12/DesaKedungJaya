@@ -5,14 +5,17 @@ import {
   FileCheck, CheckCircle2, ChevronRight, Home, Phone,
   ThumbsUp, XCircle, AlertCircle
 } from 'lucide-react';
-import { getSuratForRT, approveByRT, rejectOrReviseSurat } from '../../services/workflowService';
+import { getSuratForRT, approveByRT, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 
 export default function RtRwDashboard() {
   const [antreanRT, setAntreanRT] = useState(getSuratForRT('RT 03 / RW 02'));
-  const [disetujuiCount, setDisetujuiCount] = useState(19);
+  const [disetujuiCount, setDisetujuiCount] = useState(() => 
+    getAllSurat().filter(s => s.status !== 'MENUNGGU_RT' && (s.wilayahRT === 'RT 03 / RW 02' || !s.wilayahRT)).length
+  );
 
   const refreshList = () => {
     setAntreanRT(getSuratForRT('RT 03 / RW 02'));
+    setDisetujuiCount(getAllSurat().filter(s => s.status !== 'MENUNGGU_RT' && (s.wilayahRT === 'RT 03 / RW 02' || !s.wilayahRT)).length);
   };
 
   const handleApprove = (id, pemohonNama) => {

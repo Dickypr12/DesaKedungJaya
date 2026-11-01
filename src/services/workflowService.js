@@ -8,86 +8,24 @@ import { sendWhatsAppNotification } from './notificationService';
 
 const STORAGE_WORKFLOW_KEY = 'kedungjaya_surat_pipeline';
 
-// Inisialisasi data awal jika belum ada
+// Inisialisasi data awal (Mulai dari NOL / Zero Data)
 export function initWorkflowPipeline() {
   const existing = localStorage.getItem(STORAGE_WORKFLOW_KEY);
   if (!existing) {
-    const initialPipeline = [
-      {
-        id: 'SRT-2025-001',
-        noReg: '470/142/SKU/X/2025',
-        jenis: 'Surat Keterangan Usaha (SKU)',
-        pemohonNama: 'Hendra Kusuma',
-        pemohonNik: '3216012804920003',
-        pemohonTelepon: '081234567891',
-        pemohonAlamat: 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan',
-        wilayahRT: 'RT 03 / RW 02',
-        keperluan: 'Persyaratan Pengajuan KUR BRI Usaha Toko Kelontong "Jaya Makmur"',
-        detailUsaha: 'Toko Kelontong "Jaya Makmur" (Berjalan 3 Tahun)',
-        tanggalPengajuan: '31 Oktober 2025, 08:30 WIB',
-        status: 'MENUNGGU_TTE_KADES', // Muncul di dashboard Kades persis seperti screenshot Stitch!
-        statusLabel: 'DIPERIKSA',
-        rekomendasi: 'Rekomendasi Layak Usaha',
-        riwayat: [
-          { tahap: 'Pengajuan Warga', waktu: '31 Okt 2025, 08:30', oleh: 'Hendra Kusuma (Warga)', catatan: 'Formulir online dan foto usaha diunggah' },
-          { tahap: 'Pengantar RT/RW', waktu: '31 Okt 2025, 08:45', oleh: 'Bpk. Mulyono (Ketua RT 03)', catatan: 'Domisili dan usaha faktual terverifikasi' },
-          { tahap: 'Validasi Operator', waktu: '31 Okt 2025, 09:10', oleh: 'Dewi Lestari, S.Pd (Operator)', catatan: 'NIK dan KTP valid terhubung Disdukcapil' }
-        ],
-        tteInfo: null
-      },
-      {
-        id: 'SRT-2025-002',
-        noReg: '474/089/SKTM/X/2025',
-        jenis: 'SKTM Bantuan Pendidikan',
-        pemohonNama: 'Ibu Sumarni',
-        pemohonNik: '3216014407880005',
-        pemohonTelepon: '081299887766',
-        pemohonAlamat: 'Kp Wates, RT 01 / RW 01, Kedungjaya, Kec. Babelan',
-        wilayahRT: 'RT 01 / RW 01',
-        keperluan: 'Beasiswa KIP Kuliah Putra Pertama',
-        detailUsaha: 'Keluarga Pra-Sejahtera Desil 2',
-        tanggalPengajuan: '31 Oktober 2025, 09:00 WIB',
-        status: 'MENUNGGU_TTE_KADES',
-        statusLabel: 'SIAP TTE',
-        rekomendasi: 'Rekomendasi: Layak',
-        riwayat: [
-          { tahap: 'Pengajuan Warga', waktu: '31 Okt 2025, 09:00', oleh: 'Ibu Sumarni', catatan: 'Pengajuan SKTM dan kartu KIP dilampirkan' },
-          { tahap: 'Pengantar RT/RW', waktu: '31 Okt 2025, 09:15', oleh: 'Ketua RT 01', catatan: 'Kondisi ekonomi sesuai fakta lapangan' },
-          { tahap: 'Validasi Operator', waktu: '31 Okt 2025, 09:30', oleh: 'Dewi Lestari, S.Pd', catatan: 'Data DTKS Terpadu Valid' }
-        ],
-        tteInfo: null
-      },
-      {
-        id: 'SRT-2025-003',
-        noReg: '471/021/SKD/VIII/2025',
-        jenis: 'Surat Keterangan Domisili',
-        pemohonNama: 'Hendra Kusuma',
-        pemohonNik: '3216012804920003',
-        pemohonTelepon: '081234567891',
-        pemohonAlamat: 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan',
-        wilayahRT: 'RT 03 / RW 02',
-        keperluan: 'Pembukaan Rekening Bank BJB',
-        detailUsaha: '-',
-        tanggalPengajuan: '14 Agustus 2025, 10:00 WIB',
-        status: 'SELESAI_TERBIT',
-        statusLabel: '100% SAH BSrE',
-        rekomendasi: 'Disetujui',
-        riwayat: [
-          { tahap: 'Pengajuan Warga', waktu: '14 Agu 2025, 10:00', oleh: 'Hendra Kusuma', catatan: 'Diajukan online' },
-          { tahap: 'Pengantar RT/RW', waktu: '14 Agu 2025, 10:15', oleh: 'Bpk. Mulyono', catatan: 'Terverifikasi' },
-          { tahap: 'Validasi Operator', waktu: '14 Agu 2025, 10:30', oleh: 'Dewi Lestari, S.Pd', catatan: 'Lengkap' },
-          { tahap: 'Penandatanganan TTE', waktu: '14 Agu 2025, 11:00', oleh: 'Bpk. H. Suryono, S.Sos. (Kades)', catatan: 'Telah dibubuhi TTE BSrE BSSN' }
-        ],
-        tteInfo: {
-          penandatangan: 'Bpk. H. Suryono, S.Sos.',
-          jabatan: 'Kepala Desa Kedung Jaya',
-          sertifikat: 'BSrE BSSN ID: BSRE-KJ-2025-8941',
-          tanggalTTE: '14 Agu 2025, 11:00 WIB'
-        }
+    localStorage.setItem(STORAGE_WORKFLOW_KEY, JSON.stringify([]));
+  } else {
+    try {
+      const items = JSON.parse(existing);
+      // Bersihkan data dummy bawaan lama jika masih tersimpan di browser
+      const cleaned = Array.isArray(items) 
+        ? items.filter(i => !['SRT-2025-001', 'SRT-2025-002', 'SRT-2025-003'].includes(i.id))
+        : [];
+      if (cleaned.length !== items.length) {
+        localStorage.setItem(STORAGE_WORKFLOW_KEY, JSON.stringify(cleaned));
       }
-    ];
-
-    localStorage.setItem(STORAGE_WORKFLOW_KEY, JSON.stringify(initialPipeline));
+    } catch {
+      localStorage.setItem(STORAGE_WORKFLOW_KEY, JSON.stringify([]));
+    }
   }
 }
 

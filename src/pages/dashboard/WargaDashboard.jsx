@@ -333,25 +333,31 @@ export default function WargaDashboard() {
             <span className="text-[11px] font-bold text-teal-700">{suratTerbit.length} Dokumen</span>
           </div>
 
-          {suratTerbit.map((doc) => (
-            <div key={doc.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/70 flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-mono text-slate-400">{doc.noReg}</span>
-                <h5 className="text-xs font-bold text-slate-900">{doc.jenis}</h5>
-                <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Sah TTE BSrE • {doc.tteInfo?.tanggalTTE || 'Terbit'}
-                </p>
-              </div>
-
-              <button
-                onClick={() => setModalPreview(doc)}
-                className="px-3 py-1.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
-              >
-                <Eye className="w-3.5 h-3.5" />
-                <span>Lihat & Cetak Surat</span>
-              </button>
+          {suratTerbit.length === 0 ? (
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
+              Belum ada dokumen surat yang terbit.
             </div>
-          ))}
+          ) : (
+            suratTerbit.map((doc) => (
+              <div key={doc.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/70 flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-mono text-slate-400">{doc.noReg}</span>
+                  <h5 className="text-xs font-bold text-slate-900">{doc.jenis}</h5>
+                  <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Sah TTE BSrE • {doc.tteInfo?.tanggalTTE || 'Terbit'}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setModalPreview(doc)}
+                  className="px-3 py-1.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Lihat & Cetak Surat</span>
+                </button>
+              </div>
+            ))
+          )}
         </div>
 
         {/* SECTION: LAPORAN & ADUAN WARGA (DUSUN & LINGKUNGAN) */}

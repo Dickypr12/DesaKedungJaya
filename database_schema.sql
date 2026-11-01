@@ -99,7 +99,7 @@ CREATE TABLE notifikasi_wa (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 7. SEED DATA AWAL (6 ROLES RESMI)
+-- 7. SEED DATA AKUN RESMI (6 ROLES RESMI PEMERINTAHAN DESA)
 -- Password Default: 'KedungJaya2026!' (SHA-256 Hash)
 INSERT INTO users (nik, nama, telepon, email, password_hash, role, jabatan, dusun, wilayah_rt)
 VALUES
@@ -110,9 +110,3 @@ VALUES
 ('3216019901010001', 'Tim IT Desa', '081234567894', 'admin@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'admin', 'Administrator Sistem', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
 ('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Kp. Pengawas (Dusun III)', 'RT 02 / RW 03')
 ON CONFLICT (nik) DO NOTHING;
-
--- 8. SEED DATA AWAL SURAT PIPELINE
-INSERT INTO surat_pengajuan (id, no_reg, jenis, pemohon_nik, pemohon_nama, pemohon_telepon, pemohon_alamat, wilayah_rt, keperluan, detail_usaha, status, status_label, rekomendasi)
-VALUES
-('SRT-2025-001', '470/142/SKU/X/2025', 'Surat Keterangan Usaha (SKU)', '3216012804920003', 'Hendra Kusuma', '081234567891', 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan', 'RT 03 / RW 02', 'Persyaratan Pengajuan KUR BRI Usaha Toko Kelontong "Jaya Makmur"', 'Toko Kelontong "Jaya Makmur"', 'MENUNGGU_TTE_KADES', 'DIPERIKSA', 'Rekomendasi Layak Usaha')
-ON CONFLICT (id) DO NOTHING;

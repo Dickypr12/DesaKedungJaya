@@ -5,14 +5,21 @@ import {
   Search, CheckCircle2, ChevronRight, FileText, Send, 
   RotateCcw, Printer, Filter
 } from 'lucide-react';
-import { getSuratForOperator, forwardToKades, rejectOrReviseSurat } from '../../services/workflowService';
+import { getSuratForOperator, forwardToKades, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 
 export default function OperatorDashboard() {
   const [berkasLoket, setBerkasLoket] = useState(getSuratForOperator());
-  const [drafKadesCount, setDrafKadesCount] = useState(4);
+  const [drafKadesCount, setDrafKadesCount] = useState(() => 
+    getAllSurat().filter(s => s.status === 'MENUNGGU_TTE_KADES').length
+  );
+  const [suratTerbitCount, setSuratTerbitCount] = useState(() => 
+    getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length
+  );
 
   const refreshList = () => {
     setBerkasLoket(getSuratForOperator());
+    setDrafKadesCount(getAllSurat().filter(s => s.status === 'MENUNGGU_TTE_KADES').length);
+    setSuratTerbitCount(getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length);
   };
 
   const handleForwardToKades = (id, jenisSurat) => {
@@ -137,11 +144,11 @@ export default function OperatorDashboard() {
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">38</span>
-              <span className="text-xs font-semibold text-slate-500 ml-1.5">minggu ini</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">{suratTerbitCount}</span>
+              <span className="text-xs font-semibold text-slate-500 ml-1.5">terbit</span>
             </div>
             <p className="text-[11px] font-semibold text-cyan-800 mt-1">
-              100% Selesai Tepat
+              {suratTerbitCount > 0 ? '100% Selesai Tepat' : 'Belum ada terbit'}
             </p>
           </div>
 
