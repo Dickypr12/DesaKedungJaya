@@ -9,11 +9,13 @@ import {
 import { mockAduanKritis } from '../../data/desaData';
 import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 import { getAllAduan, disposisiOlehKades } from '../../services/aduanService';
+import SuratResmiModal from '../../components/SuratResmiModal';
 
 export default function KadesDashboard() {
   const [antrean, setAntrean] = useState(getSuratForKades());
   const [suratTerbitCount, setSuratTerbitCount] = useState(() => getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length);
   const [modalTTE, setModalTTE] = useState(null);
+  const [previewDoc, setPreviewDoc] = useState(null);
   const [tteSuccess, setTteSuccess] = useState(false);
   const [daftarAduan, setDaftarAduan] = useState(getAllAduan());
   const [modalDisposisi, setModalDisposisi] = useState(null);
@@ -335,20 +337,40 @@ export default function KadesDashboard() {
             ))
           )}
 
-          {/* Shortcut Link: 2 berkas lain */}
-          <div className="p-3 bg-white rounded-xl border border-slate-200/70 flex items-center justify-between text-xs font-semibold text-slate-600">
-            <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-slate-400" />
-              <span>2 berkas lain (SK Domisili & Pengantar Nikah)</span>
-            </span>
-            <button
-              onClick={() => alert('Menampilkan seluruh antrean berkas terdaftar.')}
-              className="text-[#0b5e42] font-bold text-[11px] flex items-center"
-            >
-              <span>Lihat Semua</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* SECTION: ARSIP SURAT TERBIT TTE RESMI */}
+          {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length > 0 && (
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-1 h-5 rounded-full bg-emerald-600"></span>
+                  <h3 className="text-sm font-extrabold text-slate-900">
+                    Arsip Dokumen Terbit (TTE Sah)
+                  </h3>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                  {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length} Dokumen
+                </span>
+              </div>
+
+              {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').map(doc => (
+                <div key={doc.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/70 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono text-slate-400">{doc.noReg}</span>
+                    <h5 className="text-xs font-bold text-slate-900">{doc.jenis}</h5>
+                    <p className="text-[10px] text-slate-500">Pemohon: {doc.pemohonNama}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDoc(doc)}
+                    className="px-3 py-1.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>PDF / Word</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* SECTION: PENGAWASAN ADUAN KRITIS */}
@@ -678,6 +700,14 @@ export default function KadesDashboard() {
 
           </div>
         </div>
+      )}
+
+      {/* MODAL PRATINJAU & UNDUH SURAT (PDF / WORD) */}
+      {previewDoc && (
+        <SuratResmiModal
+          surat={previewDoc}
+          onClose={() => setPreviewDoc(null)}
+        />
       )}
 
     </div>

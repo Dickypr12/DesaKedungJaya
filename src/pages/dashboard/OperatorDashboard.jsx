@@ -6,9 +6,11 @@ import {
   RotateCcw, Printer, Filter
 } from 'lucide-react';
 import { getSuratForOperator, forwardToKades, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
+import SuratResmiModal from '../../components/SuratResmiModal';
 
 export default function OperatorDashboard() {
   const [berkasLoket, setBerkasLoket] = useState(getSuratForOperator());
+  const [previewSurat, setPreviewSurat] = useState(null);
   const [drafKadesCount, setDrafKadesCount] = useState(() => 
     getAllSurat().filter(s => s.status === 'MENUNGGU_TTE_KADES').length
   );
@@ -246,7 +248,51 @@ export default function OperatorDashboard() {
           )}
         </div>
 
+        {/* SECTION: SURAT TERBIT SIAP CETAK LOKET */}
+        {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length > 0 && (
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-1 h-5 rounded-full bg-cyan-700"></span>
+                <h3 className="text-sm font-extrabold text-slate-900">
+                  Surat Terbit Siap Cetak (TTE Sah)
+                </h3>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800">
+                {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length} Dokumen
+              </span>
+            </div>
+
+            {getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').map(doc => (
+              <div key={doc.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/70 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-mono text-slate-400">{doc.noReg}</span>
+                  <h5 className="text-xs font-bold text-slate-900">{doc.jenis}</h5>
+                  <p className="text-[10px] text-slate-500">Pemohon: {doc.pemohonNama} ({doc.wilayahRT || 'RT 03/02'})</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPreviewSurat(doc)}
+                  className="px-3 py-1.5 rounded-xl bg-cyan-700 hover:bg-cyan-800 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Cetak / PDF / Word</span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
+
+      {/* MODAL PRATINJAU SURAT (PDF & WORD) */}
+      {previewSurat && (
+        <SuratResmiModal
+          surat={previewSurat}
+          onClose={() => setPreviewSurat(null)}
+        />
+      )}
+
     </div>
   );
 }

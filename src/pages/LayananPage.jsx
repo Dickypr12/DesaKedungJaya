@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { daftarLayanan, desaInfo } from '../data/desaData';
 import { ajukanSuratBaru, getAllSurat } from '../services/workflowService';
+import SuratResmiModal from '../components/SuratResmiModal';
 
 export default function LayananPage() {
   const location = useLocation();
@@ -37,16 +38,40 @@ export default function LayananPage() {
   const [trackingInput, setTrackingInput] = useState('');
   const [trackingResult, setTrackingResult] = useState(null);
   const [trackingError, setTrackingError] = useState('');
+  const [previewSurat, setPreviewSurat] = useState(null);
 
   // Database tracking tiket permohonan mandiri (Mulai dari Nol)
   const [ticketsDatabase, setTicketsDatabase] = useState([]);
 
   useEffect(() => {
-    if (searchParams.get('type')) {
-      setSelectedSuratId(searchParams.get('type'));
+    const typeParam = searchParams.get('type');
+    const tabParam = searchParams.get('tab');
+    if (typeParam) {
+      setSelectedSuratId(typeParam);
     }
-    if (searchParams.get('tab')) {
-      setActiveTab(searchParams.get('tab'));
+    if (tabParam) {
+      setActiveTab(tabParam);
+      if (tabParam === 'tracking' && typeParam) {
+        setTrackingInput(typeParam);
+        const allWf = getAllSurat();
+        const foundWf = allWf.find(s => s.id === typeParam || s.noReg === typeParam);
+        if (foundWf) {
+          setTrackingResult({
+            kode: foundWf.noReg,
+            jenisSurat: foundWf.jenis,
+            pemohon: foundWf.pemohonNama,
+            nikMasked: foundWf.pemohonNik.substring(0, 6) + '********' + foundWf.pemohonNik.substring(foundWf.pemohonNik.length - 2),
+            tanggal: foundWf.tanggalPengajuan,
+            status: foundWf.status,
+            pesan: foundWf.status === 'SELESAI_TERBIT' 
+              ? `Surat telah ditandatangani secara digital oleh Kepala Desa (${foundWf.tteInfo?.sertifikat || 'BSrE BSSN'}) dan sah secara hukum.`
+              : 'Permohonan sedang dalam tahapan proses administrasi.',
+            stepActive: foundWf.status === 'SELESAI_TERBIT' ? 4 : 1,
+            isSigned: foundWf.status === 'SELESAI_TERBIT',
+            suratOriginal: foundWf
+          });
+        }
+      }
     }
   }, [location.search]);
 
@@ -148,7 +173,8 @@ export default function LayananPage() {
         status: wfMatch.status,
         pesan: pesanStatus,
         stepActive: stepActive,
-        isSigned: wfMatch.status === 'SELESAI_TERBIT'
+        isSigned: wfMatch.status === 'SELESAI_TERBIT',
+        suratOriginal: wfMatch
       });
       return;
     }
@@ -688,18 +714,30 @@ export default function LayananPage() {
               {trackingResult.stepActive === 4 && (
                 <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-xs text-emerald-900">
-                    <p className="font-bold">Dokumen Fisik Sudah Dicetak & Divalidasi</p>
-                    <p className="text-emerald-700 mt-0.5">Silakan ambil di Kantor Balai Desa Kedung Jaya membawa KTP asli.</p>
+                    <p className="font-bold">E-Dokumen Resmi Telah Terbit & Sah TTE BSrE</p>
+                    <p className="text-emerald-700 mt-0.5">Surat telah ditandatangani digital oleh Kepala Desa dan siap diunduh dalam format PDF atau Word.</p>
                   </div>
-                  <a
-                    href={`https://wa.me/${desaInfo.whatsapp.replace(/[^0-9]/g, '')}?text=Halo%20Admin%20Desa%20Kedung%20Jaya,%20saya%20ingin%20mengonfirmasi%20tiket%20${trackingResult.kode}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 shrink-0"
-                  >
-                    <span>Konfirmasi Pengambilan via WA</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {trackingResult.suratOriginal && (
+                      <button
+                        type="button"
+                        onClick={() => setPreviewSurat(trackingResult.suratOriginal)}
+                        className="px-4 py-2.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition-all"
+                      >
+                        <FileText className="w-4 h-4" />
+                        <span>Unduh PDF / Word</span>
+                      </button>
+                    )}
+                    <a
+                      href={`https://wa.me/${desaInfo.whatsapp.replace(/[^0-9]/g, '')}?text=Halo%20Admin%20Desa%20Kedung%20Jaya,%20saya%20ingin%20mengonfirmasi%20tiket%20${trackingResult.kode}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2.5 rounded-xl bg-white border border-emerald-300 hover:bg-emerald-100 text-emerald-800 font-bold text-xs shadow-xs flex items-center gap-1.5"
+                    >
+                      <span>Konfirmasi WA</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               )}
 
@@ -773,6 +811,14 @@ export default function LayananPage() {
             ))}
           </div>
         </div>
+      )}
+
+      {/* MODAL PRATINJAU SURAT RESMI (CETAK PDF & WORD) */}
+      {previewSurat && (
+        <SuratResmiModal
+          surat={previewSurat}
+          onClose={() => setPreviewSurat(null)}
+        />
       )}
 
     </div>
