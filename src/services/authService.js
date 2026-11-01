@@ -248,7 +248,7 @@ export async function registerWarga({ nik, nama, telepon, email, password, role 
     wilayah_rt: wilayahStr,
     rtRw: wilayahStr,
     dusun: selectedDusun,
-    statusVerifikasi: 'TERVERIFIKASI',
+    statusVerifikasi: role === 'rtrw' ? 'MENUNGGU_VERIFIKASI_DESA' : 'TERVERIFIKASI',
     otpVerified: true,
     tanggalDaftar: new Date().toISOString()
   };
@@ -262,6 +262,7 @@ export async function registerWarga({ nik, nama, telepon, email, password, role 
     userId: newUser.id,
     nikMasked: cleanNik.substring(0, 4) + '********' + cleanNik.substring(cleanNik.length - 2),
     telepon: cleanPhone,
+    role: newUser.role,
     step: 'OTP_PENDING',
     expiresAt: Date.now() + 10 * 60 * 1000 // 10 menit
   };
@@ -320,6 +321,15 @@ export async function loginUser(identifier, password) {
     recordFailedAttempt(cleanIdent);
     // Pesan aman yang tidak membocorkan apakah identitas ada di database
     throw new Error('Nomor NIK/WhatsApp atau kata sandi yang Anda masukkan tidak sesuai.');
+  }
+
+  // Cek apakah akun Ketua RT/RW masih menunggu verifikasi kantor desa
+  if (user.role === 'rtrw' && user.statusVerifikasi === 'MENUNGGU_VERIFIKASI_DESA') {
+    throw new Error('Akun Ketua RT/RW Anda sedang menunggu verifikasi & aktivasi SK dari Kantor Desa Kedung Jaya. Silakan hubungi bagian pelayanan desa untuk proses aktivasi.');
+  }
+
+  if (user.statusVerifikasi === 'DITOLAK') {
+    throw new Error('Pendaftaran akun ini telah ditolak oleh pihak kantor desa karena data identitas atau SK tidak valid.');
   }
 
   // Berhasil login: reset gagal
@@ -458,4 +468,50 @@ export async function resetPasswordWithToken(token, newPassword) {
 
   return { success: true, message: 'Kata sandi berhasil diperbarui. Silakan login kembali.' };
 }
+
+// Dapatkan pendaftaran akun RT/RW yang masih menunggu verifikasi kantor desa
+export function getPendingRtRegistrations() {
+  const users = getAllUsers();
+  return users.filter(u => u.role === 'rtrw' && u.statusVerifikasi === 'MENUNGGU_VERIFIKASI_DESA');
+}
+
+// Dapatkan seluruh akun RT/RW terdaftar
+export function getAllRtAccounts() {
+  const users = getAllUsers();
+  return users.filter(u => u.role === 'rtrw');
+}
+
+// Setujui & Aktifkan Akun RT/RW oleh bagian desa (Operator Loket / Admin IT)
+export function approveRtRegistration(userId, verifiedBy = 'Dewi Lestari, S.Pd (Operator Pelayanan)') {
+  const users = getAllUsers();
+  const index = users.findIndex(u => u.id === userId || u.nik === userId);
+  if (index === -1) {
+    throw new Error('Akun RT/RW tidak ditemukan.');
+  }
+
+  users[index].statusVerifikasi = 'TERVERIFIKASI';
+  users[index].verifiedAt = new Date().toISOString();
+  users[index].verifiedBy = verifiedBy;
+  saveUsers(users);
+
+  return users[index];
+}
+
+// Tolak Pendaftaran Akun RT/RW
+export function rejectRtRegistration(userId, alasan = 'SK Tidak Sesuai Data Desa', rejectedBy = 'Operator Pelayanan') {
+  const users = getAllUsers();
+  const index = users.findIndex(u => u.id === userId || u.nik === userId);
+  if (index === -1) {
+    throw new Error('Akun RT/RW tidak ditemukan.');
+  }
+
+  users[index].statusVerifikasi = 'DITOLAK';
+  users[index].alasanPenolakan = alasan;
+  users[index].rejectedAt = new Date().toISOString();
+  users[index].rejectedBy = rejectedBy;
+  saveUsers(users);
+
+  return users[index];
+}
+
 

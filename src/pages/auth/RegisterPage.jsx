@@ -394,8 +394,14 @@ export default function RegisterPage() {
               </div>
 
               {formData.role === 'rtrw' && (
-                <div className="p-2.5 rounded-xl bg-blue-50 text-[11px] text-blue-900 border border-blue-200">
-                  ℹ️ Akun ini akan menerima permohonan surat pengantar khusus yang diajukan oleh warga di <strong>RT {formData.rt} / RW {formData.rw}</strong>.
+                <div className="p-3 rounded-xl bg-amber-50 text-[11px] text-amber-950 border border-amber-200/80 space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold text-amber-900">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+                    <span>Wajib Verifikasi Kantor Desa:</span>
+                  </div>
+                  <p className="leading-relaxed text-amber-800">
+                    Akun ini akan bertugas memverifikasi surat pengantar warga di <strong>RT {formData.rt} / RW {formData.rw}</strong>. Sesuai aturan desa, akun Ketua RT/RW <strong>wajib disahkan oleh Petugas Kantor Desa</strong> sebelum dapat digunakan untuk login.
+                  </p>
                 </div>
               )}
             </div>

@@ -88,7 +88,8 @@ export default function VerifyOtpPage() {
       }
       
       verifyOTP(tempReg.userId, fullOtp);
-      navigate('/verification-status');
+      const targetRole = tempReg.role === 'rtrw' ? 'rtrw' : 'warga';
+      navigate(`/verification-status?role=${targetRole}`);
     } catch (err) {
       setErrorMessage(err.message || 'Kode OTP tidak valid atau kadaluarsa.');
     } finally {
