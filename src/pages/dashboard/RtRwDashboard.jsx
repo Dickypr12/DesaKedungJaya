@@ -89,7 +89,7 @@ export default function RtRwDashboard() {
               Bpk. Mulyono
             </h2>
             <p className="text-[11px] text-slate-400 truncate">
-              Dusun II Kedung Barat • Masa Bakti 2024-2029
+              Kp. Wates, RT 03 / RW 02, Kedungjaya • Masa Bakti 2024-2029
             </p>
           </div>
         </div>

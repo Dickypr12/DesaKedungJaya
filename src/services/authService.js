@@ -42,7 +42,7 @@ export async function initSeedUsers() {
         email: 'hendra.kusuma@kedungjaya.id',
         role: 'warga',
         statusVerifikasi: 'TERVERIFIKASI',
-        dusun: 'Dusun II Kedung Barat',
+        dusun: 'Kp. Wates (Dusun I)',
         rtRw: 'RT 03 / RW 02',
         passwordHash: defaultPasswordHash,
         tanggalDaftar: '2025-02-15'

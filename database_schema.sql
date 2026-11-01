@@ -25,7 +25,7 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     role VARCHAR(30) NOT NULL CHECK (role IN ('warga', 'rtrw', 'operator', 'kades', 'admin', 'bendahara')),
     jabatan VARCHAR(100),
-    dusun VARCHAR(100) DEFAULT 'Dusun II Kedung Barat',
+    dusun VARCHAR(100) DEFAULT 'Kp. Wates (Dusun I)',
     wilayah_rt VARCHAR(50) DEFAULT 'RT 03 / RW 02',
     is_verified BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -103,16 +103,16 @@ CREATE TABLE notifikasi_wa (
 -- Password Default: 'KedungJaya2026!' (SHA-256 Hash)
 INSERT INTO users (nik, nama, telepon, email, password_hash, role, jabatan, dusun, wilayah_rt)
 VALUES
-('3216012804920003', 'Hendra Kusuma', '081234567891', 'hendra.kusuma@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'warga', 'Warga Dusun II', 'Dusun II Kedung Barat', 'RT 03 / RW 02'),
-('3216011503820002', 'Bpk. Mulyono', '081234567892', 'rt03.rw02@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'rtrw', 'Ketua RT 03', 'Dusun II Kedung Barat', 'RT 03 / RW 02'),
-('199104052017012005', 'Dewi Lestari, S.Pd', '081234567893', 'pelayanan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'operator', 'Operator Loket Pelayanan', 'Dusun I Kedung Timur', 'RT 01 / RW 01'),
-('197508122010011001', 'Bpk. H. Suryono, S.Sos.', '081234567890', 'kades@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'kades', 'Kepala Desa Kedung Jaya', 'Dusun I Kedung Timur', 'RT 01 / RW 01'),
-('3216019901010001', 'Tim IT Desa', '081234567894', 'admin@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'admin', 'Administrator Sistem', 'Dusun I Kedung Timur', 'RT 01 / RW 01'),
-('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Dusun III Kedung Selatan', 'RT 02 / RW 03')
+('3216012804920003', 'Hendra Kusuma', '081234567891', 'hendra.kusuma@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'warga', 'Warga Kp. Wates', 'Kp. Wates (Dusun I)', 'RT 03 / RW 02'),
+('3216011503820002', 'Bpk. Mulyono', '081234567892', 'rt03.rw02@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'rtrw', 'Ketua RT 03', 'Kp. Wates (Dusun I)', 'RT 03 / RW 02'),
+('199104052017012005', 'Dewi Lestari, S.Pd', '081234567893', 'pelayanan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'operator', 'Operator Loket Pelayanan', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
+('197508122010011001', 'Bpk. H. Suryono, S.Sos.', '081234567890', 'kades@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'kades', 'Kepala Desa Kedung Jaya', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
+('3216019901010001', 'Tim IT Desa', '081234567894', 'admin@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'admin', 'Administrator Sistem', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
+('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Kp. Pengawas (Dusun III)', 'RT 02 / RW 03')
 ON CONFLICT (nik) DO NOTHING;
 
 -- 8. SEED DATA AWAL SURAT PIPELINE
 INSERT INTO surat_pengajuan (id, no_reg, jenis, pemohon_nik, pemohon_nama, pemohon_telepon, pemohon_alamat, wilayah_rt, keperluan, detail_usaha, status, status_label, rekomendasi)
 VALUES
-('SRT-2025-001', '470/142/SKU/X/2025', 'Surat Keterangan Usaha (SKU)', '3216012804920003', 'Hendra Kusuma', '081234567891', 'Dusun II Kedung Barat, RT 03 / RW 02', 'RT 03 / RW 02', 'Persyaratan Pengajuan KUR BRI Usaha Toko Kelontong "Jaya Makmur"', 'Toko Kelontong "Jaya Makmur"', 'MENUNGGU_TTE_KADES', 'DIPERIKSA', 'Rekomendasi Layak Usaha')
+('SRT-2025-001', '470/142/SKU/X/2025', 'Surat Keterangan Usaha (SKU)', '3216012804920003', 'Hendra Kusuma', '081234567891', 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan', 'RT 03 / RW 02', 'Persyaratan Pengajuan KUR BRI Usaha Toko Kelontong "Jaya Makmur"', 'Toko Kelontong "Jaya Makmur"', 'MENUNGGU_TTE_KADES', 'DIPERIKSA', 'Rekomendasi Layak Usaha')
 ON CONFLICT (id) DO NOTHING;

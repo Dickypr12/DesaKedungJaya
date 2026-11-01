@@ -22,7 +22,7 @@ export default function LayananPage() {
     nik: '',
     nama: '',
     telepon: '',
-    dusun: 'Dusun I Kedung Timur',
+    dusun: 'Dusun I (Kp. Wates)',
     rt: '01',
     rw: '01',
     keperluan: '',
@@ -215,34 +215,34 @@ export default function LayananPage() {
 
       {/* TAB NAVIGATION */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex border-b border-slate-200">
+        <div className="flex border-b border-slate-200 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveTab('form')}
-            className={`flex-1 py-4 text-center text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 min-w-[120px] py-3.5 sm:py-4 text-center text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 ${
               activeTab === 'form'
                 ? 'border-brand-600 text-brand-700 bg-brand-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <FileText className="w-4 h-4" />
-            <span>Formulir Pengajuan Surat</span>
+            <FileText className="w-4 h-4 shrink-0" />
+            <span>Formulir Pengajuan</span>
           </button>
           
           <button
             onClick={() => setActiveTab('tracking')}
-            className={`flex-1 py-4 text-center text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 min-w-[120px] py-3.5 sm:py-4 text-center text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 ${
               activeTab === 'tracking'
                 ? 'border-brand-600 text-brand-700 bg-brand-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            <Search className="w-4 h-4" />
-            <span>Lacak Status Dokumen</span>
+            <Search className="w-4 h-4 shrink-0" />
+            <span>Lacak Dokumen</span>
           </button>
 
           <button
             onClick={() => setActiveTab('syarat')}
-            className={`flex-1 py-4 text-center text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 min-w-[120px] py-3.5 sm:py-4 text-center text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 ${
               activeTab === 'syarat'
                 ? 'border-brand-600 text-brand-700 bg-brand-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -451,10 +451,10 @@ export default function LayananPage() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white"
                       >
-                        <option>Dusun I Kedung Timur</option>
-                        <option>Dusun II Kedung Barat</option>
-                        <option>Dusun III Kedung Selatan</option>
-                        <option>Dusun IV Kedung Utara</option>
+                        <option>Dusun I (Kp. Wates)</option>
+                        <option>Dusun II (Kp. Babakan)</option>
+                        <option>Dusun III (Kp. Pengawas)</option>
+                        <option>Dusun IV (Kp. Belendung)</option>
                       </select>
                     </div>
                   </div>
@@ -662,7 +662,7 @@ export default function LayananPage() {
                   Alur Proses Dokumen:
                 </h4>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
                   
                   {/* Step 1 */}
                   <div className={`p-4 rounded-2xl border text-center space-y-2 ${

@@ -20,7 +20,7 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="font-extrabold text-white text-lg tracking-tight">DESA KEDUNG JAYA</h3>
-                <p className="text-xs text-brand-400 font-medium">Kecamatan Kedungwuni</p>
+                <p className="text-xs text-brand-400 font-medium">Kec. Babelan, Kabupaten Bekasi</p>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">

@@ -36,7 +36,7 @@ import { desaInfo } from './data/desaData';
 export default function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-brand-500 selection:text-white">
+      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-brand-500 selection:text-white overflow-x-hidden">
         <ScrollToTop />
         
         {/* Top Navigation */}

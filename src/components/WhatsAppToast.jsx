@@ -23,7 +23,7 @@ export default function WhatsAppToast() {
   if (!activeToast) return null;
 
   return (
-    <div className="fixed bottom-5 right-5 z-[9999] max-w-sm w-full mx-auto px-3 animate-slideUp">
+    <div className="fixed bottom-4 left-3 right-3 sm:left-auto sm:right-5 sm:bottom-5 z-[9999] max-w-sm mx-auto sm:mx-0 animate-slideUp">
       <div className="bg-[#128C7E] text-white rounded-2xl p-4 shadow-2xl border border-emerald-400/30 flex items-start gap-3 backdrop-blur-md">
         
         {/* WhatsApp Icon Circle */}

@@ -211,6 +211,49 @@ export default function KontakPage() {
         </div>
       </section>
 
+      {/* PETA LOKASI KANTOR DESA & NAVIGASI */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span className="text-brand-600 text-xs font-extrabold uppercase tracking-widest flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-brand-600" /> Lokasi Kantor Desa
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
+                Peta & Petunjuk Arah
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                {desaInfo.alamat}
+              </p>
+            </div>
+
+            <a
+              href="https://maps.google.com/?q=V24H%2BG56%2C+Jl.+Pertamina%2C+Kp+Wates%2C+Kedungjaya%2C+Kec.+Babelan%2C+Kabupaten+Bekasi%2C+Jawa+Barat+17610"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition-all self-start sm:self-auto shrink-0"
+            >
+              <MapPin className="w-4 h-4" />
+              <span>Buka di Google Maps Navigasi</span>
+            </a>
+          </div>
+
+          {/* Embedded Responsive Map */}
+          <div className="w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+            <iframe
+              title="Peta Kantor Desa Kedung Jaya Babelan"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://maps.google.com/maps?q=V24H%2BG56%2C%20Jl.%20Pertamina%2C%20Kp%20Wates%2C%20Kedungjaya%2C%20Kec.%20Babelan%2C%20Kabupaten%20Bekasi%2C%20Jawa%20Barat%2017610&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
       {/* FORM PENGADUAN WARGA (LAPOR KEDUNG JAYA) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -299,10 +342,10 @@ export default function KontakPage() {
                     onChange={(e) => setFormData({ ...formData, dusun: e.target.value })}
                     className="w-full px-3 py-3 rounded-xl border border-slate-300 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
                   >
-                    <option>Dusun I Kedung Timur</option>
-                    <option>Dusun II Kedung Barat</option>
-                    <option>Dusun III Kedung Selatan</option>
-                    <option>Dusun IV Kedung Utara</option>
+                    <option>Dusun I (Kp. Wates)</option>
+                    <option>Dusun II (Kp. Babakan)</option>
+                    <option>Dusun III (Kp. Pengawas)</option>
+                    <option>Dusun IV (Kp. Belendung)</option>
                   </select>
                 </div>
               </div>

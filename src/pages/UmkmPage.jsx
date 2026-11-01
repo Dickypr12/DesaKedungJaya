@@ -15,7 +15,7 @@ export default function UmkmPage() {
   const [registerData, setRegisterData] = useState({
     namaUsaha: '',
     pemilik: '',
-    dusun: 'Dusun I Kedung Timur',
+    dusun: 'Kp. Wates (Dusun I)',
     kategori: 'Kuliner',
     whatsapp: '',
     deskripsi: ''
@@ -40,7 +40,7 @@ export default function UmkmPage() {
       setRegisterData({
         namaUsaha: '',
         pemilik: '',
-        dusun: 'Dusun I Kedung Timur',
+        dusun: 'Kp. Wates (Dusun I)',
         kategori: 'Kuliner',
         whatsapp: '',
         deskripsi: ''

@@ -29,7 +29,7 @@ export default function WargaDashboard() {
   // Form input aduan baru
   const [judulAduan, setJudulAduan] = useState('');
   const [kategoriAduan, setKategoriAduan] = useState('Infrastruktur Jalan & Jembatan');
-  const [dusunAduan, setDusunAduan] = useState('Dusun II Kedung Barat');
+  const [dusunAduan, setDusunAduan] = useState('Kp. Wates (Dusun I)');
   const [deskripsiAduan, setDeskripsiAduan] = useState('');
 
   const loadData = () => {
@@ -57,7 +57,7 @@ export default function WargaDashboard() {
       pemohonNama: citizenNama,
       pemohonNik: citizenNik,
       pemohonTelepon: user?.telepon || '081234567891',
-      pemohonAlamat: user?.dusun || 'Dusun II Kedung Barat, RT 03 / RW 02',
+      pemohonAlamat: user?.dusun || 'Kp Wates, RT 03 / RW 02, Kedungjaya, Kec. Babelan',
       wilayahRT: 'RT 03 / RW 02',
       keperluan,
       detailUsaha
@@ -527,10 +527,10 @@ export default function WargaDashboard() {
                   onChange={(e) => setDusunAduan(e.target.value)}
                   className="w-full p-2.5 rounded-xl border border-slate-300 bg-white"
                 >
-                  <option>Dusun I Kedung Timur</option>
-                  <option>Dusun II Kedung Barat</option>
-                  <option>Dusun III Kedung Selatan</option>
-                  <option>Dusun IV Kedung Utara</option>
+                  <option>Dusun I (Kp. Wates)</option>
+                  <option>Dusun II (Kp. Babakan)</option>
+                  <option>Dusun III (Kp. Pengawas)</option>
+                  <option>Dusun IV (Kp. Belendung)</option>
                 </select>
               </div>
 

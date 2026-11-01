@@ -202,8 +202,8 @@ export default function ProfilPage() {
 
             <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2">
               <span className="text-xs font-bold text-emerald-400 uppercase">Batas Barat</span>
-              <p className="text-base font-bold text-white">Kelurahan Kedungwuni</p>
-              <p className="text-xs text-slate-400">Kawasan Sentra Perdagangan Kecamatan</p>
+              <p className="text-base font-bold text-white">Kelurahan Kebalen / Babelan Kota</p>
+              <p className="text-xs text-slate-400">Kawasan Sentra Perdagangan & Pusat Kecamatan Babelan</p>
             </div>
 
           </div>
@@ -318,25 +318,25 @@ export default function ProfilPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <h4 className="font-bold text-slate-900 text-sm">Dusun I Kedung Timur</h4>
+                <h4 className="font-bold text-slate-900 text-sm">Dusun I (Kp. Wates)</h4>
                 <p className="text-xs text-slate-500 mt-1">6 RT • 2 RW</p>
                 <p className="text-lg font-black text-brand-700 mt-2">2.140 Jiwa</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <h4 className="font-bold text-slate-900 text-sm">Dusun II Kedung Barat</h4>
+                <h4 className="font-bold text-slate-900 text-sm">Dusun II (Kp. Babakan)</h4>
                 <p className="text-xs text-slate-500 mt-1">6 RT • 2 RW</p>
                 <p className="text-lg font-black text-brand-700 mt-2">1.980 Jiwa</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <h4 className="font-bold text-slate-900 text-sm">Dusun III Kedung Selatan</h4>
+                <h4 className="font-bold text-slate-900 text-sm">Dusun III (Kp. Pengawas)</h4>
                 <p className="text-xs text-slate-500 mt-1">5 RT • 1 RW</p>
                 <p className="text-lg font-black text-brand-700 mt-2">1.750 Jiwa</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <h4 className="font-bold text-slate-900 text-sm">Dusun IV Kedung Utara</h4>
+                <h4 className="font-bold text-slate-900 text-sm">Dusun IV (Kp. Belendung)</h4>
                 <p className="text-xs text-slate-500 mt-1">5 RT • 1 RW</p>
                 <p className="text-lg font-black text-brand-700 mt-2">1.550 Jiwa</p>
               </div>

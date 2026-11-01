@@ -628,10 +628,10 @@ export default function KadesDashboard() {
                   className="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-medium"
                 >
                   <option>Tim Teknis Desa (Kaur Pembangunan)</option>
-                  <option>Kepala Dusun I Kedung Timur</option>
-                  <option>Kepala Dusun II Kedung Barat</option>
-                  <option>Kepala Dusun III Kedung Selatan</option>
-                  <option>Kepala Dusun IV Kedung Utara</option>
+                  <option>Kepala Dusun I (Kp. Wates)</option>
+                  <option>Kepala Dusun II (Kp. Babakan)</option>
+                  <option>Kepala Dusun III (Kp. Pengawas)</option>
+                  <option>Kepala Dusun IV (Kp. Belendung)</option>
                   <option>Satgas Linmas & Trantibum</option>
                   <option>Bhabinkamtibmas & Babinsa Desa</option>
                 </select>
