@@ -4,24 +4,26 @@ import {
   ArrowLeft, User, Shield, Check, Clock, FileCheck, 
   Search, CheckCircle2, ChevronRight, FileText, Send, 
   RotateCcw, Printer, Filter, Award, UserCheck, XCircle,
-  AlertTriangle, Phone, MessageSquare, ShieldCheck
+  AlertTriangle, Phone, MessageSquare, ShieldCheck,
+  CreditCard, Eye, X, Image as ImageIcon, ZoomIn
 } from 'lucide-react';
 import { getSuratForOperator, forwardToKades, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 import { 
-  getPendingRtRegistrations, 
-  approveRtRegistration, 
-  rejectRtRegistration,
-  getAllRtAccounts 
+  getPendingRegistrations, 
+  approveRegistration, 
+  rejectRegistration,
+  getAllUsers 
 } from '../../services/authService';
 import SuratResmiModal from '../../components/SuratResmiModal';
 
 export default function OperatorDashboard() {
   const [berkasLoket, setBerkasLoket] = useState(getSuratForOperator());
-  const [pendingRts, setPendingRts] = useState(() => getPendingRtRegistrations());
-  const [allRts, setAllRts] = useState(() => getAllRtAccounts());
-  const [activeTab, setActiveTab] = useState('surat'); // 'surat' | 'verifikasi_rt'
+  const [pendingUsers, setPendingUsers] = useState(() => getPendingRegistrations());
+  const [activeTab, setActiveTab] = useState('surat'); // 'surat' | 'verifikasi_akun'
+  const [filterRole, setFilterRole] = useState('ALL'); // 'ALL' | 'warga' | 'rtrw'
   const [previewSurat, setPreviewSurat] = useState(null);
-  
+  const [inspectDoc, setInspectDoc] = useState(null); // { title, src, user, docType }
+
   const [drafKadesCount, setDrafKadesCount] = useState(() => 
     getAllSurat().filter(s => s.status === 'MENUNGGU_TTE_KADES').length
   );
@@ -31,8 +33,7 @@ export default function OperatorDashboard() {
 
   const refreshList = () => {
     setBerkasLoket(getSuratForOperator());
-    setPendingRts(getPendingRtRegistrations());
-    setAllRts(getAllRtAccounts());
+    setPendingUsers(getPendingRegistrations());
     setDrafKadesCount(getAllSurat().filter(s => s.status === 'MENUNGGU_TTE_KADES').length);
     setSuratTerbitCount(getAllSurat().filter(s => s.status === 'SELESAI_TERBIT').length);
   };
@@ -50,22 +51,34 @@ export default function OperatorDashboard() {
     alert(`Berkas ${jenisSurat} dikembalikan ke pemohon untuk revisi.`);
   };
 
-  const handleApproveRt = (userId, namaRt, wilayah) => {
-    if (window.confirm(`Setujui pendaftaran akun Ketua ${wilayah} atas nama ${namaRt}?\nAkun akan langsung aktif dan memiliki wewenang mengesahkan surat pengantar warga.`)) {
-      approveRtRegistration(userId, 'Dewi Lestari, S.Pd (Operator Pelayanan)');
+  const handleApproveUser = (userId, namaUser, role, wilayah) => {
+    const roleLabel = role === 'rtrw' ? `Ketua ${wilayah || 'RT/RW'}` : 'Warga';
+    if (window.confirm(`Setujui & aktifkan akun ${roleLabel} atas nama "${namaUser}"?\n\nFoto fisik e-KTP dan Kartu Keluarga telah dinyatakan valid dan sesuai Buku Induk Desa.`)) {
+      approveRegistration(userId, 'Dewi Lestari, S.Pd (Operator Pelayanan)');
+      if (inspectDoc) setInspectDoc(null);
       refreshList();
-      alert(`Sukses! Akun Ketua ${wilayah} (${namaRt}) telah berhasil diaktifkan.`);
+      alert(`Sukses! Akun ${roleLabel} (${namaUser}) telah berhasil DISETUJUI & DIAKTIFKAN. Pemohon sekarang sudah bisa login.`);
     }
   };
 
-  const handleRejectRt = (userId, namaRt, wilayah) => {
-    const alasan = window.prompt(`Masukkan alasan penolakan akun ${namaRt} (${wilayah}):`, 'SK Pengangkatan tidak sesuai dengan pangkalan data desa');
+  const handleRejectUser = (userId, namaUser, role) => {
+    const roleLabel = role === 'rtrw' ? 'Ketua RT/RW' : 'Warga';
+    const alasan = window.prompt(`Masukkan alasan penolakan pendaftaran ${roleLabel} (${namaUser}):`, 'Foto e-KTP atau Kartu Keluarga buram / tidak sesuai data kependudukan desa');
     if (alasan) {
-      rejectRtRegistration(userId, alasan, 'Dewi Lestari, S.Pd (Operator Pelayanan)');
+      rejectRegistration(userId, alasan, 'Dewi Lestari, S.Pd (Operator Pelayanan)');
+      if (inspectDoc) setInspectDoc(null);
       refreshList();
-      alert(`Pendaftaran akun ${namaRt} telah ditolak.`);
+      alert(`Pendaftaran akun ${namaUser} telah ditolak.`);
     }
   };
+
+  const filteredPending = pendingUsers.filter(u => {
+    if (filterRole === 'ALL') return true;
+    return u.role === filterRole;
+  });
+
+  const pendingWargaCount = pendingUsers.filter(u => u.role === 'warga').length;
+  const pendingRtCount = pendingUsers.filter(u => u.role === 'rtrw').length;
 
   return (
     <div className="min-h-screen bg-[#f1faf4] text-slate-800 pb-16">
@@ -154,19 +167,19 @@ export default function OperatorDashboard() {
 
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Verifikasi RT/RW</span>
+              <span className="text-xs font-bold text-slate-700">Verifikasi KTP & KK</span>
               <span className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                pendingRts.length > 0 ? 'bg-amber-100 text-amber-700 animate-bounce' : 'bg-blue-100 text-blue-700'
+                pendingUsers.length > 0 ? 'bg-amber-100 text-amber-700 animate-bounce' : 'bg-emerald-100 text-emerald-700'
               }`}>
-                <Award className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-3.5 h-3.5" />
               </span>
             </div>
             <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{pendingRts.length}</span>
+              <span className="text-2xl font-black text-slate-900 leading-none">{pendingUsers.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">akun</span>
             </div>
-            <p className={`text-[11px] font-bold mt-1 ${pendingRts.length > 0 ? 'text-amber-700' : 'text-slate-400'}`}>
-              {pendingRts.length > 0 ? 'Menunggu SK Desa' : 'Semua RT disahkan'}
+            <p className={`text-[11px] font-bold mt-1 ${pendingUsers.length > 0 ? 'text-amber-700' : 'text-slate-400'}`}>
+              {pendingUsers.length > 0 ? `${pendingWargaCount} Warga, ${pendingRtCount} RT` : 'Semua akun disahkan'}
             </p>
           </div>
 
@@ -204,7 +217,7 @@ export default function OperatorDashboard() {
 
         </div>
 
-        {/* TAB TOGGLE: BERKAS SURAT vs VERIFIKASI RT/RW */}
+        {/* TAB TOGGLE: BERKAS SURAT vs VERIFIKASI AKUN (KTP & KK) */}
         <div className="grid grid-cols-2 gap-2 bg-slate-200/70 p-1 rounded-2xl">
           <button
             type="button"
@@ -221,16 +234,16 @@ export default function OperatorDashboard() {
 
           <button
             type="button"
-            onClick={() => setActiveTab('verifikasi_rt')}
+            onClick={() => setActiveTab('verifikasi_akun')}
             className={`py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 relative ${
-              activeTab === 'verifikasi_rt'
+              activeTab === 'verifikasi_akun'
                 ? 'bg-white text-slate-900 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Award className="w-3.5 h-3.5" />
-            <span>Verifikasi RT ({pendingRts.length})</span>
-            {pendingRts.length > 0 && (
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Verifikasi KTP/KK ({pendingUsers.length})</span>
+            {pendingUsers.length > 0 && (
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping absolute top-2 right-2"></span>
             )}
           </button>
@@ -355,72 +368,113 @@ export default function OperatorDashboard() {
           </div>
         )}
 
-        {/* TAB 2: VERIFIKASI AKUN PENDAFTARAN KETUA RT/RW */}
-        {activeTab === 'verifikasi_rt' && (
+        {/* TAB 2: VERIFIKASI AKUN PENDAFTARAN (WARGA & RT/RW) */}
+        {activeTab === 'verifikasi_akun' && (
           <div className="space-y-4">
             
-            {/* NOTICE BANNER SK VERIFIKASI */}
-            <div className="bg-amber-600 text-white rounded-2xl p-4 shadow-sm space-y-2">
+            {/* NOTICE BANNER VERIFIKASI KTP & KK */}
+            <div className="bg-emerald-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
               <div className="flex items-start justify-between">
                 <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
-                  <Award className="w-4 h-4 text-amber-100" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-200" />
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-800 text-amber-100 font-extrabold text-[10px]">
-                  PENGESAHAN SK DESA
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-200 font-extrabold text-[10px]">
+                  VERIFIKASI FISIK DESA
                 </span>
               </div>
 
               <h3 className="text-xs font-extrabold text-white pt-1">
-                Wewenang Verifikasi Akun RT/RW
+                Pemeriksaan Fisik e-KTP & Kartu Keluarga (KK)
               </h3>
-              <p className="text-[11px] text-amber-50 leading-relaxed font-light">
-                Calon pengurus yang mendaftar sebagai RT/RW <strong>tidak bisa langsung login</strong> sampai identitas dan SK Pengangkatan disahkan oleh staf Kantor Desa di sini.
+              <p className="text-[11px] text-emerald-100/90 leading-relaxed font-light">
+                Seluruh pendaftaran akun baru (Warga maupun RT/RW) <strong>tidak dapat langsung login</strong>. Petugas Loket Desa wajib mencocokkan foto fisik e-KTP dan KK pemohon dengan buku induk kependudukan sebelum mengaktifkan akun.
               </p>
+            </div>
+
+            {/* FILTER PILLS */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setFilterRole('ALL')}
+                className={`px-3 py-1.5 rounded-full font-bold transition-all shrink-0 ${
+                  filterRole === 'ALL'
+                    ? 'bg-[#0b5e42] text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                Semua ({pendingUsers.length})
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setFilterRole('warga')}
+                className={`px-3 py-1.5 rounded-full font-bold transition-all shrink-0 ${
+                  filterRole === 'warga'
+                    ? 'bg-emerald-700 text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                Warga ({pendingWargaCount})
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setFilterRole('rtrw')}
+                className={`px-3 py-1.5 rounded-full font-bold transition-all shrink-0 ${
+                  filterRole === 'rtrw'
+                    ? 'bg-blue-700 text-white shadow-xs'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                Ketua RT/RW ({pendingRtCount})
+              </button>
             </div>
 
             {/* PENDING LIST */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-1 h-5 rounded-full bg-amber-600"></span>
+                  <span className="w-1 h-5 rounded-full bg-emerald-700"></span>
                   <h3 className="text-sm font-extrabold text-slate-900">
-                    Menunggu Verifikasi & SK ({pendingRts.length})
+                    Antrean Verifikasi Dokumen ({filteredPending.length})
                   </h3>
                 </div>
-                {pendingRts.length > 0 && (
+                {filteredPending.length > 0 && (
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">
-                    Perlu Ditindaklanjuti
+                    Menunggu Validasi
                   </span>
                 )}
               </div>
 
-              {pendingRts.length === 0 ? (
+              {filteredPending.length === 0 ? (
                 <div className="p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-2">
                   <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#0b5e42] flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-5 h-5" />
                   </div>
-                  <p className="text-xs font-bold text-slate-800">Tidak ada pendaftaran RT/RW pending</p>
+                  <p className="text-xs font-bold text-slate-800">Tidak ada pendaftaran pending</p>
                   <p className="text-[11px] text-slate-400">
-                    Semua akun Ketua RT/RW yang mendaftar telah terverifikasi atau disahkan.
+                    Semua akun yang mendaftar telah diperiksa dan diaktifkan.
                   </p>
                 </div>
               ) : (
-                pendingRts.map(rtUser => (
-                  <div key={rtUser.id} className="bg-white rounded-2xl p-4 shadow-sm border border-amber-200 space-y-3">
+                filteredPending.map(user => (
+                  <div key={user.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 inline-block mb-1">
-                          PENDAFTAR BARU
+                        <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md inline-block mb-1 ${
+                          user.role === 'rtrw' ? 'bg-blue-100 text-blue-900' : 'bg-emerald-100 text-emerald-900'
+                        }`}>
+                          {user.role === 'rtrw' ? 'PENDAFTAR KETUA RT/RW' : 'PENDAFTAR WARGA'}
                         </span>
-                        <h4 className="text-sm font-extrabold text-slate-900">{rtUser.nama}</h4>
-                        <p className="text-[11px] font-mono text-slate-500">NIK: {rtUser.nik}</p>
+                        <h4 className="text-sm font-extrabold text-slate-900">{user.nama}</h4>
+                        <p className="text-[11px] font-mono text-slate-500">NIK: {user.nik}</p>
                       </div>
 
                       <div className="text-right">
-                        <span className="text-xs font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200 block">
-                          {rtUser.wilayahTugas || rtUser.rtRw || 'RT 01 / RW 01'}
+                        <span className="text-xs font-black text-slate-800 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 block">
+                          {user.wilayahTugas || user.rtRw || 'RT 01 / RW 01'}
                         </span>
-                        <span className="text-[10px] text-slate-400 mt-0.5 block">{rtUser.dusun}</span>
+                        <span className="text-[10px] text-slate-400 mt-0.5 block">{user.dusun}</span>
                       </div>
                     </div>
 
@@ -428,27 +482,93 @@ export default function OperatorDashboard() {
                       <div className="flex items-center justify-between text-slate-600">
                         <span className="text-slate-400">WhatsApp:</span>
                         <a
-                          href={`https://wa.me/${rtUser.telepon.replace(/[^0-9]/g, '')}?text=Halo%20Bpk/Ibu%20${encodeURIComponent(rtUser.nama)},%20kami%20dari%20Kantor%20Desa%20Kedung%20Jaya%20ingin%20memverifikasi%20SK%20pendaftaran%20Ketua%20${encodeURIComponent(rtUser.wilayahTugas)}`}
+                          href={`https://wa.me/${user.telepon.replace(/[^0-9]/g, '')}?text=Halo%20Bpk/Ibu%20${encodeURIComponent(user.nama)},%20kami%20dari%20Kantor%20Desa%20Kedung%20Jaya%20ingin%20memverifikasi%20dokumen%20KTP%20dan%20KK%20pendaftaran%20Anda`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="font-bold text-[#0b5e42] hover:underline flex items-center gap-1 font-mono"
                         >
                           <Phone className="w-3 h-3" />
-                          <span>{rtUser.telepon}</span>
+                          <span>{user.telepon}</span>
                         </a>
                       </div>
                       <div className="flex items-center justify-between text-slate-600">
                         <span className="text-slate-400">Waktu Daftar:</span>
                         <span className="font-medium text-slate-700">
-                          {rtUser.tanggalDaftar ? new Date(rtUser.tanggalDaftar).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari ini'}
+                          {user.tanggalDaftar ? new Date(user.tanggalDaftar).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari ini'}
                         </span>
                       </div>
                     </div>
 
+                    {/* DOKUMEN INSPECTION: FOTO KTP & FOTO KK */}
+                    <div className="space-y-1.5 pt-1">
+                      <span className="text-[11px] font-bold text-slate-700 block">
+                        Dokumen Fisik Wajib Diperiksa:
+                      </span>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        {/* KTP BUTTON & PREVIEW */}
+                        <button
+                          type="button"
+                          onClick={() => setInspectDoc({
+                            title: `Pemeriksaan Foto Fisik e-KTP - ${user.nama}`,
+                            src: user.fotoKTP,
+                            user: user,
+                            docType: 'e-KTP'
+                          })}
+                          className="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left flex items-center gap-2 transition-colors group"
+                        >
+                          {user.fotoKTP ? (
+                            <img src={user.fotoKTP} alt="KTP" className="w-9 h-9 rounded-lg object-cover border border-slate-200" />
+                          ) : (
+                            <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
+                              <CreditCard className="w-4 h-4" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <span className="text-[11px] font-bold text-slate-800 block truncate group-hover:text-[#0b5e42]">
+                              Foto e-KTP
+                            </span>
+                            <span className="text-[9px] text-[#0b5e42] font-semibold flex items-center gap-0.5">
+                              <Eye className="w-2.5 h-2.5" /> Buka Foto
+                            </span>
+                          </div>
+                        </button>
+
+                        {/* KK BUTTON & PREVIEW */}
+                        <button
+                          type="button"
+                          onClick={() => setInspectDoc({
+                            title: `Pemeriksaan Foto Kartu Keluarga (KK) - ${user.nama}`,
+                            src: user.fotoKK,
+                            user: user,
+                            docType: 'Kartu Keluarga'
+                          })}
+                          className="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left flex items-center gap-2 transition-colors group"
+                        >
+                          {user.fotoKK ? (
+                            <img src={user.fotoKK} alt="KK" className="w-9 h-9 rounded-lg object-cover border border-slate-200" />
+                          ) : (
+                            <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
+                              <FileText className="w-4 h-4" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <span className="text-[11px] font-bold text-slate-800 block truncate group-hover:text-[#0b5e42]">
+                              Foto KK Asli
+                            </span>
+                            <span className="text-[9px] text-[#0b5e42] font-semibold flex items-center gap-0.5">
+                              <Eye className="w-2.5 h-2.5" /> Buka Foto
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* ACTION BUTTONS */}
                     <div className="flex gap-2 pt-1">
                       <button
                         type="button"
-                        onClick={() => handleApproveRt(rtUser.id, rtUser.nama, rtUser.wilayahTugas || rtUser.rtRw)}
+                        onClick={() => handleApproveUser(user.id, user.nama, user.role, user.wilayahTugas || user.rtRw)}
                         className="flex-1 py-2.5 px-3 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-colors"
                       >
                         <UserCheck className="w-3.5 h-3.5" />
@@ -457,7 +577,7 @@ export default function OperatorDashboard() {
 
                       <button
                         type="button"
-                        onClick={() => handleRejectRt(rtUser.id, rtUser.nama, rtUser.wilayahTugas || rtUser.rtRw)}
+                        onClick={() => handleRejectUser(user.id, user.nama, user.role)}
                         className="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs flex items-center gap-1 transition-colors"
                       >
                         <XCircle className="w-3.5 h-3.5" />
@@ -469,47 +589,39 @@ export default function OperatorDashboard() {
               )}
             </div>
 
-            {/* LIST OF CURRENTLY REGISTERED RT/RW ACCOUNTS */}
+            {/* LIST OF VERIFIED ACCOUNTS */}
             <div className="space-y-3 pt-3 border-t border-slate-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1 h-5 rounded-full bg-cyan-700"></span>
                   <h3 className="text-sm font-extrabold text-slate-900">
-                    Daftar Akun Ketua RT/RW Terdaftar
+                    Pengguna Aktif Terverifikasi Kantor Desa
                   </h3>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
-                  {allRts.length} Akun
+                  {getAllUsers().filter(u => u.statusVerifikasi === 'TERVERIFIKASI').length} Akun
                 </span>
               </div>
 
               <div className="space-y-2">
-                {allRts.map(rt => (
-                  <div key={rt.id} className="bg-white rounded-xl p-3 shadow-xs border border-slate-200/80 flex items-center justify-between text-xs">
+                {getAllUsers().filter(u => u.statusVerifikasi === 'TERVERIFIKASI').map(user => (
+                  <div key={user.id} className="bg-white rounded-xl p-3 shadow-xs border border-slate-200/80 flex items-center justify-between text-xs">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">{rt.nama}</span>
-                        <span className={`text-[9px] font-bold px-2 py-0.2 rounded-full ${
-                          rt.statusVerifikasi === 'TERVERIFIKASI'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : rt.statusVerifikasi === 'DITOLAK'
-                            ? 'bg-rose-100 text-rose-800'
-                            : 'bg-amber-100 text-amber-800'
-                        }`}>
-                          {rt.statusVerifikasi === 'TERVERIFIKASI' ? 'AKTIF' : rt.statusVerifikasi}
+                        <span className="font-bold text-slate-900">{user.nama}</span>
+                        <span className="text-[9px] font-bold px-2 py-0.2 rounded-full bg-emerald-100 text-emerald-800">
+                          {user.role === 'rtrw' ? 'KETUA RT' : user.role === 'warga' ? 'WARGA' : user.role.toUpperCase()}
                         </span>
                       </div>
                       <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                        {rt.wilayahTugas || rt.rtRw} • {rt.telepon}
+                        {user.wilayahTugas || user.rtRw || user.dusun || 'Desa Kedung Jaya'} • NIK: {user.nik ? user.nik.substring(0, 6) + '********' : '-'}
                       </p>
                     </div>
 
-                    {rt.statusVerifikasi === 'TERVERIFIKASI' && (
-                      <span className="text-emerald-600 font-bold text-[11px] flex items-center gap-1">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                        <span>Sah</span>
-                      </span>
-                    )}
+                    <span className="text-emerald-600 font-bold text-[11px] flex items-center gap-1">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                      <span>Aktif</span>
+                    </span>
                   </div>
                 ))}
               </div>
@@ -519,6 +631,76 @@ export default function OperatorDashboard() {
         )}
 
       </div>
+
+      {/* MODAL INSPEKSI FOTO DOKUMEN (KTP / KK) */}
+      {inspectDoc && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <div>
+                <span className="text-[10px] font-extrabold text-cyan-800 uppercase tracking-wider block">
+                  Pemeriksaan Keabsahan Dokumen
+                </span>
+                <h3 className="text-sm font-extrabold text-slate-900 truncate">
+                  {inspectDoc.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setInspectDoc(null)}
+                className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-700 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-4 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-slate-900 text-center">
+              {inspectDoc.src ? (
+                <img
+                  src={inspectDoc.src}
+                  alt={inspectDoc.docType}
+                  className="max-h-[60vh] max-w-full rounded-xl object-contain shadow-md"
+                />
+              ) : (
+                <div className="p-8 text-white/70 space-y-2">
+                  <ImageIcon className="w-12 h-12 mx-auto text-slate-500" />
+                  <p className="text-xs">Foto dokumen belum terunggah oleh pemohon.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="p-4 border-t border-slate-200 bg-white flex items-center justify-between gap-3">
+              <div className="text-xs text-slate-600">
+                <span className="font-bold text-slate-900 block">{inspectDoc.user?.nama}</span>
+                <span className="text-[10px] text-slate-400 font-mono">NIK: {inspectDoc.user?.nik}</span>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setInspectDoc(null)}
+                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                >
+                  Tutup
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApproveUser(
+                    inspectDoc.user?.id, 
+                    inspectDoc.user?.nama, 
+                    inspectDoc.user?.role, 
+                    inspectDoc.user?.wilayahTugas || inspectDoc.user?.rtRw
+                  )}
+                  className="px-4 py-2 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                >
+                  <UserCheck className="w-3.5 h-3.5" />
+                  <span>Setujui Akun Ini</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MODAL PRATINJAU SURAT (PDF & WORD) */}
       {previewSurat && (

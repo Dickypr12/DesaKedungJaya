@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, HelpCircle, Landmark, CreditCard, User, 
   Lock, Eye, EyeOff, RotateCcw, ShieldCheck, ArrowRight,
-  MessageCircle, Info, Check, AlertCircle, Headphones
+  MessageCircle, Info, Check, AlertCircle, Headphones,
+  Camera, Upload, FileText, Image as ImageIcon, Trash2
 } from 'lucide-react';
 import { validateNIK, validatePassword, registerWarga } from '../../services/authService';
 
@@ -19,6 +20,8 @@ export default function RegisterPage() {
     dusun: 'Kp. Wates (Dusun I)',
     rt: '01',
     rw: '01',
+    fotoKTP: null,
+    fotoKK: null,
     password: '',
     confirmPassword: '',
     agreeTerms: false
@@ -42,6 +45,38 @@ export default function RegisterPage() {
     setErrorMsg('');
   };
 
+  const handleFileUpload = (e, field) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrorMsg('File harus berupa foto/gambar (JPG, PNG, atau WEBP).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg('Ukuran file maksimal 5 MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFormData(prev => ({
+        ...prev,
+        [field]: event.target.result
+      }));
+      setErrorMsg('');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveFile = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: null
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
@@ -58,6 +93,16 @@ export default function RegisterPage() {
 
     if (!formData.telepon.trim()) {
       setErrorMsg('Nomor WhatsApp aktif wajib diisi untuk verifikasi OTP.');
+      return;
+    }
+
+    if (!formData.fotoKTP) {
+      setErrorMsg('Wajib mengunggah foto fisik e-KTP asli untuk verifikasi kantor desa.');
+      return;
+    }
+
+    if (!formData.fotoKK) {
+      setErrorMsg('Wajib mengunggah foto fisik Kartu Keluarga (KK) asli untuk verifikasi kantor desa.');
       return;
     }
 
@@ -87,7 +132,9 @@ export default function RegisterPage() {
         role: formData.role,
         rt: formData.rt,
         rw: formData.rw,
-        dusun: formData.dusun
+        dusun: formData.dusun,
+        fotoKTP: formData.fotoKTP,
+        fotoKK: formData.fotoKK
       });
 
       // Lanjut ke langkah 2: Verifikasi OTP
@@ -404,6 +451,145 @@ export default function RegisterPage() {
                   </p>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* FIELD MANDATORY: UNGGAH DOKUMEN IDENTITAS (E-KTP & KARTU KELUARGA) */}
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-4">
+            <div className="flex items-start gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-slate-800">
+                  Dokumen Wajib Verifikasi Kantor Desa <span className="text-rose-500">*</span>
+                </h3>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Demi ketertiban dan pencegahan data palsu, semua pendaftaran akun (Warga maupun RT) wajib melampirkan foto fisik e-KTP dan Kartu Keluarga (KK) asli.
+                </p>
+              </div>
+            </div>
+
+            {/* UPLOAD FOTO KTP */}
+            <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <CreditCard className="w-3.5 h-3.5 text-[#0b5e42]" />
+                  <span>Foto e-KTP Asli <span className="text-rose-500">*</span></span>
+                </span>
+                {formData.fotoKTP ? (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Check className="w-3 h-3 stroke-[3]" /> Terunggah
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    Wajib Diunggah
+                  </span>
+                )}
+              </div>
+
+              {formData.fotoKTP ? (
+                <div className="relative rounded-xl overflow-hidden border border-slate-200 group">
+                  <img
+                    src={formData.fotoKTP}
+                    alt="Preview e-KTP"
+                    className="w-full h-36 object-cover bg-slate-100"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/50 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile('fotoKTP')}
+                      className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-bold flex items-center gap-1 shadow-sm hover:bg-rose-700"
+                    >
+                      <Trash2 className="w-3 h-3" /> Ganti Foto KTP
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <label className="border-2 border-dashed border-slate-300 hover:border-[#0b5e42] rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-colors group">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'fotoKTP')}
+                    className="hidden"
+                  />
+                  <div className="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-emerald-50 text-slate-500 group-hover:text-[#0b5e42] flex items-center justify-center transition-colors">
+                    <Camera className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-700 group-hover:text-[#0b5e42]">
+                    Ambil Foto / Unggah e-KTP
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    Format JPG/PNG/WEBP maks. 5MB
+                  </span>
+                </label>
+              )}
+            </div>
+
+            {/* UPLOAD FOTO KK */}
+            <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-[#0b5e42]" />
+                  <span>Foto Kartu Keluarga (KK) Asli <span className="text-rose-500">*</span></span>
+                </span>
+                {formData.fotoKK ? (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Check className="w-3 h-3 stroke-[3]" /> Terunggah
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    Wajib Diunggah
+                  </span>
+                )}
+              </div>
+
+              {formData.fotoKK ? (
+                <div className="relative rounded-xl overflow-hidden border border-slate-200 group">
+                  <img
+                    src={formData.fotoKK}
+                    alt="Preview KK"
+                    className="w-full h-36 object-cover bg-slate-100"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/50 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile('fotoKK')}
+                      className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-bold flex items-center gap-1 shadow-sm hover:bg-rose-700"
+                    >
+                      <Trash2 className="w-3 h-3" /> Ganti Foto KK
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <label className="border-2 border-dashed border-slate-300 hover:border-[#0b5e42] rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-white transition-colors group">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'fotoKK')}
+                    className="hidden"
+                  />
+                  <div className="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-emerald-50 text-slate-500 group-hover:text-[#0b5e42] flex items-center justify-center transition-colors">
+                    <Upload className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-700 group-hover:text-[#0b5e42]">
+                    Ambil Foto / Unggah Kartu Keluarga
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    Pastikan No. KK dan daftar nama keluarga terlihat jelas
+                  </span>
+                </label>
+              )}
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 space-y-1">
+              <span className="font-bold flex items-center gap-1 text-amber-800">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                <span>Pemberitahuan Verifikasi Kantor Desa:</span>
+              </span>
+              <p className="text-amber-800 leading-relaxed font-light">
+                Setelah pendaftaran berhasil, Petugas Kantor Desa akan memvalidasi foto e-KTP dan KK Anda dengan buku induk kependudukan. Akun akan diaktifkan setelah diverifikasi.
+              </p>
             </div>
           </div>
 
