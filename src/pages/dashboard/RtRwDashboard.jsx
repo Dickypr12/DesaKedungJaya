@@ -62,165 +62,107 @@ export default function RtRwDashboard() {
 
   return (
     <div className="min-h-screen bg-[#f1faf4] text-slate-800 pb-16">
-      <div className="max-w-md mx-auto px-4 pt-4 sm:pt-6 space-y-4">
+      
+      {/* Container Responsive Laptop & Mobile */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6">
         
-        {/* HEADER BAR */}
-        <div className="flex items-center justify-between py-1">
-          <Link
-            to="/dashboard"
-            className="w-10 h-10 rounded-full bg-white/90 shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-700 hover:bg-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
+        {/* HEADER BAR RESPONSIVE */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard"
+              className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors shrink-0"
+              title="Kembali"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
 
-          <div className="text-center">
-            <h1 className="text-base font-extrabold text-slate-900 leading-tight">
-              Verifikasi Ketua RT / RW
-            </h1>
-            <p className="text-[11px] font-medium text-slate-500">
-              Pemerintah Desa Kedung Jaya
-            </p>
-          </div>
-
-          <div className="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-sm">
-            <User className="w-5 h-5" />
-          </div>
-        </div>
-
-        {/* STATUS SUB-HEADER PILLS */}
-        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800">
-            <Shield className="w-3.5 h-3.5 text-blue-800" />
-            <span>Verifikator Lingkungan RT/RW</span>
-          </span>
-
-          <span className="flex items-center gap-1.5 text-slate-500">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span>{activeWilayah} Terhubung</span>
-          </span>
-        </div>
-
-        {/* PROFILE CARD RT & WILAYAH SELECTOR */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
-          <div className="flex items-center gap-3.5">
-            <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80"
-                alt={user?.nama || 'Ketua RT'}
-                className="w-12 h-12 rounded-xl object-cover"
-              />
-              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-blue-700 text-white flex items-center justify-center text-[10px]">
-                <Check className="w-2.5 h-2.5 stroke-[3]" />
-              </span>
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] font-bold text-blue-800 tracking-wider uppercase block">
-                Ketua Rukun Tetangga
-              </span>
-              <h2 className="text-sm font-extrabold text-slate-900 truncate">
-                {user?.nama || 'Bpk. Mulyono'}
-              </h2>
-              <p className="text-[11px] text-slate-500 truncate">
-                {activeWilayah} • {user?.dusun || 'Desa Kedungjaya'}
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+                  Verifikasi Surat & Pengantar RT / RW
+                </h1>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">
+                  <Shield className="w-3 h-3 text-blue-800" />
+                  <span>{activeWilayah} Aktif</span>
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">
+                Pemerintah Desa Kedung Jaya • Hak Akses Verifikator Lingkungan Warga
               </p>
             </div>
           </div>
 
-          {/* KONTROL GANTI / PILIH WILAYAH RT RW */}
-          <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <MapPin className="w-3.5 h-3.5 text-blue-700 shrink-0" />
-              <span className="font-semibold text-[11px]">Wilayah Tugas:</span>
+          <div className="flex items-center gap-3 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-xl">
+            <div className="text-right hidden sm:block">
+              <span className="text-xs font-extrabold text-slate-900 block">{user?.nama || 'Ketua RT'}</span>
+              <span className="text-[11px] text-blue-700 font-bold">Ketua {activeWilayah}</span>
             </div>
-
-            <div className="flex items-center gap-1.5">
-              <select
-                value={selectedRT}
-                onChange={(e) => handleWilayahChange(e.target.value, selectedRW)}
-                className="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold text-blue-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                title="Pilih RT yang diverifikasi"
-              >
-                {Array.from({ length: 22 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
-                  <option key={num} value={num}>RT {num}</option>
-                ))}
-              </select>
-
-              <span className="text-slate-400 font-bold">/</span>
-
-              <select
-                value={selectedRW}
-                onChange={(e) => handleWilayahChange(selectedRT, e.target.value)}
-                className="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold text-blue-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                title="Pilih RW yang diverifikasi"
-              >
-                {Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
-                  <option key={num} value={num}>RW {num}</option>
-                ))}
-              </select>
+            <div className="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-sm shrink-0">
+              <User className="w-5 h-5" />
             </div>
           </div>
         </div>
 
-        {/* 2x2 STATS METRIC GRID */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* 4x1 STATS METRIC GRID RESPONSIVE */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Perlu Pengantar</span>
-              <span className="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">
-                <Clock className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{antreanRT.length}</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{antreanRT.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">warga</span>
             </div>
             <p className="text-[11px] font-bold text-rose-600 mt-1">
-              Khusus {activeWilayah}
+              Khusus wilayah {activeWilayah}
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Pengantar Terbit</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <FileCheck className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <FileCheck className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{disetujuiCount}</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{disetujuiCount}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">berkas</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
-              {disetujuiCount > 0 ? 'Telah Disahkan' : 'Mulai dari 0'}
+              {disetujuiCount > 0 ? 'Telah Disahkan RT' : 'Mulai dari 0'}
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Wilayah Aktif</span>
-              <span className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                <Users className="w-3.5 h-3.5" />
+              <span className="text-xs font-bold text-slate-700">Wilayah Tugas</span>
+              <span className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                <Users className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-lg font-black text-blue-900 leading-none">{activeWilayah}</span>
+            <div className="mt-3">
+              <span className="text-xl sm:text-2xl font-black text-blue-900 leading-none">{activeWilayah}</span>
             </div>
             <p className="text-[11px] font-semibold text-slate-500 mt-1">
               Fokus Verifikasi
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Status Akun</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <CheckCircle2 className="w-3.5 h-3.5" />
+              <span className="text-xs font-bold text-slate-700">Status Akun RT</span>
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <CheckCircle2 className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-base font-black text-slate-900 leading-none">Aktif Resmi</span>
+            <div className="mt-3">
+              <span className="text-lg sm:text-xl font-black text-slate-900 leading-none">Aktif Resmi</span>
             </div>
             <p className="text-[11px] font-semibold text-emerald-700 mt-1">
               SK Terdaftar Pemdes
@@ -229,24 +171,11 @@ export default function RtRwDashboard() {
 
         </div>
 
-        {/* NOTICE CARD WEWENANG RT */}
-        <div className="bg-blue-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
-          <div className="flex items-start justify-between">
-            <div className="w-7 h-7 rounded-lg bg-white/15 flex items-center justify-center">
-              <Shield className="w-4 h-4 text-blue-200" />
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-900 text-white font-extrabold text-[10px]">
-              LEVEL {activeWilayah}
-            </span>
-          </div>
-
-          <h3 className="text-xs font-extrabold text-white pt-1">
-            Isolasi Berkas Lingkungan {activeWilayah}
-          </h3>
-          <p className="text-[11px] text-blue-100/90 leading-relaxed font-light">
-            Sistem secara ketat hanya menampilkan permohonan surat dari warga yang memilih pengesahan di wilayah {activeWilayah}. Berkas dari RT/RW lain tidak akan tercampur di akun Anda.
-          </p>
-        </div>
+        {/* 2-COLUMN GRID ON LAPTOP / DESKTOP */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* LEFT COLUMN: ANTREAN PERMOHONAN PENGANTAR */}
+          <div className="lg:col-span-8 space-y-6">
 
         {/* SECTION: ANTREAN PERMOHONAN PENGANTAR */}
         <div className="space-y-3 pt-2">
@@ -329,6 +258,126 @@ export default function RtRwDashboard() {
               </div>
             ))
           )}
+        </div>
+
+          </div>
+
+          {/* RIGHT COLUMN: PROFIL RT, WILAYAH SELECTOR, & PANDUAN */}
+          <div className="lg:col-span-4 space-y-6">
+
+            {/* PROFILE CARD RT & WILAYAH SELECTOR */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
+                <div className="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80"
+                    alt={user?.nama || 'Ketua RT'}
+                    className="w-14 h-14 rounded-2xl object-cover"
+                  />
+                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-blue-700 text-white flex items-center justify-center text-[10px]">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </span>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] font-bold text-blue-800 tracking-wider uppercase block">
+                    Ketua Rukun Tetangga
+                  </span>
+                  <h2 className="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+                    {user?.nama || 'Bpk. Mulyono'}
+                  </h2>
+                  <p className="text-xs text-slate-500 truncate">
+                    {activeWilayah} • {user?.dusun || 'Desa Kedungjaya'}
+                  </p>
+                </div>
+              </div>
+
+              {/* KONTROL GANTI / PILIH WILAYAH RT RW */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
+                  <MapPin className="w-4 h-4 text-blue-700 shrink-0" />
+                  <span>Ganti Wilayah Pengawasan:</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-semibold block mb-1">Rukun Tetangga (RT)</label>
+                    <select
+                      value={selectedRT}
+                      onChange={(e) => handleWilayahChange(e.target.value, selectedRW)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-blue-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      title="Pilih RT yang diverifikasi"
+                    >
+                      {Array.from({ length: 22 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                        <option key={num} value={num}>RT {num}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-semibold block mb-1">Rukun Warga (RW)</label>
+                    <select
+                      value={selectedRW}
+                      onChange={(e) => handleWilayahChange(selectedRT, e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-blue-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      title="Pilih RW yang diverifikasi"
+                    >
+                      {Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')).map(num => (
+                        <option key={num} value={num}>RW {num}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-slate-400">
+                  Mengubah wilayah akan menyaring otomatis antrean warga di RT/RW tersebut.
+                </p>
+              </div>
+            </div>
+
+            {/* NOTICE CARD WEWENANG RT */}
+            <div className="bg-blue-800 text-white rounded-2xl p-5 shadow-sm space-y-2.5">
+              <div className="flex items-start justify-between">
+                <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-blue-200" />
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-900 text-white font-extrabold text-[10px]">
+                  LEVEL {activeWilayah}
+                </span>
+              </div>
+
+              <h3 className="text-xs font-extrabold text-white pt-1">
+                Isolasi Berkas Lingkungan {activeWilayah}
+              </h3>
+              <p className="text-xs text-blue-100/90 leading-relaxed font-light">
+                Sistem secara ketat hanya menampilkan permohonan surat dari warga yang memilih pengesahan di wilayah {activeWilayah}. Berkas dari RT/RW lain tidak akan tercampur di akun Anda.
+              </p>
+            </div>
+
+            {/* PANDUAN RINGKAS PEMERIKSAAN RT */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
+              <h4 className="text-xs font-extrabold text-slate-900">
+                Langkah Verifikasi Pak RT:
+              </h4>
+
+              <div className="space-y-2 text-xs text-slate-600">
+                <div className="flex items-start gap-2">
+                  <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">1</span>
+                  <span>Tekan tombol <strong>"Periksa Foto Kartu Keluarga"</strong> untuk mengecek kesesuaian identitas pemohon.</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">2</span>
+                  <span>Jika pemohon benar warga {activeWilayah}, klik <strong>"Sahkan Pengantar RT"</strong>.</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">3</span>
+                  <span>Berkas otomatis terkirim ke loket kantor desa tanpa perlu tanda tangan basah di kertas.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
       </div>

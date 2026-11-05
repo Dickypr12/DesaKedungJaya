@@ -60,102 +60,80 @@ export default function KadesDashboard() {
   return (
     <div className="min-h-screen bg-[#f1faf4] text-slate-800 pb-16">
       
-      {/* Container phone/mobile layout centered */}
-      <div className="max-w-md mx-auto px-4 pt-4 sm:pt-6 space-y-4">
+      {/* Container Responsive Laptop & Mobile */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6">
         
-        {/* HEADER BAR */}
-        <div className="flex items-center justify-between py-1">
-          <Link
-            to="/dashboard"
-            className="w-10 h-10 rounded-full bg-white/90 shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-700 hover:bg-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
+        {/* HEADER BAR RESPONSIVE */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard"
+              className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors shrink-0"
+              title="Kembali"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
 
-          <div className="text-center">
-            <h1 className="text-base font-extrabold text-slate-900 leading-tight">
-              Persetujuan Kepala Desa
-            </h1>
-            <p className="text-[11px] font-medium text-slate-500">
-              Pemerintah Desa Kedung Jaya
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+                  Persetujuan & TTE Kepala Desa
+                </h1>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#d7f5e5] text-[#0b5e42] text-[10px] font-bold">
+                  <Shield className="w-3 h-3 text-[#0b5e42]" />
+                  <span>BSrE BSSN Aktif</span>
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">
+                Pemerintah Desa Kedung Jaya • Hak Akses Pejabat Pengesah Tertinggi
+              </p>
+            </div>
           </div>
 
-          <div className="w-10 h-10 rounded-full bg-[#0b5e42] text-white flex items-center justify-center shadow-sm">
-            <User className="w-5 h-5" />
-          </div>
-        </div>
-
-        {/* STATUS SUB-HEADER PILLS */}
-        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d7f5e5] text-[#0b5e42]">
-            <Shield className="w-3.5 h-3.5 text-[#0b5e42]" />
-            <span>Hak Akses Pejabat Pengesah</span>
-          </span>
-
-          <span className="flex items-center gap-1.5 text-slate-500">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Sistem Terhubung BSrE</span>
-          </span>
-        </div>
-
-        {/* PROFILE CARD KEPALA DESA */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex items-center gap-3.5">
-          <div className="relative">
+          <div className="flex items-center gap-3 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-xl">
+            <div className="text-right hidden sm:block">
+              <span className="text-xs font-extrabold text-slate-900 block">Bpk. H. Johari</span>
+              <span className="text-[11px] text-slate-400">Kepala Desa Kedung Jaya</span>
+            </div>
             <img
               src="./public/images/johari.jpeg"
               alt="Bpk. H. Johari"
-              className="w-12 h-12 rounded-xl object-cover"
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0b5e42] shrink-0"
             />
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#0b5e42] text-white flex items-center justify-center text-[10px]">
-              <Check className="w-2.5 h-2.5 stroke-[3]" />
-            </span>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-bold text-[#0b5e42] tracking-wider uppercase block">
-              Kepala Desa Kedung Jaya
-            </span>
-            <h2 className="text-sm font-extrabold text-slate-900 truncate">
-              Bpk. H. Johari.
-            </h2>
-            <p className="text-[11px] text-slate-400 truncate">
-              • Sesi Aktif Kades • Token TTE Siap
-            </p>
           </div>
         </div>
 
-        {/* 2x2 STATS METRIC GRID */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* 4x1 STATS METRIC GRID RESPONSIVE */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           
           {/* Card 1: Menunggu TTE */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Menunggu TTE</span>
-              <span className="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">
-                <Edit3 className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                <Edit3 className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{antrean.length}</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{antrean.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">berkas</span>
             </div>
             <p className="text-[11px] font-bold text-rose-600 mt-1 flex items-center gap-1">
-              <Clock className="w-3 h-3" /> Perlu tindakan
+              <Clock className="w-3 h-3" /> Perlu tanda tangan
             </p>
           </div>
 
           {/* Card 2: Surat Terbit */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Surat Terbit</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <FileCheck className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <FileCheck className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{suratTerbitCount}</span>
-              <span className="text-xs font-semibold text-slate-500 ml-1.5">minggu ini</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{suratTerbitCount}</span>
+              <span className="text-xs font-semibold text-slate-500 ml-1.5">terbit</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
               ↗ 100% Sah BSrE
@@ -163,15 +141,15 @@ export default function KadesDashboard() {
           </div>
 
           {/* Card 3: Disposisi Aduan */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Disposisi Aduan</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <Bell className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                <Bell className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">
                 {daftarAduan.filter(a => a.status === 'MENUNGGU_DISPOSISI').length}
               </span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">prioritas</span>
@@ -182,15 +160,15 @@ export default function KadesDashboard() {
           </div>
 
           {/* Card 4: Kepuasan Warga */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Kepuasan Warga</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <Shield className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">96%</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">96%</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">IKM</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
@@ -199,6 +177,12 @@ export default function KadesDashboard() {
           </div>
 
         </div>
+
+        {/* 2-COLUMN GRID ON LAPTOP / DESKTOP */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* LEFT COLUMN: DRAF SURAT TTE & ADUAN KRITIS */}
+          <div className="lg:col-span-8 space-y-6">
 
         {/* BSrE BSSN NOTICE CARD */}
         <div className="bg-[#0b5e42] text-white rounded-2xl p-4 shadow-sm space-y-2">
@@ -466,94 +450,159 @@ export default function KadesDashboard() {
           )))}
         </div>
 
-        {/* SECTION: MONITORING TREN PELAYANAN */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-1 h-5 rounded-full bg-[#0b5e42]"></span>
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Monitoring Tren Pelayanan
+          </div>
+
+          {/* RIGHT COLUMN: PROFIL KADES, BSRE BSSN, TREN PELAYANAN */}
+          <div className="lg:col-span-4 space-y-6">
+
+            {/* PROFILE CARD KEPALA DESA */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                <img
+                  src="./public/images/johari.jpeg"
+                  alt="Bpk. H. Johari"
+                  className="w-14 h-14 rounded-2xl object-cover ring-2 ring-[#0b5e42]"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="text-[10px] font-bold text-[#0b5e42] tracking-wider uppercase block">
+                    Kepala Desa Kedung Jaya
+                  </span>
+                  <h2 className="text-base font-extrabold text-slate-900 truncate">
+                    Bpk. H. Johari
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Sesi Aktif Pejabat • Token TTE Siap
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Jabatan:</span>
+                  <span className="font-bold text-slate-800">Kepala Desa Kedung Jaya</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Status BSrE:</span>
+                  <span className="font-bold text-emerald-700 flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" /> Terhubung Aktif
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Wewenang:</span>
+                  <span className="font-semibold text-slate-700">Tanda Tangan Elektronik & Disposisi</span>
+                </div>
+              </div>
+            </div>
+
+            {/* BSrE BSSN NOTICE CARD */}
+            <div className="bg-[#0b5e42] text-white rounded-2xl p-5 shadow-sm space-y-2.5">
+              <div className="flex items-start justify-between">
+                <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-emerald-200" />
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#1b7a5a] text-white font-extrabold text-[10px] tracking-wider">
+                  BSRE BSSN
+                </span>
+              </div>
+
+              <h3 className="text-xs font-extrabold text-white pt-1">
+                Kewenangan Penandatanganan Digital
               </h3>
+
+              <p className="text-xs text-emerald-100/90 leading-relaxed font-light">
+                Penandatanganan digital menggunakan sertifikat elektronik resmi tersertifikasi Balai Sertifikasi Elektronik (BSrE) BSSN. Dokumen yang terbit memiliki kekuatan hukum sah di seluruh instansi RI.
+              </p>
             </div>
-            <span className="text-[10px] font-bold text-slate-400">
-              Oktober 2025
-            </span>
+
+            {/* SECTION: MONITORING TREN PELAYANAN */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-4 rounded-full bg-[#0b5e42]"></span>
+                  <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
+                    Monitoring Tren Pelayanan
+                  </h3>
+                </div>
+                <span className="text-[10px] font-bold text-slate-400">
+                  Bulan Berjalan
+                </span>
+              </div>
+              
+              {/* Target Boxes */}
+              <div className="grid grid-cols-2 gap-2 pb-2 border-b border-slate-100">
+                <div className="p-3 rounded-xl bg-[#eefaf2]">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase">
+                    Rata-rata Waktu Terbit
+                  </p>
+                  <p className="text-xl font-black text-[#0b5e42] mt-0.5">
+                    1.4 <span className="text-xs font-semibold text-slate-600">Hari Kerja</span>
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase">
+                    Target Standar Desa
+                  </p>
+                  <p className="text-xs font-bold text-slate-800 mt-2">
+                    Maksimal 2.0 Hari
+                  </p>
+                </div>
+              </div>
+
+              {/* Kecepatan Minggu Ini */}
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-slate-700">Kecepatan Penyelesaian</span>
+                <span className="font-extrabold text-[#0b5e42]">+18% Lebih Cepat</span>
+              </div>
+
+              {/* Weekly Bar Visualizer */}
+              <div className="grid grid-cols-5 gap-2 pt-1 text-center">
+                <div>
+                  <div className="h-14 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
+                    <span className="text-[10px] font-bold text-emerald-800">8</span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Sen</span>
+                </div>
+
+                <div>
+                  <div className="h-16 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
+                    <span className="text-[10px] font-bold text-emerald-800">10</span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Sel</span>
+                </div>
+
+                <div>
+                  <div className="h-20 bg-[#0b5e42] rounded-lg flex items-end justify-center pb-1 shadow-sm">
+                    <span className="text-[10px] font-bold text-white">14</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-[#0b5e42] mt-1 block">Rab</span>
+                </div>
+
+                <div>
+                  <div className="h-12 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
+                    <span className="text-[10px] font-bold text-emerald-800">6</span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Kam</span>
+                </div>
+
+                <div>
+                  <div className="h-10 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
+                    <span className="text-[10px] font-bold text-emerald-800">4</span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Jum</span>
+                </div>
+              </div>
+
+              {/* Bottom Status Indicators */}
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] font-medium text-slate-500">
+                <span>• 42 Surat Diproses</span>
+                <span className="text-[#0b5e42] font-semibold">• 0 Keterlambatan SOP</span>
+              </div>
+
+            </div>
+
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-4">
-            
-            {/* Target Boxes */}
-            <div className="grid grid-cols-2 gap-2 pb-2 border-b border-slate-100">
-              <div className="p-2.5 rounded-xl bg-[#eefaf2]">
-                <p className="text-[10px] font-bold text-slate-500 uppercase">
-                  Rata-rata Waktu Terbit
-                </p>
-                <p className="text-lg font-black text-[#0b5e42] mt-0.5">
-                  1.4 <span className="text-xs font-semibold text-slate-600">Hari Kerja</span>
-                </p>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-slate-50">
-                <p className="text-[10px] font-bold text-slate-500 uppercase">
-                  Target Standar Desa
-                </p>
-                <p className="text-xs font-bold text-slate-800 mt-1.5">
-                  Maksimal 2.0 Hari
-                </p>
-              </div>
-            </div>
-
-            {/* Kecepatan Minggu Ini */}
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-slate-700">Kecepatan Penyelesaian Minggu Ini</span>
-              <span className="font-extrabold text-[#0b5e42]">+18% Lebih Cepat</span>
-            </div>
-
-            {/* Weekly Bar Visualizer */}
-            <div className="grid grid-cols-5 gap-2 pt-1 text-center">
-              <div>
-                <div className="h-14 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
-                  <span className="text-[10px] font-bold text-emerald-800">8</span>
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Sen</span>
-              </div>
-
-              <div>
-                <div className="h-16 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
-                  <span className="text-[10px] font-bold text-emerald-800">10</span>
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Sel</span>
-              </div>
-
-              <div>
-                <div className="h-20 bg-[#0b5e42] rounded-lg flex items-end justify-center pb-1 shadow-sm">
-                  <span className="text-[10px] font-bold text-white">14</span>
-                </div>
-                <span className="text-[10px] font-bold text-[#0b5e42] mt-1 block">Rab</span>
-              </div>
-
-              <div>
-                <div className="h-12 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
-                  <span className="text-[10px] font-bold text-emerald-800">6</span>
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Kam</span>
-              </div>
-
-              <div>
-                <div className="h-10 bg-emerald-100 rounded-lg flex items-end justify-center pb-1">
-                  <span className="text-[10px] font-bold text-emerald-800">4</span>
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 mt-1 block">Jum</span>
-              </div>
-            </div>
-
-            {/* Bottom Status Indicators */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] font-medium text-slate-500">
-              <span>• 42 Surat Diproses</span>
-              <span className="text-[#0b5e42] font-semibold">• 0 Pelanggaran Batas Waktu</span>
-            </div>
-
-          </div>
         </div>
 
       </div>
@@ -561,7 +610,7 @@ export default function KadesDashboard() {
       {/* MODAL TTE ELEKTRONIK BSrE */}
       {modalTTE && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-fadeIn max-h-[92vh] overflow-y-auto">
             
             <div className="w-12 h-12 rounded-2xl bg-[#eefaf2] text-[#0b5e42] flex items-center justify-center mx-auto">
               <Shield className="w-6 h-6" />
@@ -613,7 +662,7 @@ export default function KadesDashboard() {
       {/* MODAL DISPOSISI ADUAN KRITIS OLEH KEPALA DESA */}
       {modalDisposisi && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp max-h-[92vh] overflow-y-auto">
             
             <div className="flex items-center justify-between">
               <div>

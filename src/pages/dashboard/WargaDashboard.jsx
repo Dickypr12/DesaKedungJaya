@@ -122,82 +122,59 @@ export default function WargaDashboard() {
 
   return (
     <div className="min-h-screen bg-[#f1faf4] text-slate-800 pb-16">
-      <div className="max-w-md mx-auto px-4 pt-4 sm:pt-6 space-y-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6">
         
-        {/* HEADER BAR */}
-        <div className="flex items-center justify-between py-1">
-          <Link
-            to="/dashboard"
-            className="w-10 h-10 rounded-full bg-white/90 shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-700 hover:bg-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
+        {/* HEADER BAR RESPONSIVE */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard"
+              className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors shrink-0"
+              title="Kembali"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
 
-          <div className="text-center">
-            <h1 className="text-base font-extrabold text-slate-900 leading-tight">
-              Portal Layanan Warga
-            </h1>
-            <p className="text-[11px] font-medium text-slate-500">
-              Desa Kedung Jaya Mandiri
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+                  Portal Layanan Mandiri Warga
+                </h1>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#d7f5e5] text-[#0b5e42] text-[10px] font-bold">
+                  <Shield className="w-3 h-3 text-[#0b5e42]" />
+                  <span>Dukcapil Aktif</span>
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">
+                Pemerintah Desa Kedung Jaya • Pelayanan Administrasi & Aduan Digital
+              </p>
+            </div>
           </div>
 
-          <div className="w-10 h-10 rounded-full bg-teal-700 text-white flex items-center justify-center shadow-sm">
-            <User className="w-5 h-5" />
-          </div>
-        </div>
-
-        {/* STATUS SUB-HEADER PILLS */}
-        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d7f5e5] text-[#0b5e42]">
-            <Shield className="w-3.5 h-3.5 text-[#0b5e42]" />
-            <span>Identitas Kependudukan Aktif</span>
-          </span>
-
-          <span className="flex items-center gap-1.5 text-slate-500">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Data Terhubung Dukcapil</span>
-          </span>
-        </div>
-
-        {/* PROFILE CARD WARGA */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex items-center gap-3.5">
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80"
-              alt={citizenNama}
-              className="w-12 h-12 rounded-xl object-cover"
-            />
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-teal-600 text-white flex items-center justify-center text-[10px]">
-              <Check className="w-2.5 h-2.5 stroke-[3]" />
-            </span>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-bold text-teal-700 tracking-wider uppercase block">
-              Warga Desa Terverifikasi
-            </span>
-            <h2 className="text-sm font-extrabold text-slate-900 truncate">
-              {citizenNama}
-            </h2>
-            <p className="text-[11px] text-slate-400 truncate">
-              NIK: {user?.nikMasked || citizenNik} • RT 03/02
-            </p>
+          {/* Quick User Identity Badge */}
+          <div className="flex items-center gap-3 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-xl">
+            <div className="text-right hidden sm:block">
+              <span className="text-xs font-extrabold text-slate-900 block">{citizenNama}</span>
+              <span className="text-[11px] text-slate-400 font-mono">NIK: {user?.nikMasked || citizenNik}</span>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-teal-700 text-white flex items-center justify-center shadow-sm shrink-0">
+              <User className="w-5 h-5" />
+            </div>
           </div>
         </div>
 
-        {/* 2x2 STATS METRIC GRID */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* 4x1 METRIC STATS GRID */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Surat Aktif</span>
-              <span className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
-                <Clock className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{suratBerjalan.length}</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{suratBerjalan.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">berkas</span>
             </div>
             <p className="text-[11px] font-bold text-amber-700 mt-1">
@@ -205,237 +182,368 @@ export default function WargaDashboard() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Surat Terbit</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <CheckCircle2 className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <CheckCircle2 className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">{suratTerbit.length}</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{suratTerbit.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">dokumen</span>
             </div>
             <p className="text-[11px] font-bold text-[#0b5e42] mt-1">
-              TTE Sah & Ber-QR
+              TTE Sah & Ber-QR BSrE
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Status DTKS</span>
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5" />
+              <span className="text-xs font-bold text-slate-700">Status DTKS Bansos</span>
+              <span className="w-8 h-8 rounded-xl bg-emerald-100 text-[#0b5e42] flex items-center justify-center">
+                <Shield className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-base font-black text-slate-900 leading-none">Terpadu Valid</span>
+            <div className="mt-3">
+              <span className="text-lg sm:text-xl font-black text-slate-900 leading-none">Terpadu Valid</span>
             </div>
             <p className="text-[11px] font-semibold text-emerald-700 mt-1">
-              Desil 3 (Penerima PKH)
+              Desil 3 (Penerima PKH/Bansos)
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/70 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700">Aduan Warga</span>
-              <span className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                <FileText className="w-3.5 h-3.5" />
+              <span className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                <FileText className="w-4 h-4" />
               </span>
             </div>
-            <div className="mt-2">
-              <span className="text-2xl font-black text-slate-900 leading-none">1</span>
+            <div className="mt-3">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 leading-none">{aduanList.length}</span>
               <span className="text-xs font-semibold text-slate-500 ml-1.5">laporan</span>
             </div>
             <p className="text-[11px] font-semibold text-slate-500 mt-1">
-              Jembatan Dusun II
+              Aspirasi Lingkungan
             </p>
           </div>
 
         </div>
 
-        {/* QUICK ACTION BUTTON */}
-        <button
-          type="button"
-          onClick={() => setModalAjukan(true)}
-          className="w-full py-3 px-4 rounded-2xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition-colors"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>Buat Pengajuan Surat Mandiri Baru</span>
-        </button>
+        {/* 2-COLUMN LAYOUT ON LAPTOP / DESKTOP (8 COLS LEFT, 4 COLS RIGHT) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* LEFT COLUMN: SURAT AKTIF, DOKUMEN TERBIT, ADUAN */}
+          <div className="lg:col-span-8 space-y-6">
 
-        {/* STATUS DOKUMEN AKTIF BERJALAN (ESTAFET REALTIME) */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-1 h-5 rounded-full bg-[#0b5e42]"></span>
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Pengajuan Surat Sedang Berjalan
-              </h3>
+            {/* QUICK ACTION BANNER */}
+            <div className="bg-gradient-to-r from-[#0b5e42] to-emerald-800 text-white rounded-2xl p-5 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full inline-block">
+                  Layanan Mandiri 24 Jam
+                </span>
+                <h3 className="text-base font-extrabold text-white">
+                  Butuh Surat Keterangan atau Pengantar Desa?
+                </h3>
+                <p className="text-xs text-emerald-100/90 leading-relaxed max-w-lg">
+                  Ajukan surat langsung dari ponsel atau laptop. Otomatis diteruskan ke Ketua RT Anda untuk verifikasi, lalu ke loket desa dan TTE Kades.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setModalAjukan(true)}
+                className="py-3 px-5 rounded-xl bg-white text-[#0b5e42] hover:bg-emerald-50 font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-transform transform active:scale-95 shrink-0"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Ajukan Surat Baru</span>
+              </button>
             </div>
-            <span className="text-[11px] font-bold text-amber-700">
-              {suratBerjalan.length} Berkas
-            </span>
-          </div>
 
-          {suratBerjalan.length === 0 ? (
-            <div className="p-5 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500">
-              Tidak ada surat yang sedang diproses. Tekan tombol di atas untuk membuat surat baru.
-            </div>
-          ) : (
-            suratBerjalan.map((surat) => {
-              const isRT = surat.status === 'MENUNGGU_RT';
-              const isOperator = surat.status === 'MENUNGGU_OPERATOR';
-              const isKades = surat.status === 'MENUNGGU_TTE_KADES';
-
-              return (
-                <div key={surat.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold font-mono text-slate-500">
-                      NO REG: {surat.noReg}
-                    </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                      isKades ? 'bg-amber-100 text-amber-800 animate-pulse' :
-                      isOperator ? 'bg-cyan-100 text-cyan-800' : 'bg-blue-100 text-blue-800'
-                    }`}>
-                      {isKades ? 'PROSES TTE KADES' : isOperator ? 'LOKET OPERATOR' : 'VERIFIKASI RT'}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h4 className="text-sm font-extrabold text-slate-900">
-                      {surat.jenis}
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {surat.keperluan}
-                    </p>
-                  </div>
-
-                  {/* Stepper Status 4 Tahap */}
-                  <div className="grid grid-cols-4 gap-1 pt-1 text-center text-[10px]">
-                    <div className="p-1.5 rounded-lg bg-[#eefaf2] text-[#0b5e42] font-bold border border-emerald-200">
-                      ✓ Diajukan
-                    </div>
-                    <div className={`p-1.5 rounded-lg font-bold border ${
-                      !isRT ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' : 'bg-blue-100 text-blue-800 border-blue-300 animate-pulse'
-                    }`}>
-                      {!isRT ? `✓ ${surat.wilayahRT || 'RT'}` : `⌛ ${surat.wilayahRT || 'RT'}`}
-                    </div>
-                    <div className={`p-1.5 rounded-lg font-bold border ${
-                      isKades ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' :
-                      isOperator ? 'bg-cyan-100 text-cyan-800 border-cyan-300 animate-pulse' : 'bg-slate-50 text-slate-400 border-slate-200'
-                    }`}>
-                      {isKades ? '✓ Operator' : isOperator ? '⌛ Operator' : '3. Operator'}
-                    </div>
-                    <div className={`p-1.5 rounded-lg font-bold border ${
-                      isKades ? 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse' : 'bg-slate-50 text-slate-400 border-slate-200'
-                    }`}>
-                      {isKades ? '⌛ TTE Kades' : '4. TTE Kades'}
-                    </div>
-                  </div>
-
-                  <p className="text-[11px] text-slate-400">
-                    Posisi saat ini: <strong className="text-slate-700">
-                      {isRT ? `Menunggu verifikasi faktual Ketua ${surat.wilayahRT || 'RT'}` :
-                       isOperator ? 'Pemeriksaan berkas e-KTP oleh Operator Desa' :
-                       'Menunggu pengesahan tanda tangan elektronik Kepala Desa'}
-                    </strong>
-                  </p>
+            {/* STATUS DOKUMEN AKTIF BERJALAN (ESTAFET REALTIME) */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-5 rounded-full bg-[#0b5e42]"></span>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+                    Pengajuan Surat Sedang Berjalan
+                  </h3>
                 </div>
-              );
-            })
-          )}
-        </div>
+                <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                  {suratBerjalan.length} Berkas Aktif
+                </span>
+              </div>
 
-        {/* RIWAYAT SURAT TERBIT & ARSIP DOKUMEN DIGITAL (TTE SAH) */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-1 h-5 rounded-full bg-teal-600"></span>
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Dokumen Resmi Terbit (E-Dokumen)
-              </h3>
-            </div>
-            <span className="text-[11px] font-bold text-teal-700">{suratTerbit.length} Dokumen</span>
-          </div>
-
-          {suratTerbit.length === 0 ? (
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
-              Belum ada dokumen surat yang terbit.
-            </div>
-          ) : (
-            suratTerbit.map((doc) => (
-              <div key={doc.id} className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/70 flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] font-mono text-slate-400">{doc.noReg}</span>
-                  <h5 className="text-xs font-bold text-slate-900">{doc.jenis}</h5>
-                  <p className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> Sah TTE BSrE • {doc.tteInfo?.tanggalTTE || 'Terbit'}
-                  </p>
+              {suratBerjalan.length === 0 ? (
+                <div className="p-8 text-center space-y-2">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                    <Clock className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs font-bold text-slate-700">Tidak ada permohonan surat yang sedang diproses.</p>
+                  <p className="text-xs text-slate-400">Tekan tombol "Ajukan Surat Baru" untuk membuat permohonan pertama Anda.</p>
                 </div>
+              ) : (
+                <div className="space-y-3">
+                  {suratBerjalan.map((surat) => {
+                    const isRT = surat.status === 'MENUNGGU_RT';
+                    const isOperator = surat.status === 'MENUNGGU_OPERATOR';
+                    const isKades = surat.status === 'MENUNGGU_TTE_KADES';
 
+                    return (
+                      <div key={surat.id} className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 space-y-3 hover:bg-slate-50 transition-colors">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                          <span className="text-xs font-bold font-mono text-slate-500">
+                            NO REG: {surat.noReg}
+                          </span>
+                          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block self-start sm:self-auto ${
+                            isKades ? 'bg-amber-100 text-amber-800 animate-pulse' :
+                            isOperator ? 'bg-cyan-100 text-cyan-800' : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {isKades ? 'PROSES TTE KEPALA DESA' : isOperator ? 'LOKET OPERATOR DESA' : 'MENUNGGU VERIFIKASI RT'}
+                          </span>
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-extrabold text-slate-900">
+                            {surat.jenis}
+                          </h4>
+                          <p className="text-xs text-slate-600 mt-0.5">
+                            Keperluan: {surat.keperluan}
+                          </p>
+                        </div>
+
+                        {/* Stepper Status 4 Tahap Responsive */}
+                        <div className="grid grid-cols-4 gap-1.5 sm:gap-2 pt-1 text-center text-[10px] sm:text-xs">
+                          <div className="p-2 rounded-xl bg-[#eefaf2] text-[#0b5e42] font-bold border border-emerald-200">
+                            ✓ 1. Diajukan
+                          </div>
+                          <div className={`p-2 rounded-xl font-bold border ${
+                            !isRT ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' : 'bg-blue-100 text-blue-800 border-blue-300 animate-pulse'
+                          }`}>
+                            {!isRT ? `✓ 2. ${surat.wilayahRT || 'RT'}` : `⌛ 2. ${surat.wilayahRT || 'RT'}`}
+                          </div>
+                          <div className={`p-2 rounded-xl font-bold border ${
+                            isKades ? 'bg-[#eefaf2] text-[#0b5e42] border-emerald-200' :
+                            isOperator ? 'bg-cyan-100 text-cyan-800 border-cyan-300 animate-pulse' : 'bg-slate-100 text-slate-400 border-slate-200'
+                          }`}>
+                            {isKades ? '✓ 3. Operator' : isOperator ? '⌛ 3. Operator' : '3. Operator'}
+                          </div>
+                          <div className={`p-2 rounded-xl font-bold border ${
+                            isKades ? 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse' : 'bg-slate-100 text-slate-400 border-slate-200'
+                          }`}>
+                            {isKades ? '⌛ 4. TTE Kades' : '4. TTE Kades'}
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-slate-500">
+                          Posisi berkas saat ini: <strong className="text-slate-800">
+                            {isRT ? `Menunggu pemeriksaan & persetujuan faktual Ketua ${surat.wilayahRT || 'RT'}` :
+                             isOperator ? 'Pemeriksaan berkas e-KTP & pengantar oleh Petugas Operator Kantor Desa' :
+                             'Menunggu pengesahan tanda tangan elektronik (TTE BSrE) Kepala Desa'}
+                          </strong>
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* RIWAYAT SURAT TERBIT & ARSIP DOKUMEN DIGITAL (TTE SAH) */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-5 rounded-full bg-teal-600"></span>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+                    Dokumen Resmi Terbit (E-Dokumen TTE Sah)
+                  </h3>
+                </div>
+                <span className="text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                  {suratTerbit.length} Dokumen Siap Unduh
+                </span>
+              </div>
+
+              {suratTerbit.length === 0 ? (
+                <div className="p-8 text-center text-xs text-slate-400">
+                  Belum ada dokumen surat yang selesai terbit. Surat yang disahkan Pak Kades akan otomatis muncul di sini.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {suratTerbit.map((doc) => (
+                    <div key={doc.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between gap-3 hover:bg-slate-50 transition-colors">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-slate-400 block">{doc.noReg}</span>
+                        <h5 className="text-xs sm:text-sm font-extrabold text-slate-900">{doc.jenis}</h5>
+                        <p className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                          <span>TTE Sah BSrE • {doc.tteInfo?.tanggalTTE || 'Terbit'}</span>
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => setModalPreview(doc)}
+                        className="w-full py-2 px-3 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Lihat, Cetak PDF & Word</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* SECTION: LAPORAN & ADUAN WARGA (DUSUN & LINGKUNGAN) */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-5 rounded-full bg-rose-600"></span>
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+                    Aspirasi & Laporan Lingkungan Warga
+                  </h3>
+                </div>
                 <button
-                  onClick={() => setModalPreview(doc)}
-                  className="px-3 py-1.5 rounded-xl bg-[#0b5e42] hover:bg-[#084832] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                  onClick={() => setModalAduan(true)}
+                  className="text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl transition-colors border border-rose-200"
                 >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Lihat & Cetak Surat</span>
+                  + Buat Laporan Baru
                 </button>
               </div>
-            ))
-          )}
-        </div>
 
-        {/* SECTION: LAPORAN & ADUAN WARGA (DUSUN & LINGKUNGAN) */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-1 h-5 rounded-full bg-rose-600"></span>
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Aspirasi & Laporan Lingkungan
-              </h3>
+              {aduanList.length === 0 ? (
+                <div className="p-8 text-center text-xs text-slate-400">
+                  Belum ada laporan pengaduan lingkungan yang diajukan.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {aduanList.map((adu) => (
+                    <div key={adu.id} className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-mono text-slate-500 font-bold">{adu.tiket}</span>
+                        <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                          adu.status === 'DIDISPOSISIKAN' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'
+                        }`}>
+                          {adu.status === 'DIDISPOSISIKAN' ? '✓ DITINDAKLANJUTI KADES' : '⌛ MENUNGGU DISPOSISI'}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-black text-slate-900">{adu.judul}</h4>
+                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">{adu.deskripsi}</p>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-white border border-slate-200 text-xs space-y-1">
+                        <p className="text-slate-700"><strong>Wilayah Kejadian:</strong> {adu.dusun}</p>
+                        <p className="text-slate-700"><strong>Status Tindakan:</strong> {adu.disposisiCatatan}</p>
+                        {adu.status === 'DIDISPOSISIKAN' && (
+                          <p className="text-emerald-700 font-bold text-xs pt-1">
+                            • Ditugaskan kepada: {adu.disposisiTarget}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <button
-              onClick={() => setModalAduan(true)}
-              className="text-[11px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-xl transition-colors border border-rose-200"
-            >
-              + Lapor Aduan Baru
-            </button>
+
           </div>
 
-          {aduanList.length === 0 ? (
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
-              Belum ada aduan yang Anda laporkan.
-            </div>
-          ) : (
-            aduanList.map((adu) => (
-              <div key={adu.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400 font-bold">{adu.tiket}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    adu.status === 'DIDISPOSISIKAN' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'
-                  }`}>
-                    {adu.status === 'DIDISPOSISIKAN' ? '✓ DITINDAKLANJUTI KADES' : '⌛ MENUNGGU DISPOSISI'}
+          {/* RIGHT COLUMN: PROFIL LENGKAP, PANDUAN ALUR & KONTAK RT */}
+          <div className="lg:col-span-4 space-y-6">
+
+            {/* KARTU IDENTITAS DIGITAL WARGA */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                <img
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80"
+                  alt={citizenNama}
+                  className="w-12 h-12 rounded-xl object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block">
+                    Profil Warga Terverifikasi
+                  </span>
+                  <h3 className="text-sm font-extrabold text-slate-900 truncate">
+                    {citizenNama}
+                  </h3>
+                  <span className="text-xs text-slate-400 font-mono">
+                    NIK: {user?.nikMasked || citizenNik}
                   </span>
                 </div>
+              </div>
 
-                <div>
-                  <h4 className="text-xs font-black text-slate-900">{adu.judul}</h4>
-                  <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">{adu.deskripsi}</p>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Dusun:</span>
+                  <span className="font-semibold text-slate-800">{user?.dusun || 'Kp. Wates (Dusun I)'}</span>
                 </div>
-
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] space-y-1">
-                  <p className="text-slate-700"><strong>Wilayah:</strong> {adu.dusun}</p>
-                  <p className="text-slate-700"><strong>Status Tindakan:</strong> {adu.disposisiCatatan}</p>
-                  {adu.status === 'DIDISPOSISIKAN' && (
-                    <p className="text-emerald-700 font-bold text-[10px]">
-                      • Ditugaskan kepada: {adu.disposisiTarget}
-                    </p>
-                  )}
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Wilayah RT / RW:</span>
+                  <span className="font-bold text-[#0b5e42]">{user?.rtRw || user?.wilayahTugas || 'RT 03 / RW 02'}</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Status Identitas:</span>
+                  <span className="font-bold text-emerald-700 flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" /> Terverifikasi
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-slate-600">
+                  <span className="text-slate-400">Nomor WhatsApp:</span>
+                  <span className="font-mono text-slate-700">{user?.telepon || '0812-3456-7891'}</span>
                 </div>
               </div>
-            ))
-          )}
+            </div>
+
+            {/* INFOGRAFIS ALUR 4 TAHAP */}
+            <div className="bg-[#f0faf4] rounded-2xl p-5 border border-emerald-100 space-y-3">
+              <h4 className="text-xs font-extrabold text-[#0b5e42] uppercase tracking-wider">
+                Alur Pengurusan Surat Online:
+              </h4>
+
+              <div className="space-y-2.5 text-xs">
+                <div className="flex items-start gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-[#0b5e42] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                  <p className="text-slate-700">Warga mengisi formulir dan melampirkan foto Kartu Keluarga.</p>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                  <p className="text-slate-700">Ketua RT memverifikasi foto KK & identitas pemohon di wilayahnya.</p>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-cyan-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</span>
+                  <p className="text-slate-700">Operator Loket Desa memeriksa kelengkapan draf surat resmi.</p>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">4</span>
+                  <p className="text-slate-700">Kepala Desa menandatangani secara digital (TTE BSrE) & terbit seketika.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* KONTAK BANTUAN WHATSAPP POSKO */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
+              <h4 className="text-xs font-extrabold text-slate-900">
+                Butuh Bantuan Layanan?
+              </h4>
+              <p className="text-xs text-slate-500 leading-relaxed font-light">
+                Jika ada kendala permohonan surat atau ingin konsultasi dengan petugas loket, hubungi kontak resmi desa.
+              </p>
+
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20Pelayanan%20Desa%20Kedung%20Jaya,%20saya%20butuh%20bantuan%20layanan%20surat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#eefaf2] hover:bg-[#d8ece1] text-[#0b5e42] font-bold text-xs flex items-center justify-center gap-2 transition-colors border border-emerald-200"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>WhatsApp Pelayanan Desa</span>
+              </a>
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -443,12 +551,15 @@ export default function WargaDashboard() {
       {/* MODAL FORM PENGAJUAN SURAT BARU */}
       {modalAjukan && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-slate-900">
-                Pengajuan Surat Mandiri Baru
-              </h3>
-              <button onClick={() => setModalAjukan(false)} className="text-slate-400 hover:text-slate-600">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span className="text-[10px] font-bold text-[#0b5e42] uppercase tracking-wider block">Formulir Mandiri</span>
+                <h3 className="text-base font-black text-slate-900">
+                  Pengajuan Surat Mandiri Baru
+                </h3>
+              </div>
+              <button onClick={() => setModalAjukan(false)} className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -607,7 +718,7 @@ export default function WargaDashboard() {
       {/* MODAL LAPORKAN ADUAN LINGKUNGAN / ASPIRASI BARU */}
       {modalAduan && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-scaleUp max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">
