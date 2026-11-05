@@ -6,6 +6,7 @@ import {
   User, LogIn, LogOut, UserPlus
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import UserAvatar from './UserAvatar';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -90,9 +91,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-2.5">
               {isAuthenticated && user ? (
                 <div className="flex items-center gap-2 bg-slate-100/90 py-1.5 px-3 rounded-2xl border border-slate-200">
-                  <div className="w-7 h-7 rounded-xl bg-[#0b5e42] text-white flex items-center justify-center text-xs font-bold">
-                    {user.nama.charAt(0)}
-                  </div>
+                  <UserAvatar user={user} className="w-7 h-7" />
                   <div className="text-left text-xs">
                     <p className="font-bold text-slate-900 leading-tight truncate max-w-[110px]">{user.nama}</p>
                     <span className="text-[10px] font-mono text-[#0b5e42] uppercase">{user.role}</span>
@@ -214,9 +213,7 @@ export default function Navbar() {
               {isAuthenticated && user ? (
                 <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#0b5e42] text-white flex items-center justify-center font-bold text-xs">
-                      {user.nama.charAt(0)}
-                    </div>
+                    <UserAvatar user={user} className="w-8 h-8" />
                     <div>
                       <p className="text-xs font-bold text-slate-900">{user.nama}</p>
                       <span className="text-[10px] text-[#0b5e42] uppercase font-mono">{user.role}</span>

@@ -10,6 +10,7 @@ import { mockAduanKritis } from '../../data/desaData';
 import { getSuratForKades, signByKadesTTE, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
 import { getAllAduan, disposisiOlehKades } from '../../services/aduanService';
 import SuratResmiModal from '../../components/SuratResmiModal';
+import UserAvatar from '../../components/UserAvatar';
 
 export default function KadesDashboard() {
   const [antrean, setAntrean] = useState(getSuratForKades());
@@ -95,10 +96,12 @@ export default function KadesDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">Bpk. H. Johari</span>
               <span className="text-[11px] text-slate-400">Kepala Desa Kedung Jaya</span>
             </div>
-            <img
-              src="./public/images/johari.jpeg"
+            <UserAvatar
+              role="kades"
+              gender="L"
+              name="Bpk. H. Johari"
+              className="w-10 h-10 ring-2 ring-[#0b5e42] shrink-0"
               alt="Bpk. H. Johari"
-              className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0b5e42] shrink-0"
             />
           </div>
         </div>
@@ -458,10 +461,12 @@ export default function KadesDashboard() {
             {/* PROFILE CARD KEPALA DESA */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
               <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                <img
-                  src="./public/images/johari.jpeg"
+                <UserAvatar
+                  role="kades"
+                  gender="L"
+                  name="Bpk. H. Johari"
+                  className="w-14 h-14 ring-2 ring-[#0b5e42]"
                   alt="Bpk. H. Johari"
-                  className="w-14 h-14 rounded-2xl object-cover ring-2 ring-[#0b5e42]"
                 />
                 <div className="min-w-0 flex-1">
                   <span className="text-[10px] font-bold text-[#0b5e42] tracking-wider uppercase block">

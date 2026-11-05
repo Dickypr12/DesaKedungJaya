@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { getSuratByWarga, ajukanSuratBaru } from '../../services/workflowService';
 import { getAduanByWarga, buatAduanBaru } from '../../services/aduanService';
 import SuratResmiModal from '../../components/SuratResmiModal';
+import UserAvatar from '../../components/UserAvatar';
 
 export default function WargaDashboard() {
   const { user } = useAuth();
@@ -157,9 +158,12 @@ export default function WargaDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">{citizenNama}</span>
               <span className="text-[11px] text-slate-400 font-mono">NIK: {user?.nikMasked || citizenNik}</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-teal-700 text-white flex items-center justify-center shadow-sm shrink-0">
-              <User className="w-5 h-5" />
-            </div>
+            <UserAvatar
+              user={user}
+              name={citizenNama}
+              className="w-10 h-10 ring-2 ring-teal-600 shrink-0"
+              alt={citizenNama}
+            />
           </div>
         </div>
 
@@ -456,10 +460,11 @@ export default function WargaDashboard() {
             {/* KARTU IDENTITAS DIGITAL WARGA */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
               <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80"
+                <UserAvatar
+                  user={user}
+                  name={citizenNama}
+                  className="w-12 h-12 ring-2 ring-teal-600"
                   alt={citizenNama}
-                  className="w-12 h-12 rounded-xl object-cover"
                 />
                 <div className="min-w-0 flex-1">
                   <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block">

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg_rt" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="skin_rt" x1="64" y1="40" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fed7aa"/>
+      <stop offset="1" stop-color="#fba86b"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#bg_rt)"/>
+  <circle cx="64" cy="64" r="61" stroke="#93c5fd" stroke-opacity="0.3" stroke-width="2"/>
+  <path d="M26 128 C26 102 44 94 64 94 C84 94 102 102 102 128 Z" fill="#0f172a"/>
+  <path d="M52 94 L64 108 L76 94 Z" fill="#3b82f6"/>
+  <path d="M54 78 H74 V94 H54 Z" fill="#ea9250"/>
+  <circle cx="41" cy="64" r="6" fill="#fba86b"/>
+  <circle cx="87" cy="64" r="6" fill="#fba86b"/>
+  <ellipse cx="64" cy="63" rx="23" ry="26" fill="url(#skin_rt)"/>
+  <path d="M38 52 C38 34 50 28 64 28 C78 28 90 34 90 52 L91 55 C82 56 46 56 37 55 Z" fill="#27272a"/>
+  <path d="M40 52 Q64 54 88 52" stroke="#3f3f46" stroke-width="1.5" fill="none"/>
+  <rect x="47" y="58" width="13" height="10" rx="3" stroke="#1e293b" stroke-width="2" fill="rgba(255,255,255,0.2)"/>
+  <rect x="68" y="58" width="13" height="10" rx="3" stroke="#1e293b" stroke-width="2" fill="rgba(255,255,255,0.2)"/>
+  <line x1="60" y1="62" x2="68" y2="62" stroke="#1e293b" stroke-width="2"/>
+  <circle cx="53.5" cy="63" r="2" fill="#0f172a"/>
+  <circle cx="74.5" cy="63" r="2" fill="#0f172a"/>
+  <path d="M58 72 Q64 74 70 72" stroke="#18181b" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M58 76 Q64 80 70 76" stroke="#991b1b" stroke-width="2" stroke-linecap="round" fill="#fff"/>
+</svg>

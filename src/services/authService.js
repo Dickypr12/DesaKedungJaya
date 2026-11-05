@@ -30,6 +30,8 @@ export async function initSeedUsers() {
         telepon: '081234567890',
         email: 'kades@kedungjaya.desa.id',
         role: 'kades',
+        jenisKelamin: 'L',
+        avatar: '/images/avatars/kades_male.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         passwordHash: defaultPasswordHash,
         tanggalDaftar: '2025-01-01'
@@ -41,6 +43,8 @@ export async function initSeedUsers() {
         telepon: '081234567891',
         email: 'hendra.kusuma@kedungjaya.id',
         role: 'warga',
+        jenisKelamin: 'L',
+        avatar: '/images/avatars/male_warga.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         dusun: 'Kp. Wates (Dusun I)',
         rtRw: 'RT 03 / RW 02',
@@ -54,6 +58,8 @@ export async function initSeedUsers() {
         telepon: '081234567892',
         email: 'rt03.rw02@kedungjaya.desa.id',
         role: 'rtrw',
+        jenisKelamin: 'L',
+        avatar: '/images/avatars/male_rt.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         wilayahTugas: 'RT 03 / RW 02',
         passwordHash: defaultPasswordHash,
@@ -66,6 +72,8 @@ export async function initSeedUsers() {
         telepon: '081234567893',
         email: 'pelayanan@kedungjaya.desa.id',
         role: 'operator',
+        jenisKelamin: 'P',
+        avatar: '/images/avatars/female_operator.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         passwordHash: defaultPasswordHash,
         tanggalDaftar: '2025-01-05'
@@ -77,6 +85,8 @@ export async function initSeedUsers() {
         telepon: '081234567894',
         email: 'admin@kedungjaya.desa.id',
         role: 'admin',
+        jenisKelamin: 'L',
+        avatar: '/images/avatars/admin_tech.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         passwordHash: defaultPasswordHash,
         tanggalDaftar: '2025-01-01'
@@ -88,6 +98,8 @@ export async function initSeedUsers() {
         telepon: '081234567895',
         email: 'keuangan@kedungjaya.desa.id',
         role: 'bendahara',
+        jenisKelamin: 'P',
+        avatar: '/images/avatars/female_bendahara.svg',
         statusVerifikasi: 'TERVERIFIKASI',
         passwordHash: defaultPasswordHash,
         tanggalDaftar: '2025-01-05'
@@ -209,6 +221,7 @@ export async function registerWarga({
   email, 
   password, 
   role = 'warga', 
+  jenisKelamin = 'L',
   rt = '01', 
   rw = '01', 
   dusun,
@@ -257,6 +270,7 @@ export async function registerWarga({
   const wilayahStr = `RT ${rt.toString().padStart(2, '0')} / RW ${rw.toString().padStart(2, '0')}`;
   const selectedDusun = dusun || 'Kp. Wates (Dusun I)';
 
+  const isFemale = jenisKelamin === 'P';
   const newUser = {
     id: `usr_${Date.now()}`,
     nik: cleanNik,
@@ -264,6 +278,8 @@ export async function registerWarga({
     telepon: cleanPhone,
     email: email ? email.trim() : '',
     role: role === 'rtrw' ? 'rtrw' : 'warga',
+    jenisKelamin: isFemale ? 'P' : 'L',
+    avatar: isFemale ? '/images/avatars/female_warga.svg' : '/images/avatars/male_warga.svg',
     jabatan: role === 'rtrw' ? `Ketua ${wilayahStr}` : `Warga ${wilayahStr}`,
     wilayahTugas: wilayahStr,
     wilayah_rt: wilayahStr,
@@ -371,6 +387,8 @@ export async function loginUser(identifier, password) {
       nikMasked: user.nik.substring(0, 6) + '********' + user.nik.substring(user.nik.length - 2),
       nama: user.nama,
       role: user.role,
+      jenisKelamin: user.jenisKelamin || (user.role === 'bendahara' || user.role === 'operator' ? 'P' : 'L'),
+      avatar: user.avatar || (user.role === 'bendahara' ? '/images/avatars/female_bendahara.svg' : user.role === 'operator' ? '/images/avatars/female_operator.svg' : user.role === 'kades' ? '/images/avatars/kades_male.svg' : user.role === 'rtrw' ? '/images/avatars/male_rt.svg' : user.role === 'admin' ? '/images/avatars/admin_tech.svg' : '/images/avatars/male_warga.svg'),
       jabatan: user.jabatan || '',
       statusVerifikasi: user.statusVerifikasi,
       telepon: user.telepon,
@@ -425,7 +443,28 @@ export function updateUserWilayahRT(userId, newWilayahRT) {
 export function getCurrentSession() {
   try {
     const raw = localStorage.getItem(STORAGE_SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    const session = JSON.parse(raw);
+    if (session && session.user) {
+      if (!session.user.jenisKelamin) {
+        session.user.jenisKelamin = (session.user.role === 'bendahara' || session.user.role === 'operator') ? 'P' : 'L';
+      }
+      if (!session.user.avatar || session.user.avatar.includes('unsplash') || session.user.avatar.includes('johari.jpeg')) {
+        const r = session.user.role;
+        session.user.avatar = (r === 'kades') 
+          ? '/images/avatars/kades_male.svg'
+          : (r === 'bendahara')
+          ? '/images/avatars/female_bendahara.svg'
+          : (r === 'operator')
+          ? '/images/avatars/female_operator.svg'
+          : (r === 'rtrw')
+          ? '/images/avatars/male_rt.svg'
+          : (r === 'admin')
+          ? '/images/avatars/admin_tech.svg'
+          : (session.user.jenisKelamin === 'P' ? '/images/avatars/female_warga.svg' : '/images/avatars/male_warga.svg');
+      }
+    }
+    return session;
   } catch {
     return null;
   }

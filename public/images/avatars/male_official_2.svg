@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg_mo1" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0284c7"/>
+      <stop offset="1" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="skin_mo1" x1="64" y1="40" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fde4cf"/>
+      <stop offset="1" stop-color="#f5caa6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#bg_mo1)"/>
+  <circle cx="64" cy="64" r="61" stroke="#7dd3fc" stroke-opacity="0.3" stroke-width="2"/>
+  <path d="M26 128 C26 102 44 94 64 94 C84 94 102 102 102 128 Z" fill="#1e293b"/>
+  <path d="M50 94 L64 112 L78 94 Z" fill="#ffffff"/>
+  <path d="M64 100 L64 128" stroke="#cbd5e1" stroke-width="1.5"/>
+  <path d="M54 78 H74 V94 H54 Z" fill="#e2b18c"/>
+  <circle cx="41" cy="64" r="6" fill="#f5caa6"/>
+  <circle cx="87" cy="64" r="6" fill="#f5caa6"/>
+  <ellipse cx="64" cy="63" rx="23" ry="26" fill="url(#skin_mo1)"/>
+  <path d="M39 52 C39 36 50 30 64 30 C78 30 89 36 89 50 C89 54 88 56 86 58 C84 53 82 45 78 43 C70 40 58 42 50 45 C44 47 41 53 39 52 Z" fill="#1e293b"/>
+  <ellipse cx="54" cy="63" rx="2.5" ry="3.5" fill="#0f172a"/>
+  <ellipse cx="74" cy="63" rx="2.5" ry="3.5" fill="#0f172a"/>
+  <circle cx="53" cy="62" r="1" fill="#ffffff"/>
+  <circle cx="73" cy="62" r="1" fill="#ffffff"/>
+  <path d="M49 56 Q54 54 59 56" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M69 56 Q74 54 79 56" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M64 63 Q66 68 63 69" stroke="#d9986b" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M57 73 Q64 79 71 73" stroke="#b91c1c" stroke-width="2" stroke-linecap="round" fill="#fff"/>
+</svg>

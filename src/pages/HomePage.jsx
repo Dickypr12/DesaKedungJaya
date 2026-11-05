@@ -201,11 +201,11 @@ export default function HomePage() {
             {/* Foto Kades */}
             <div className="lg:col-span-4 flex flex-col items-center text-center">
               <div className="relative">
-                <div className="w-48 h-56 sm:w-56 sm:h-64 rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                <div className="w-48 h-56 sm:w-56 sm:h-64 rounded-2xl overflow-hidden shadow-md border-4 border-white bg-emerald-950 flex items-center justify-center p-2">
                   <img
                     src={desaInfo.kepalaDesa.foto}
                     alt={desaInfo.kepalaDesa.nama}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <span className="absolute -bottom-3 bg-brand-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">

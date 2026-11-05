@@ -15,7 +15,7 @@ export const desaInfo = {
   kepalaDesa: {
     nama: "Bpk. H. Johari, S.Sos.",
     sambutan: "Puji syukur ke hadirat Tuhan Yang Maha Kuasa atas terwujudnya Website Resmi Pemerintah Desa Kedung Jaya. Website ini merupakan wujud keterbukaan informasi publik dan digitalisasi pelayanan warga terintegrasi TTE BSrE BSSN. Kami berkomitmen mewujudkan Desa Kedung Jaya yang mandiri, transparan, dan sejahtera dengan pelayanan cepat, tepat, dan tanpa pungli.",
-    foto: "./public/images/johari.jpeg"
+    foto: "/images/avatars/kades_male.svg"
   },
   statistik: {
     penduduk: 7420,
@@ -48,56 +48,56 @@ export const perangkatDesa = [
     jabatan: "Kepala Desa",
     nipd: "19750812 201001 1 001",
     pendidikan: "S1 Ilmu Sosial",
-    foto: "./public/images/johari.jpegF"
+    foto: "/images/avatars/kades_male.svg"
   },
   {
     nama: "Bambang Sudirman, S.AP",
     jabatan: "Sekretaris Desa",
     nipd: "19820315 201201 1 002",
     pendidikan: "S1 Administrasi Publik",
-    foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/male_official_1.svg"
   },
   {
     nama: "Siti Rahmawati, S.E",
     jabatan: "Kaur Keuangan (Bendahara)",
     nipd: "19890620 201502 2 003",
     pendidikan: "S1 Ekonomi Akuntansi",
-    foto: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/female_bendahara.svg"
   },
   {
     nama: "Rahmat Hidayat, S.T",
     jabatan: "Kaur Perencanaan & Pembangunan",
     nipd: "19871110 201601 1 004",
     pendidikan: "S1 Teknik Sipil",
-    foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/male_official_2.svg"
   },
   {
     nama: "Dewi Lestari, S.Pd",
     jabatan: "Kasi Pelayanan Umum",
     nipd: "19910405 201701 2 005",
     pendidikan: "S1 Kependidikan",
-    foto: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/female_operator.svg"
   },
   {
     nama: "Muhammad Yusuf",
     jabatan: "Kasi Kesejahteraan Rakyat",
     nipd: "19850118 201401 1 006",
     pendidikan: "SMA / Sederajat",
-    foto: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/male_warga.svg"
   },
   {
     nama: "Sunarto Wijaya",
     jabatan: "Kepala Dusun I (Kedung Timur)",
     nipd: "19780214 201101 1 007",
     pendidikan: "SMA / Sederajat",
-    foto: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/male_rt.svg"
   },
   {
     nama: "Kuswanto",
     jabatan: "Kepala Dusun II (Kedung Barat)",
     nipd: "19800722 201301 1 008",
     pendidikan: "SMA / Sederajat",
-    foto: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80"
+    foto: "/images/avatars/male_official_1.svg"
   }
 ];
 
@@ -429,7 +429,7 @@ export const daftarRole = [
     sublabel: 'Sesi Aktif Kades • Token TTE Siap',
     hakAkses: 'Hak Akses Pejabat Pengesah',
     koneksi: 'Sistem Terhubung BSrE',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/kades_male.svg',
     warna: 'bg-emerald-700'
   },
   {
@@ -439,7 +439,7 @@ export const daftarRole = [
     sublabel: 'NIK: 3216012804920003 • Dusun II RT 03/02',
     hakAkses: 'Layanan Mandiri Warga',
     koneksi: 'Identitas Kependudukan Terverifikasi',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/male_warga.svg',
     warna: 'bg-teal-700'
   },
   {
@@ -449,7 +449,7 @@ export const daftarRole = [
     sublabel: 'Ketua RT 03 / RW 02 • Kp Wates, Kedungjaya',
     hakAkses: 'Verifikator Lingkungan Tingkat Rukun Warga',
     koneksi: 'Database Wilayah Terhubung',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/male_rt.svg',
     warna: 'bg-blue-700'
   },
   {
@@ -459,7 +459,7 @@ export const daftarRole = [
     sublabel: 'Loket Pelayanan Umum & Pemeriksa Berkas',
     hakAkses: 'Operator SIPADES & Pelayanan Surat',
     koneksi: 'Integrasi Disdukcapil & DTKS Aktif',
-    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/female_operator.svg',
     warna: 'bg-cyan-700'
   },
   {
@@ -469,7 +469,7 @@ export const daftarRole = [
     sublabel: 'Administrator Sistem, Jaringan & Keamanan',
     hakAkses: 'Akses Penuh Manajemen Sistem & Audit Log',
     koneksi: 'Server Lokal & Cloud Sinkron (100% Online)',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/admin_tech.svg',
     warna: 'bg-slate-800'
   },
   {
@@ -479,7 +479,7 @@ export const daftarRole = [
     sublabel: 'Kaur Keuangan • Penatausahaan Kas APBDes',
     hakAkses: 'Otoritas Pengeluaran Kas & SPP',
     koneksi: 'Siskeudes & Rekening Kas Desa Terhubung',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80',
+    avatar: '/images/avatars/female_bendahara.svg',
     warna: 'bg-amber-700'
   }
 ];

@@ -14,6 +14,7 @@ import {
   rejectRegistration,
   getAllUsers 
 } from '../../services/authService';
+import UserAvatar from '../../components/UserAvatar';
 import SuratResmiModal from '../../components/SuratResmiModal';
 
 export default function OperatorDashboard() {
@@ -118,9 +119,13 @@ export default function OperatorDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">Dewi Lestari, S.Pd</span>
               <span className="text-[11px] text-cyan-800 font-semibold">Kasi Pelayanan Umum</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-cyan-700 text-white flex items-center justify-center shadow-sm shrink-0">
-              <User className="w-5 h-5" />
-            </div>
+            <UserAvatar
+              role="operator"
+              gender="P"
+              name="Dewi Lestari, S.Pd"
+              className="w-10 h-10 ring-2 ring-cyan-600 shrink-0"
+              alt="Dewi Lestari, S.Pd"
+            />
           </div>
         </div>
 
@@ -339,10 +344,12 @@ export default function OperatorDashboard() {
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
                 <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
                   <div className="relative">
-                    <img
-                      src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80"
+                    <UserAvatar
+                      role="operator"
+                      gender="P"
+                      name="Dewi Lestari, S.Pd"
+                      className="w-14 h-14 ring-2 ring-cyan-600"
                       alt="Dewi Lestari, S.Pd"
-                      className="w-14 h-14 rounded-2xl object-cover"
                     />
                     <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-cyan-700 text-white flex items-center justify-center text-xs">
                       <Check className="w-3 h-3 stroke-[3]" />

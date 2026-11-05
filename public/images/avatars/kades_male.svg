@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg_kades" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b5e42"/>
+      <stop offset="1" stop-color="#043927"/>
+    </linearGradient>
+    <linearGradient id="skin_kades" x1="64" y1="40" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fcdab7"/>
+      <stop offset="1" stop-color="#f1be95"/>
+    </linearGradient>
+    <linearGradient id="batik" x1="30" y1="90" x2="98" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14281d"/>
+      <stop offset="1" stop-color="#0b1b13"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#bg_kades)"/>
+  <circle cx="64" cy="64" r="61" stroke="#34d399" stroke-opacity="0.3" stroke-width="2"/>
+  <path d="M26 128 C26 102 44 94 64 94 C84 94 102 102 102 128 Z" fill="url(#batik)"/>
+  <path d="M52 94 L64 110 L76 94 L69 94 L64 104 L59 94 Z" fill="#ffffff"/>
+  <path d="M62 103 L66 103 L67 122 L64 125 L61 122 Z" fill="#b91c1c"/>
+  <path d="M54 78 H74 V94 H54 Z" fill="#e8ad82"/>
+  <circle cx="41" cy="63" r="6" fill="#f1be95"/>
+  <circle cx="87" cy="63" r="6" fill="#f1be95"/>
+  <ellipse cx="64" cy="62" rx="23" ry="26" fill="url(#skin_kades)"/>
+  <ellipse cx="54" cy="61" rx="2.5" ry="3.5" fill="#1e293b"/>
+  <ellipse cx="74" cy="61" rx="2.5" ry="3.5" fill="#1e293b"/>
+  <circle cx="53" cy="60" r="1" fill="#ffffff"/>
+  <circle cx="73" cy="60" r="1" fill="#ffffff"/>
+  <path d="M49 54 Q54 52 59 54" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M69 54 Q74 52 79 54" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M64 61 Q66 66 63 67" stroke="#d9986b" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M56 70 Q64 72 72 70" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+  <path d="M57 73 Q64 79 71 73" stroke="#991b1b" stroke-width="2" stroke-linecap="round" fill="#fff"/>
+  <path d="M38 52 C38 34 50 28 64 28 C78 28 90 34 90 52 L91 55 C82 56 46 56 37 55 Z" fill="#18181b"/>
+  <path d="M40 52 Q64 55 88 52" stroke="#eab308" stroke-width="1.5" fill="none"/>
+  <polygon points="64,30 65.5,33 62.5,33" fill="#eab308"/>
+</svg>

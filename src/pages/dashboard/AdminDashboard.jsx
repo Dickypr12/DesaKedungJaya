@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { daftarRole } from '../../data/desaData';
 import { getDatabaseStatus } from '../../services/dbClient';
+import UserAvatar from '../../components/UserAvatar';
 
 export default function AdminDashboard() {
   const dbStatus = getDatabaseStatus();
@@ -47,9 +48,13 @@ export default function AdminDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">Tim IT Desa</span>
               <span className="text-[11px] text-slate-500 font-semibold">Administrator Sistem</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center shadow-sm shrink-0">
-              <User className="w-5 h-5" />
-            </div>
+            <UserAvatar
+              role="admin"
+              gender="L"
+              name="Tim IT Desa"
+              className="w-10 h-10 ring-2 ring-slate-700 shrink-0"
+              alt="Tim IT Desa"
+            />
           </div>
         </div>
 
@@ -192,10 +197,12 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
               <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
                 <div className="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80"
+                  <UserAvatar
+                    role="admin"
+                    gender="L"
+                    name="Tim IT Desa"
+                    className="w-14 h-14 ring-2 ring-slate-700"
                     alt="Tim IT Desa"
-                    className="w-14 h-14 rounded-2xl object-cover"
                   />
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-800 text-white flex items-center justify-center text-[10px]">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />

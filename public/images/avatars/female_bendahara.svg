@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg_fb" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b45309"/>
+      <stop offset="1" stop-color="#78350f"/>
+    </linearGradient>
+    <linearGradient id="skin_fb" x1="64" y1="45" x2="64" y2="85" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fdf2e9"/>
+      <stop offset="1" stop-color="#fcdab7"/>
+    </linearGradient>
+    <linearGradient id="hijab_fb" x1="30" y1="25" x2="98" y2="105" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#115e59"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#bg_fb)"/>
+  <circle cx="64" cy="64" r="61" stroke="#fde68a" stroke-opacity="0.3" stroke-width="2"/>
+  <path d="M24 128 C24 102 44 94 64 94 C84 94 104 102 104 128 Z" fill="#134e4a"/>
+  <path d="M42 85 C42 104 54 116 64 116 C74 116 86 104 86 85 C86 78 84 76 80 76 C74 76 70 85 64 85 C58 85 54 76 48 76 C44 76 42 78 42 85 Z" fill="url(#hijab_fb)"/>
+  <path d="M34 60 C34 38 46 25 64 25 C82 25 94 38 94 60 C94 82 82 92 64 92 C46 92 34 82 34 60 Z" fill="url(#hijab_fb)"/>
+  <ellipse cx="64" cy="61" rx="19" ry="21" fill="url(#skin_fb)"/>
+  <path d="M48 48 C53 44 75 44 80 48 C77 44 70 42 64 42 C58 42 51 44 48 48 Z" fill="#fef08a"/>
+  <ellipse cx="56" cy="60" rx="2.5" ry="3.5" fill="#1e293b"/>
+  <ellipse cx="72" cy="60" rx="2.5" ry="3.5" fill="#1e293b"/>
+  <circle cx="55" cy="59" r="1.2" fill="#ffffff"/>
+  <circle cx="71" cy="59" r="1.2" fill="#ffffff"/>
+  <path d="M53 58 L51 56" stroke="#1e293b" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M75 58 L77 56" stroke="#1e293b" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M51 54 Q56 51 61 54" stroke="#475569" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M67 54 Q72 51 77 54" stroke="#475569" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M64 60 Q65 65 63 66" stroke="#e09f6e" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <ellipse cx="51" cy="65" rx="3.5" ry="2" fill="#fca5a5" fill-opacity="0.6"/>
+  <ellipse cx="77" cy="65" rx="3.5" ry="2" fill="#fca5a5" fill-opacity="0.6"/>
+  <path d="M58 70 Q64 76 70 70" stroke="#e11d48" stroke-width="2" stroke-linecap="round" fill="#fff"/>
+</svg>

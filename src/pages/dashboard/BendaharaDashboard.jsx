@@ -4,6 +4,7 @@ import {
   ArrowLeft, User, Shield, Check, Clock, Coins, 
   Landmark, Receipt, CheckCircle2, ChevronRight, FileText
 } from 'lucide-react';
+import UserAvatar from '../../components/UserAvatar';
 
 export default function BendaharaDashboard() {
   const [daftarSPP, setDaftarSPP] = useState([
@@ -68,9 +69,13 @@ export default function BendaharaDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">Siti Rahmawati, S.E</span>
               <span className="text-[11px] text-amber-800 font-semibold">Kaur Keuangan / Bendahara Desa</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-amber-700 text-white flex items-center justify-center shadow-sm shrink-0">
-              <User className="w-5 h-5" />
-            </div>
+            <UserAvatar
+              role="bendahara"
+              gender="P"
+              name="Siti Rahmawati, S.E"
+              className="w-10 h-10 ring-2 ring-amber-600 shrink-0"
+              alt="Siti Rahmawati, S.E"
+            />
           </div>
         </div>
 
@@ -224,10 +229,12 @@ export default function BendaharaDashboard() {
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-3">
               <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
                 <div className="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80"
+                  <UserAvatar
+                    role="bendahara"
+                    gender="P"
+                    name="Siti Rahmawati, S.E"
+                    className="w-14 h-14 ring-2 ring-amber-600"
                     alt="Siti Rahmawati, S.E"
-                    className="w-14 h-14 rounded-2xl object-cover"
                   />
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-amber-700 text-white flex items-center justify-center text-[10px]">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />

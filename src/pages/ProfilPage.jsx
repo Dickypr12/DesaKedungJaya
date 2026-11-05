@@ -140,11 +140,11 @@ export default function ProfilPage() {
               key={idx}
               className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-card transition-all group flex flex-col justify-between"
             >
-              <div className="relative h-64 overflow-hidden bg-slate-100">
+              <div className="relative h-64 overflow-hidden bg-gradient-to-b from-slate-100 to-slate-200/60 flex items-center justify-center p-4">
                 <img
                   src={p.foto}
                   alt={p.nama}
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  className="w-48 h-48 object-contain group-hover:scale-105 transition-transform duration-300"
                 />
                 <span className="absolute bottom-3 left-3 right-3 bg-slate-900/85 backdrop-blur-md text-white text-xs font-bold py-1.5 px-3 rounded-xl text-center">
                   {p.jabatan}

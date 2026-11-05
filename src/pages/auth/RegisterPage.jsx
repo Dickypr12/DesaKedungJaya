@@ -17,6 +17,7 @@ export default function RegisterPage() {
     telepon: '',
     email: '',
     role: 'warga', // 'warga' atau 'rtrw'
+    jenisKelamin: 'L', // 'L' (Cowo) atau 'P' (Cewe)
     dusun: 'Kp. Wates (Dusun I)',
     rt: '01',
     rw: '01',
@@ -130,6 +131,7 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         role: formData.role,
+        jenisKelamin: formData.jenisKelamin,
         rt: formData.rt,
         rw: formData.rw,
         dusun: formData.dusun,
@@ -286,6 +288,58 @@ export default function RegisterPage() {
             <p className="text-[11px] text-slate-400 pt-0.5">
               Pastikan nama sesuai e-KTP atau Kartu Keluarga (KK).
             </p>
+          </div>
+
+          {/* FIELD: PILIHAN JENIS KELAMIN & AVATAR PROFIL */}
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold text-slate-800">
+                Jenis Kelamin & Avatar Profil <span className="text-rose-500">*</span>
+              </label>
+              <span className="text-[10px] text-slate-500">Pilih untuk avatar resmi</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, jenisKelamin: 'L' }))}
+                className={`p-3 rounded-2xl border flex items-center gap-3 transition-all text-left ${
+                  formData.jenisKelamin === 'L'
+                    ? 'border-emerald-600 bg-emerald-50/80 ring-2 ring-emerald-600/30'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100'
+                }`}
+              >
+                <img
+                  src="/images/avatars/male_warga.svg"
+                  alt="Avatar Cowo"
+                  className="w-11 h-11 rounded-full shrink-0 shadow-xs"
+                />
+                <div>
+                  <span className="block text-xs font-bold text-slate-900">Laki-laki (Cowo)</span>
+                  <span className="text-[10px] text-slate-500">Avatar Warga Pria Rapi</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, jenisKelamin: 'P' }))}
+                className={`p-3 rounded-2xl border flex items-center gap-3 transition-all text-left ${
+                  formData.jenisKelamin === 'P'
+                    ? 'border-rose-500 bg-rose-50/80 ring-2 ring-rose-500/30'
+                    : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100'
+                }`}
+              >
+                <img
+                  src="/images/avatars/female_warga.svg"
+                  alt="Avatar Cewe"
+                  className="w-11 h-11 rounded-full shrink-0 shadow-xs"
+                />
+                <div>
+                  <span className="block text-xs font-bold text-slate-900">Perempuan (Cewe)</span>
+                  <span className="text-[10px] text-slate-500">Avatar Warga Hijab Anggun</span>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* FIELD 3: NOMOR WHATSAPP */}

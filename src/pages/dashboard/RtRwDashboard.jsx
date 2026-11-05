@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { updateUserWilayahRT } from '../../services/authService';
 import { getSuratForRT, approveByRT, rejectOrReviseSurat, getAllSurat } from '../../services/workflowService';
+import UserAvatar from '../../components/UserAvatar';
 
 export default function RtRwDashboard() {
   const { user } = useAuth();
@@ -98,9 +99,13 @@ export default function RtRwDashboard() {
               <span className="text-xs font-extrabold text-slate-900 block">{user?.nama || 'Ketua RT'}</span>
               <span className="text-[11px] text-blue-700 font-bold">Ketua {activeWilayah}</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-sm shrink-0">
-              <User className="w-5 h-5" />
-            </div>
+            <UserAvatar
+              user={user}
+              role="rtrw"
+              name={user?.nama || 'Ketua RT'}
+              className="w-10 h-10 ring-2 ring-blue-700 shrink-0"
+              alt={user?.nama || 'Ketua RT'}
+            />
           </div>
         </div>
 
@@ -269,10 +274,12 @@ export default function RtRwDashboard() {
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/70 space-y-4">
               <div className="flex items-center gap-3.5 pb-3 border-b border-slate-100">
                 <div className="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80"
+                  <UserAvatar
+                    user={user}
+                    role="rtrw"
+                    name={user?.nama || 'Ketua RT'}
+                    className="w-14 h-14 ring-2 ring-blue-700"
                     alt={user?.nama || 'Ketua RT'}
-                    className="w-14 h-14 rounded-2xl object-cover"
                   />
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-blue-700 text-white flex items-center justify-center text-[10px]">
                     <Check className="w-2.5 h-2.5 stroke-[3]" />
