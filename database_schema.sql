@@ -106,7 +106,7 @@ VALUES
 ('3216012804920003', 'Hendra Kusuma', '081234567891', 'hendra.kusuma@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'warga', 'Warga Kp. Wates', 'Kp. Wates (Dusun I)', 'RT 03 / RW 02'),
 ('3216011503820002', 'Bpk. Mulyono', '081234567892', 'rt03.rw02@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'rtrw', 'Ketua RT 03', 'Kp. Wates (Dusun I)', 'RT 03 / RW 02'),
 ('199104052017012005', 'Dewi Lestari, S.Pd', '081234567893', 'pelayanan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'operator', 'Operator Loket Pelayanan', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
-('197508122010011001', 'Bpk. H. Suryono, S.Sos.', '081234567890', 'kades@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'kades', 'Kepala Desa Kedung Jaya', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
+('197508122010011001', 'Bpk. H. Johari', '081234567890', 'kades@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'kades', 'Kepala Desa Kedung Jaya', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
 ('3216019901010001', 'Tim IT Desa', '081234567894', 'admin@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'admin', 'Administrator Sistem', 'Kp. Wates (Dusun I)', 'RT 01 / RW 01'),
 ('198906202015022003', 'Siti Rahmawati, S.E', '081234567895', 'keuangan@kedungjaya.id', '95536be3c6756fdcb0e91f1ad6822c6eeb4bb3cb447957cefd121e7fcff5b3f1', 'bendahara', 'Kaur Keuangan (Bendahara)', 'Kp. Pengawas (Dusun III)', 'RT 02 / RW 03')
 ON CONFLICT (nik) DO NOTHING;

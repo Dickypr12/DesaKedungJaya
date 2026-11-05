@@ -113,7 +113,7 @@ export function disposisiOlehKades(aduanId, disposisiTarget, instruksiCatatan) {
   all[index].disposisiCatatan = instruksiCatatan || 'Instruksi Kades: Lakukan peninjauan lokasi dan penanganan darurat segera.';
   all[index].riwayat.push({
     waktu: waktuStr,
-    oleh: 'Bpk. H. Suryono, S.Sos. (Kepala Desa)',
+    oleh: 'Bpk. H. Johari (Kepala Desa)',
     teks: `Didisposisikan ke ${all[index].disposisiTarget}: "${all[index].disposisiCatatan}"`
   });
 

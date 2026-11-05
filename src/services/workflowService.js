@@ -192,7 +192,7 @@ export function forwardToKades(suratId, operatorNama = 'Dewi Lestari, S.Pd (Oper
 }
 
 // AKSI 4: Kepala Desa Menandatangani Elektronik (TTE BSrE)
-export function signByKadesTTE(suratId, kadesNama = 'Bpk. H. Suryono, S.Sos.') {
+export function signByKadesTTE(suratId, kadesNama = 'Bpk. H. Johari.') {
   const all = getAllSurat();
   const index = all.findIndex(s => s.id === suratId);
   if (index === -1) return null;

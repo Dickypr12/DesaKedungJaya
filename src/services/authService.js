@@ -26,7 +26,7 @@ export async function initSeedUsers() {
       {
         id: 'usr_kades',
         nik: '197508122010011001',
-        nama: 'Bpk. H. Suryono, S.Sos.',
+        nama: 'Bpk. H. Johari',
         telepon: '081234567890',
         email: 'kades@kedungjaya.desa.id',
         role: 'kades',

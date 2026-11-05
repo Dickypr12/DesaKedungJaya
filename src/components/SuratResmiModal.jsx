@@ -206,7 +206,7 @@ export default function SuratResmiModal({ surat, onClose }) {
   const handleExportWord = () => {
     const tanggalSurat = surat.tteInfo?.tanggalTTE?.split(',')[0] || 
                          new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    const namaKades = surat.tteInfo?.penandatangan || 'Bpk. H. SURYONO, S.Sos.';
+    const namaKades = surat.tteInfo?.penandatangan || 'Bpk. H. Johari.';
     const sertifikatId = surat.tteInfo?.sertifikat || 'BSrE-KJ-2025-VALID';
 
     const wordContent = `
@@ -441,7 +441,7 @@ export default function SuratResmiModal({ surat, onClose }) {
           {/* KOP SURAT RESMI */}
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pb-3 border-b-4 border-double border-slate-900 text-center">
             <div className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 flex items-center justify-center">
-              <img src="/logo.svg" alt="Logo Desa" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
+              <img src="./public/images/logo.jpg" alt="Logo Desa" className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
             </div>
             <div className="flex-1">
               <h4 className="text-[11px] sm:text-sm font-bold uppercase tracking-wider text-slate-800">
@@ -550,7 +550,7 @@ export default function SuratResmiModal({ surat, onClose }) {
               </div>
 
               <p className="text-xs font-black underline uppercase text-slate-950 font-sans tracking-wide">
-                {surat.tteInfo?.penandatangan || 'Bpk. H. SURYONO, S.Sos.'}
+                {surat.tteInfo?.penandatangan || 'Bpk. H.Johari.'}
               </p>
               <p className="text-[10px] font-mono text-slate-600">
                 NIP. 19750812 201001 1 001

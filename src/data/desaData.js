@@ -13,9 +13,9 @@ export const desaInfo = {
   alamat: "V24H+G56, Jl. Pertamina, Kp Wates, Kedungjaya, Kec. Babelan, Kabupaten Bekasi, Jawa Barat 17610",
   jamKerja: "Senin - Jumat: 08.00 - 15.30 WIB",
   kepalaDesa: {
-    nama: "Bpk. H. Suryono, S.Sos.",
+    nama: "Bpk. H. Johari, S.Sos.",
     sambutan: "Puji syukur ke hadirat Tuhan Yang Maha Kuasa atas terwujudnya Website Resmi Pemerintah Desa Kedung Jaya. Website ini merupakan wujud keterbukaan informasi publik dan digitalisasi pelayanan warga terintegrasi TTE BSrE BSSN. Kami berkomitmen mewujudkan Desa Kedung Jaya yang mandiri, transparan, dan sejahtera dengan pelayanan cepat, tepat, dan tanpa pungli.",
-    foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
+    foto: "./public/images/johari.jpeg"
   },
   statistik: {
     penduduk: 7420,
@@ -44,11 +44,11 @@ export const visiMisi = {
 
 export const perangkatDesa = [
   {
-    nama: "Bpk. H. Suryono, S.Sos.",
+    nama: "Bpk. H. Johari",
     jabatan: "Kepala Desa",
     nipd: "19750812 201001 1 001",
     pendidikan: "S1 Ilmu Sosial",
-    foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
+    foto: "./public/images/johari.jpegF"
   },
   {
     nama: "Bambang Sudirman, S.AP",
@@ -425,7 +425,7 @@ export const daftarRole = [
   {
     id: 'kades',
     namaRole: 'Kepala Desa',
-    user: 'Bpk. H. Suryono, S.Sos.',
+    user: 'Bpk. H. Johari',
     sublabel: 'Sesi Aktif Kades • Token TTE Siap',
     hakAkses: 'Hak Akses Pejabat Pengesah',
     koneksi: 'Sistem Terhubung BSrE',

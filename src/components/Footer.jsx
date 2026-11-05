@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-brand-600 p-1.5 flex items-center justify-center">
-                <img src="/logo.svg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
+                <img src="./public/images/logo.jpg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h3 className="font-extrabold text-white text-lg tracking-tight">DESA KEDUNG JAYA</h3>

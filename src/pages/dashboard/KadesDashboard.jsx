@@ -36,7 +36,7 @@ export default function KadesDashboard() {
     setTteSuccess(true);
     setTimeout(() => {
       if (modalTTE) {
-        signByKadesTTE(modalTTE.id, 'Bpk. H. Suryono, S.Sos.');
+        signByKadesTTE(modalTTE.id, 'Bpk. H.Johari');
       }
       setSuratTerbitCount(prev => prev + 1);
       refreshList();
@@ -103,8 +103,8 @@ export default function KadesDashboard() {
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 flex items-center gap-3.5">
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
-              alt="Bpk. H. Suryono, S.Sos."
+              src="./public/images/johari.jpeg"
+              alt="Bpk. H. Johari"
               className="w-12 h-12 rounded-xl object-cover"
             />
             <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#0b5e42] text-white flex items-center justify-center text-[10px]">
@@ -117,7 +117,7 @@ export default function KadesDashboard() {
               Kepala Desa Kedung Jaya
             </span>
             <h2 className="text-sm font-extrabold text-slate-900 truncate">
-              Bpk. H. Suryono, S.Sos.
+              Bpk. H. Johari.
             </h2>
             <p className="text-[11px] text-slate-400 truncate">
               • Sesi Aktif Kades • Token TTE Siap
@@ -572,7 +572,7 @@ export default function KadesDashboard() {
                 Konfirmasi Tanda Tangan Digital (TTE)
               </h3>
               <p className="text-xs text-slate-500">
-                Sertifikat BSrE BSSN: <strong>Bpk. H. Suryono, S.Sos.</strong>
+                Sertifikat BSrE BSSN: <strong>Bpk. H. <Johari></Johari></strong>
               </p>
             </div>
 

@@ -59,15 +59,10 @@ export default function Navbar() {
             {/* Logo / Brand */}
             <Link to="/" className="flex items-center gap-2.5 sm:gap-3.5 group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 p-1.5 sm:p-2 shadow-md shadow-brand-600/20 flex items-center justify-center transform group-hover:scale-105 transition-all shrink-0">
-                <img src="/logo.svg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
+                <img src="./public/images/logo.jpg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base sm:text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-brand-700 transition-colors leading-tight">
-                  KEDUNG JAYA
-                </span>
-                <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Kec. Babelan • Kab. Bekasi
-                </span>
+                
               </div>
             </Link>
 

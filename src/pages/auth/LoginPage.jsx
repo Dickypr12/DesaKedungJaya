@@ -54,7 +54,7 @@ export default function LoginPage() {
         {/* LOGO & DESA HEADER */}
         <div className="text-center space-y-2">
           <div className="w-14 h-14 rounded-2xl bg-[#0b5e42] p-2.5 mx-auto shadow-md shadow-emerald-900/20 flex items-center justify-center">
-            <img src="/logo.svg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
+            <img src="./public/images/logo.jpg" alt="Logo Desa Kedung Jaya" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="text-lg font-black text-slate-900 tracking-tight">

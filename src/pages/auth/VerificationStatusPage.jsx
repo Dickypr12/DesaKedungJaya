@@ -16,7 +16,7 @@ export default function VerificationStatusPage() {
         {/* LOGO */}
         <div className="text-center space-y-1">
           <div className="w-12 h-12 rounded-2xl bg-[#0b5e42] p-2 mx-auto flex items-center justify-center shadow-md">
-            <img src="/logo.svg" alt="Logo Desa" className="w-full h-full object-contain" />
+            <img src="./public/images/logo.jpg" alt="Logo Desa" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-xs font-black text-slate-900 uppercase tracking-widest">
             Pemerintah Desa Kedung Jaya
