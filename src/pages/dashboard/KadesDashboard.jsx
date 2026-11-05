@@ -621,7 +621,7 @@ export default function KadesDashboard() {
                 Konfirmasi Tanda Tangan Digital (TTE)
               </h3>
               <p className="text-xs text-slate-500">
-                Sertifikat BSrE BSSN: <strong>Bpk. H. <Johari></Johari></strong>
+                Sertifikat BSrE BSSN: <strong>Bpk. H. Johari</strong>
               </p>
             </div>
 

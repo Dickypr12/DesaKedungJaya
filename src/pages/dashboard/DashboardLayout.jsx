@@ -14,10 +14,12 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const { user, isAuthenticated, loading, logout } = useAuth();
 
+  const effectiveRole = (user?.role === 'admin' && role) ? role : (user?.role || 'warga');
+
   useEffect(() => {
     if (!loading && isAuthenticated && user) {
-      // Jika URL role tidak sesuai dengan role asli akun yang login, arahkan ke role aslinya
-      if (!role || role !== user.role) {
+      // Jika bukan admin dan URL role tidak sesuai dengan role asli akun yang login, arahkan ke role aslinya
+      if (user.role !== 'admin' && (!role || role !== user.role)) {
         navigate(`/dashboard/${user.role}`, { replace: true });
       }
     }
@@ -40,7 +42,7 @@ export default function DashboardLayout() {
   }
 
   const renderDashboard = () => {
-    switch (user.role) {
+    switch (effectiveRole) {
       case 'kades':
         return <KadesDashboard />;
       case 'warga':
@@ -70,7 +72,7 @@ export default function DashboardLayout() {
     }
   };
 
-  const roleInfo = getRoleBadge(user.role);
+  const roleInfo = getRoleBadge(effectiveRole);
 
   return (
     <div className="min-h-screen bg-[#e8f5ec]">
